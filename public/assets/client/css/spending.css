@@ -1,0 +1,92 @@
+
+/* Phần tổng quan tài chính */
+#finance-summary {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#summary-box {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+#summary-item-1, #summary-item-2, #summary-item-3 {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#amount-1, #amount-2, #amount-3 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Bảng chi tiết nộp tiền */
+#payment-details {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+#payment-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#payment-table th, #payment-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+#payment-table th {
+    background-color: #007bff;
+    color: white;
+}
+
+#payment-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#payment-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Phần dự kiến tháng tới */
+#next-payment {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#next-payment-box {
+    font-size: 18px;
+    color: #333;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: #777;
+}
+.btn.return-btn {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn.return-btn:hover {
+    background-color: #0056b3; /* Màu nền khi hover */
+    transform: scale(1.05); /* Phóng to một chút khi hover */
+}

@@ -1,0 +1,19 @@
+.shadow-box {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+
+/* Tăng kích thước font-size cho các thẻ select */
+.form-select {
+    font-size: 14px; /* Điều chỉnh font size ở đây */
+    padding: 10px;   /* Điều chỉnh padding cho thẻ select */
+}
+
+/* Tăng kích thước font-size cho các option trong select */
+.form-select option {
+    font-size: 14px; /* Điều chỉnh font size cho option */
+}
