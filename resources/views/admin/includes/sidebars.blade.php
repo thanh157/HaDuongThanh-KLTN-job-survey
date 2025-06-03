@@ -30,7 +30,6 @@
                 {{-- bang dk --}}
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link">
-
                         <i class="fa-solid fa-table-columns"></i>
                         <span>
                             Bảng điều khiển
@@ -39,7 +38,7 @@
                 </li>
                 {{-- bo mon --}}
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                     <a href="{{ route('admin.department') }}" class="nav-link">
                         <i class="fa-solid fa-building"></i>
                         <span>
                             Bộ môn

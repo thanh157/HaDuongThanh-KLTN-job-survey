@@ -8,6 +8,16 @@ Route::get('/', function () {
 })->name('client.home');
 
 
-Route::get('/admin/dashboard', function () {
+Route::get('/dashboard', function () {
     return view('admin.pages.admin.dashboard');
 })->name('admin.dashboard');
+
+Route::get('/department', function () {
+    return view('admin.pages.admin.department');
+})->name('admin.department');
+
+Route::get('/create-department', function () {
+    return view('admin.pages.admin.create-department');
+})->name('admin.create-department');
+
+
