@@ -47,7 +47,7 @@
                 </li>
                 {{-- nghanh dao tao --}}
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('admin.major') }}" class="nav-link">
                         <i class="fa-solid fa-industry"></i>
                         <span>
                             Nghành đào tạo
@@ -56,7 +56,7 @@
                 </li>
                 {{-- lop hoc --}}
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('admin.class') }}" class="nav-link">
                         <i class="fa-solid fa-book"></i>
                         <span>
                             Lớp học
@@ -67,72 +67,6 @@
         </div>
         <!-- /quanlichung -->
 
-        <!-- SINH VIEN -->
-        <div class="sidebar-section">
-            <ul class="nav nav-sidebar" data-nav-type="accordion">
-
-                <!-- Club list -->
-                <li class="nav-item-header pt-0 mt-3">
-                    <div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">SINH VIÊN</div>
-                    <i class="ph-dots-three sidebar-resize-show"></i>
-                </li>
-                {{-- dssvssv --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="fa-solid fa-users"></i>
-                        <span>
-                            Danh sách sinh viên
-                        </span>
-                    </a>
-                </li>
-                {{-- dtndtn --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        <span>
-                            Đợt tốt nghiệp
-                        </span>
-                    </a>
-                </li>
-                {{-- cc --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="fa-solid fa-circle-exclamation"></i>
-                        <span>
-                            Cảnh cáo
-                        </span>
-                    </a>
-                </li>
-                {{-- nh --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="fa-solid fa-ban"></i>
-                        <span>
-                            Nghỉ học
-                        </span>
-                    </a>
-                </li>
-                {{-- xntt --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="fa-solid fa-circle-check"></i>
-                        <span>
-                            Xác nhận thông tin
-                        </span>
-                    </a>
-                </li>
-                {{-- pa --}}
-                <li class="nav-item">
-                    <a href="" class="nav-link">
-                        <i class="fa-solid fa-comments"></i>
-                        <span>
-                            Phản ánh
-                        </span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <!-- /sinh vien -->
 
         <!-- KHAO SAT -->
         <div class="sidebar-section">

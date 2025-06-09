@@ -6,16 +6,16 @@
         <!-- Header -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
             <div>
-                <h4 class="fw-bold mb-1">Bộ môn- Danh sách</h4>
+                <h4 class="fw-bold mb-1">Ngành đào tạo - Danh sách</h4>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="#">Bảng điều khiển</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Bộ môn</li>
+                        <li class="breadcrumb-item active" aria-current="page">Ngành đào tạo</li>
                     </ol>
                 </nav>
             </div>
             <div class="mt-2 mt-sm-0">
-                <a href="{{ route('admin.create-department') }}" class="btn btn-primary mt-2 mt-sm-0">
+                <a href="{{ route('admin.create-major') }}" class="btn btn-primary mt-2 mt-sm-0">
                     <i class="bi bi-plus-lg me-1"></i> Tạo mới
                 </a>
             </div>
@@ -27,32 +27,32 @@
                 <table class="table align-middle mb-0 table-bordered">
                     <thead class="table-light">
                         <tr class="text-nowrap">
-                            <!-- Mã ngành bộ môn -->
+                            <!-- Mã ngành đào tạo -->
                             <th>
                                 <form method="GET" action="" class="position-relative d-inline-block">
-                                    <span>Mã bộ môn</span>
+                                    <span>Mã ngành đào tạo</span>
                                     <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
                                         onclick="toggleFilter('filter-ma')"></i>
                                     <div id="filter-ma" class="shadow rounded p-3 bg-white position-absolute filter-popup">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="ma_bo_mon" class="form-control"
-                                                placeholder="vd: Toán">
+                                            <input type="text" name="ma_nghanh_dao_tao" class="form-control"
+                                                placeholder="vd: DT001">
                                         </div>
                                     </div>
                                 </form>
                             </th>
 
-                            <!-- Tên bộ môn -->
+                            <!-- Tên ngành đào tạo -->
                             <th>
                                 <form method="GET" action="" class="position-relative d-inline-block">
-                                    <span>Tên bộ môn</span>
+                                    <span>Tên ngành đào tạo</span>
                                     <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
                                         onclick="toggleFilter('filter-ten')"></i>
                                     <div id="filter-ten" class="shadow rounded p-3 bg-white position-absolute filter-popup">
                                         <div class="input-group">
                                             <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="ten_bo_mon" class="form-control"
+                                            <input type="text" name="ten_nghanh_dao_tao" class="form-control"
                                                 placeholder="vd: Công nghệ phần mềm...">
                                         </div>
                                     </div>
@@ -101,11 +101,11 @@
                         <!-- Dữ liệu mẫu -->
                         <tr>
                             <td>7480102</td>
-                            <td>Toán</td>
+                            <td>Khoa học máy tính</td>
                             <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>23:56 30/11/2024</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.edit-department', ['id' => 1]) }}"
+                                <a href="{{ route('admin.edit-major', ['id' => 1]) }}"
                                     class="btn btn-sm btn-outline-primary me-1">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
@@ -116,11 +116,11 @@
                         </tr>
                         <tr>
                             <td>7480102</td>
-                            <td>Vật lý</td>
+                            <td>Mạng máy tính và truyền thông dữ liệu</td>
                             <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>20:46 11/11/2024</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.edit-department', ['id' => 2]) }}"
+                                <a href="{{ route('admin.edit-major', ['id' => 2]) }}"
                                     class="btn btn-sm btn-outline-primary me-1">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
@@ -132,10 +132,10 @@
                         <tr>
                             <td>7480201</td>
                             <td>Công nghệ thông tin</td>
-                            <td><span class="badge bg-danger">ẨN</span></td>
+                            <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>20:19 16/11/2024</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.edit-department', ['id' => 3]) }}"
+                                <a href="{{ route('admin.edit-major', ['id' => 3]) }}"
                                     class="btn btn-sm btn-outline-primary me-1">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
