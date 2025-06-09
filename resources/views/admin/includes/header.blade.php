@@ -209,7 +209,7 @@
 
         <ul class="nav flex-row justify-content-end order-1 order-lg-2">
             <li class="nav-item ms-lg-2 bg-success" style="border-radius: 30px">
-                <a href="" class="navbar-nav-link rounded-pill d-flex align-items-center">
+                <a href="{{ route('admin.dashboard') }}" class="navbar-nav-link rounded-pill d-flex align-items-center">
                     <i class="ph-house me-2"></i>
                     <span>Trang chủ</span>
                 </a>
