@@ -79,7 +79,7 @@
                 </li>
                 {{-- ksvl --}}
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('admin.survey') }}" class="nav-link">
                         <i class="fa-solid fa-square-poll-vertical"></i>
                         <span>
                             Khảo sát việc làm
