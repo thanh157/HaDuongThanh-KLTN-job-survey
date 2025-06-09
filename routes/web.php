@@ -51,3 +51,7 @@ Route::get('/edit-class', function () {
 Route::get('/create-class', function () {
     return view('admin.pages.admin.create-class');
 })->name('admin.create-class');
+
+Route::get('/survey', function () {
+    return view('admin.pages.admin.survey');
+})->name('admin.survey');
