@@ -18,7 +18,7 @@
             <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importModal">
                 <i class="bi bi-upload me-1"></i> Nhập từ file
             </a>
-            <a href="{{ route('admin.create-class') }}" class="btn btn-primary">
+            <a href="{{ route('admin.class.create-class') }}" class="btn btn-primary">
                 <i class="bi bi-plus-lg me-1"></i> Tạo mới
             </a>
         </div>
@@ -46,7 +46,9 @@
 
         <!-- Card: Khóa 69 -->
         <div class="col-md-6">
-            <div class="card shadow-sm border-start border-4 border-primary h-100">
+            <div class="card shadow-sm border-start border-4 border-primary h-100 class-card" 
+                 data-href="{{ route('admin.class.class-detail', ['id' => 2]) }}"
+                 style="cursor: pointer;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
@@ -58,11 +60,11 @@
                                 <li>Hiện tại: <strong>537 SV</strong></li>
                             </ul>
                         </div>
-                        <div class="d-flex gap-1">
-                            <a href="{{ route('admin.edit-class', ['id' => 2]) }}" class="btn btn-sm btn-outline-primary" title="Sửa">
+                        <div class="d-flex flex-column gap-1">
+                            <a href="{{ route('admin.class.edit-class', ['id' => 2]) }}" class="btn btn-sm btn-outline-primary" title="Sửa" onclick="event.stopPropagation()">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <button class="btn btn-sm btn-outline-danger" title="Xóa">
+                            <button class="btn btn-sm btn-outline-danger" title="Xóa" onclick="event.stopPropagation()">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -73,7 +75,9 @@
 
         <!-- Card: Khóa 68 -->
         <div class="col-md-6">
-            <div class="card shadow-sm border-start border-4 border-success h-100">
+            <div class="card shadow-sm border-start border-4 border-success h-100 class-card" 
+                 data-href="{{ route('admin.class.class-detail', ['id' => 1]) }}"
+                 style="cursor: pointer;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
@@ -85,11 +89,11 @@
                                 <li>Hiện tại: <strong>668 SV</strong></li>
                             </ul>
                         </div>
-                        <div class="d-flex gap-1">
-                            <a href="{{ route('admin.edit-class', ['id' => 1]) }}" class="btn btn-sm btn-outline-primary" title="Sửa">
+                        <div class="d-flex flex-column gap-1">
+                            <a href="{{ route('admin.class.edit-class', ['id' => 1]) }}" class="btn btn-sm btn-outline-primary" title="Sửa" onclick="event.stopPropagation()">
                                 <i class="bi bi-pencil-square"></i>
                             </a>
-                            <button class="btn btn-sm btn-outline-danger" title="Xóa">
+                            <button class="btn btn-sm btn-outline-danger" title="Xóa" onclick="event.stopPropagation()">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -97,8 +101,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Thêm các card khác tại đây nếu có -->
 
     </div>
 </div>
@@ -130,3 +132,15 @@
     </div>
 </div>
 @endsection
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.class-card').forEach(function(card) {
+            card.addEventListener('click', function () {
+                const href = this.dataset.href;
+                if (href) window.location.href = href;
+            });
+        });
+    });
+</script>
+
