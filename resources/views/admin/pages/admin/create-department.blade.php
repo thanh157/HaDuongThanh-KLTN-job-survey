@@ -14,7 +14,7 @@
         </ol>
       </nav>
     </div>
-    <a href="{{ route('admin.department') }}" class="btn btn-primary">
+    <a href="{{ route('admin.department.index') }}" class="btn btn-primary">
       <i class="bi bi-arrow-left me-1"></i> Quay lại
     </a>
   </div>

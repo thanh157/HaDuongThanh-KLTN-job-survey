@@ -15,7 +15,7 @@
                 </nav>
             </div>
             <div class="mt-2 mt-sm-0">
-                <a href="#" class="btn btn-primary mt-2 mt-sm-0">
+                <a href="{{ route('admin.survey.create-survey') }}" class="btn btn-primary mt-2 mt-sm-0">
                     <i class="bi bi-plus-lg me-1"></i> Tạo mới
                 </a>
             </div>
@@ -100,7 +100,7 @@
                             <td>99 / 118</td>
                             <td>18:06 16/11/2024</td>
                             <td class="text-center d-flex justify-content-center gap-2">
-                                <a href="#" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
+                                <a href="{{ route('admin.survey.form-edit-survey') }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
                                     style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
@@ -134,7 +134,7 @@
                             <td>1 / 1</td>
                             <td>23:11 15/11/2024</td>
                             <td class="text-center d-flex justify-content-center gap-2">
-                                <a href="#" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
+                                <a href="{{ route('admin.survey.form-edit-survey') }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
                                     style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>

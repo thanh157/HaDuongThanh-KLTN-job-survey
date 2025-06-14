@@ -15,7 +15,7 @@
                 </nav>
             </div>
             <div class="mt-2 mt-sm-0">
-                <a href="{{ route('admin.create-major') }}" class="btn btn-primary mt-2 mt-sm-0">
+                <a href="{{ route('admin.major.create-major') }}" class="btn btn-primary mt-2 mt-sm-0">
                     <i class="bi bi-plus-lg me-1"></i> Tạo mới
                 </a>
             </div>
@@ -105,7 +105,7 @@
                             <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>23:56 30/11/2024</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.edit-major', ['id' => 1]) }}"
+                                <a href="{{ route('admin.major.edit-major', ['id' => 1]) }}"
                                     class="btn btn-sm btn-outline-primary me-1">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
@@ -120,7 +120,7 @@
                             <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>20:46 11/11/2024</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.edit-major', ['id' => 2]) }}"
+                                <a href="{{ route('admin.major.edit-major', ['id' => 2]) }}"
                                     class="btn btn-sm btn-outline-primary me-1">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
@@ -135,7 +135,7 @@
                             <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>20:19 16/11/2024</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.edit-major', ['id' => 3]) }}"
+                                <a href="{{ route('admin.major.edit-major', ['id' => 3]) }}"
                                     class="btn btn-sm btn-outline-primary me-1">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>

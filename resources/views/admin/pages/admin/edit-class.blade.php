@@ -10,7 +10,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
                         <li class="breadcrumb-item"><a href="#">Bảng điều khiển</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.class') }}">Lớp học</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.class.index') }}">Lớp học</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa</li>
                     </ol>
                 </nav>
@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('admin.class') }}" class="btn btn-secondary me-2">
+                        <a href="{{ route('admin.class.index') }}" class="btn btn-primary me-2">
                             <i class="bi bi-arrow-left"></i> Quay lại
                         </a>
                         <button type="button" class="btn btn-primary">
