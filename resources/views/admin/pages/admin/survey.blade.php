@@ -1,16 +1,18 @@
 @extends('admin.layouts.master')
 
+@section('title', 'Đợt khảo sát')
+
 @section('content')
     <div class="container py-4">
 
         <!-- Header -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
             <div>
-                <h4 class="fw-bold mb-1">Đợt khảo sát - Danh sách</h4>
+                <h4 class="fw-bold mb-1">Khảo sát - Đợt khảo sát</h4>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Bảng điều khiển</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Đợt khảo sát</li>
+                        <li class="breadcrumb-item"><a href="#">Đợt khảo sát</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Danh sách đợt khảo sát</li>
                     </ol>
                 </nav>
             </div>

@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
 
+@section('title', 'Tạo mới bộ môn')
+
 @section('content')
 <div class="container py-4">
   <!-- Tiêu đề và breadcrumb -->

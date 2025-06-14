@@ -1,16 +1,18 @@
 @extends('admin.layouts.master')
 
+@section('title', 'Chi tiết lớp học')
+
 @section('content')
     <div class="container py-4 d-flex flex-column flex-grow-1">
 
         <!-- Tiêu đề -->
         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <div>
-                <h5 class="mb-1 fw-bold">Lớp học - Danh sách khoá 47</h5>
+                <h5 class="mb-1 fw-bold">Quản lí chung - Lớp học</h5>
                 <nav style="--bs-breadcrumb-divider: '>'; font-size: 14px;">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Bảng điều khiển</a></li>
-                        <li class="breadcrumb-item active">Lớp học</li>
+                        <li class="breadcrumb-item"><a href="#">Lớp học</a></li>
+                        <li class="breadcrumb-item active">Danh sách khóa 47</li>
                     </ol>
                 </nav>
             </div>

@@ -1,15 +1,17 @@
 @extends('admin.layouts.master')
 
+@section('title', 'Đợt tốt nghiệp')
+
 @section('content')
 <div class="container py-4">
     <!-- Header -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
         <div>
-            <h4 class="fw-bold mb-1">Đợt tốt nghiệp - Danh sách</h4>
+            <h4 class="fw-bold mb-1">Tốt nghiệp - Đợt tốt nghiệp</h4>
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0">
-                    <li class="breadcrumb-item"><a href="#">Bảng điều khiển</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Đợt tốt nghiệp</li>
+                    <li class="breadcrumb-item"><a href="#">Đợt tốt nghiệp</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách đợt tốt nghiệp</li>
                 </ol>
             </nav>
         </div>

@@ -13,8 +13,7 @@
         <div class="wave-loader">
             <span></span><span></span><span></span><span></span><span></span>
         </div>
-    </div>
-
+    </div> 
     <!-- CSS hiệu ứng -->
     <style>
         .wave-loader {

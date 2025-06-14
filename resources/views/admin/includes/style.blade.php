@@ -11,3 +11,8 @@
 <link href="{{ asset('assets/admin/css/hicolor.css') }}" id="stylesheet" rel="stylesheet" type="text/css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <link href="{{ asset('assets/admin/css/login-admin.css') }}" id="stylesheet" rel="stylesheet" type="text/css">
+<style>
+    .container {
+        flex: 1;
+    }
+</style>
