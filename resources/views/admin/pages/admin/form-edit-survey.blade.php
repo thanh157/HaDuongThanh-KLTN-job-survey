@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
 
+@section('title', 'Form khảo sát')
+
 @section('content')
     <div class="container py-4">
         <!-- Tiêu đề và breadcrumb -->

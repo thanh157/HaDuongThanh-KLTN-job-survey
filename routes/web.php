@@ -84,3 +84,15 @@ Route::get('/form-edit-survey;', function () {
 Route::get('/graduation;', function () {
     return view('admin.pages.admin.graduation');
 })->name('admin.graduation.index');
+
+Route::get('/infor-account;', function () {
+    return view('admin.pages.admin.infor-account');
+})->name('admin.infor-account.index');
+
+Route::get('/edit-profile;', function () {
+    return view('admin.pages.admin.edit-profile');
+})->name('admin.infor-account.edit-profile');
+
+Route::get('/change-password;', function () {
+    return view('admin.pages.admin.change-password');
+})->name('admin.infor-account.change-password');

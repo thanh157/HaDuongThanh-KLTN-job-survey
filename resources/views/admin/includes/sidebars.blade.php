@@ -36,6 +36,7 @@
             0% {
                 left: -75%;
             }
+
             100% {
                 left: 125%;
             }
@@ -53,7 +54,7 @@
         }
 
         .nav-link.active {
-            background-color: #1a51a4 !important;
+            background-color: #213a56 !important;
             color: #fff !important;
         }
 
@@ -82,13 +83,28 @@
         <!-- Quản lí chung -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                <li class="nav-item-header {{ request()->routeIs('admin.dashboard*') || request()->routeIs('admin.department.*') || request()->routeIs('admin.major.*') || request()->routeIs('admin.class.*') ? 'active-section' : '' }}">
+                <li
+                    class="nav-item-header 
+            {{ request()->routeIs('admin.dashboard*') ||
+            request()->routeIs('admin.department.*') ||
+            request()->routeIs('admin.major.*') ||
+            request()->routeIs('admin.class.*') ||
+            request()->route() === null ||
+            request()->is('admin') ||
+            request()->path() == '/'
+                ? 'active-section'
+                : '' }}">
                     <span>Quản lí chung</span>
                 </li>
 
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}"
-                        class="nav-link {{ request()->routeIs('admin.dashboard*') ? 'active' : '' }}">
+                        class="nav-link {{ request()->routeIs('admin.dashboard*') ||
+                        request()->route() === null ||
+                        request()->is('admin') ||
+                        request()->path() == '/'
+                            ? 'active'
+                            : '' }}">
                         <i class="fa-solid fa-table-columns"></i>
                         <span>Bảng điều khiển</span>
                     </a>
@@ -155,7 +171,8 @@
         <!-- Báo cáo - Thống kê -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                <li class="nav-item-header {{ request()->is('admin/chart*') || request()->is('admin/report*') ? 'active-section' : '' }}">
+                <li
+                    class="nav-item-header {{ request()->is('admin/chart*') || request()->is('admin/report*') ? 'active-section' : '' }}">
                     <span>Báo cáo - Thống kê</span>
                 </li>
                 <li class="nav-item">
@@ -176,15 +193,17 @@
         <!-- Hệ thống -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                <li class="nav-item-header {{ request()->is('admin/account*') ? 'active-section' : '' }}">
+                <li class="nav-item-header {{ request()->routeIs('admin.infor-account.*') ? 'active-section' : '' }}">
                     <span>Hệ thống</span>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{ request()->is('admin/account*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.infor-account.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.infor-account.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-user-cog"></i>
                         <span>Tài khoản</span>
                     </a>
                 </li>
+
             </ul>
         </div>
     </div>

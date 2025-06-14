@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
 
+@section('title', 'Chỉnh sửa lớp học')
+
 @section('content')
     <div class="container py-4">
 

@@ -1,16 +1,18 @@
 @extends('admin.layouts.master')
 
+@section('title', 'Bộ môn')
+
 @section('content')
     <div class="container py-4">
 
         <!-- Header -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
             <div>
-                <h4 class="fw-bold mb-1">Bộ môn- Danh sách</h4>
+                <h4 class="fw-bold mb-1">Quản lí chung - Bộ môn</h4>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Bảng điều khiển</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Bộ môn</li>
+                        <li class="breadcrumb-item"><a href="#">Bộ môn</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Danh sách bộ môn</li>
                     </ol>
                 </nav>
             </div>
