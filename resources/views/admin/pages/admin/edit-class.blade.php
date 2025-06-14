@@ -15,6 +15,9 @@
                     </ol>
                 </nav>
             </div>
+                <a href="{{ route('admin.class.index') }}" class="btn btn-primary me-2">
+                    <i class="bi bi-arrow-left"></i> Quay lại
+                </a>
         </div>
 
         <!-- Form chỉnh sửa -->
@@ -52,9 +55,6 @@
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <a href="{{ route('admin.class.index') }}" class="btn btn-primary me-2">
-                            <i class="bi bi-arrow-left"></i> Quay lại
-                        </a>
                         <button type="button" class="btn btn-primary">
                             <i class="bi bi-save me-1"></i> Lưu thay đổi
                         </button>
