@@ -128,7 +128,6 @@
             }
         }
 
-        /* --- Hiệu ứng icon rơi --- */
         .falling-icons {
             position: fixed;
             top: 0;
@@ -163,6 +162,50 @@
                 opacity: 0;
             }
         }
+
+        /* Loader CSS */
+        .wave-loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wave-loader span {
+            display: block;
+            width: 5px;
+            height: 20px;
+            margin: 0 3px;
+            background: #0d6efd;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+
+        .wave-loader span:nth-child(2) {
+            animation-delay: -1.1s;
+        }
+
+        .wave-loader span:nth-child(3) {
+            animation-delay: -1.0s;
+        }
+
+        .wave-loader span:nth-child(4) {
+            animation-delay: -0.9s;
+        }
+
+        .wave-loader span:nth-child(5) {
+            animation-delay: -0.8s;
+        }
+
+        @keyframes wave {
+            0%,
+            40%,
+            100% {
+                transform: scaleY(0.4);
+            }
+
+            20% {
+                transform: scaleY(1);
+            }
+        }
     </style>
 </head>
 
@@ -170,6 +213,14 @@
 
     <!-- Hiệu ứng icon rơi -->
     <div class="falling-icons" id="falling-icons"></div>
+
+    <!-- Overlay loading -->
+    <div id="loading-overlay"
+        style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:1050;background:rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;">
+        <div class="wave-loader">
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </div>
 
     <div class="header">
         <div class="logo-row mb-3">
@@ -214,6 +265,10 @@
         </div>
     </div>
 
+    <!-- NProgress -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" rel="stylesheet" />
+
     <script>
         const icons = ['bi-book', 'bi-pencil', 'bi-mortarboard', 'bi-journal-text', 'bi-award-fill'];
         const container = document.getElementById('falling-icons');
@@ -225,11 +280,37 @@
             icon.style.animationDuration = (Math.random() * 3 + 5) + 's';
             icon.style.fontSize = (Math.random() * 10 + 15) + 'px';
             container.appendChild(icon);
-
             setTimeout(() => container.removeChild(icon), 10000);
         }
 
         setInterval(createIcon, 1000);
+
+        // Loading overlay và NProgress khi submit
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            if (form) {
+                form.addEventListener("submit", function () {
+                    NProgress.start();
+                    document.getElementById("loading-overlay").style.display = "flex";
+                });
+            }
+
+            const links = document.querySelectorAll("a[href]:not([target='_blank']):not([href^='#']):not([href^='javascript'])");
+            links.forEach(link => {
+                link.addEventListener("click", function () {
+                    const href = link.getAttribute("href");
+                    if (href && !href.startsWith("#") && !href.startsWith("javascript")) {
+                        NProgress.start();
+                        document.getElementById("loading-overlay").style.display = "flex";
+                    }
+                });
+            });
+
+            window.addEventListener("pageshow", function () {
+                NProgress.done();
+                document.getElementById("loading-overlay").style.display = "none";
+            });
+        });
     </script>
 
 </body>
