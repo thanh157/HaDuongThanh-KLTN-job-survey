@@ -1,5 +1,9 @@
 <?php
 
+
+use App\Http\Controllers\AuthController;
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -96,3 +100,8 @@ Route::get('/edit-profile;', function () {
 Route::get('/change-password;', function () {
     return view('admin.pages.admin.change-password');
 })->name('admin.infor-account.change-password');
+
+Route::get('/login/sso', [AuthController::class, 'redirectToSSO'])->name('sso.redirect');
+Route::get('/login/sso/callback', [AuthController::class, 'handleSSOCallback'])->name('sso.callback');
+
+Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('logout');

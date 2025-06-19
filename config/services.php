@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'sso' => [
+        'client_id' => env('SSO_CLIENT_ID'),
+        'client_secret' => env('SSO_CLIENT_SECRET'),
+        'redirect' => env('SSO_REDIRECT_URI'),
+        'base_uri' => env('SSO_BASE_URI'),
+        
+    ],
+
 ];

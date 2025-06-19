@@ -239,6 +239,9 @@
 
         <div class="login-form">
             <h5>Đăng nhập hệ thống</h5>
+            <a href="{{ route('sso.redirect') }}" class="btn btn-outline-primary w-100 mb-3">
+                Đăng nhập với SSO
+            </a>
             <form method="POST" action="#">
                 @csrf
                 <div class="form-group">
