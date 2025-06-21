@@ -53,7 +53,7 @@
                     <li><a href="{{ route('admin.infor-account.change-password') }}" class="dropdown-item"><i class="fa-solid fa-lock me-2"></i>Đổi mật khẩu</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
-                        <form method="POST" action="{{ route('logout') }}" class="m-0">
+                        <form method="POST" action="{{ route('handleLogout') }}" class="m-0">
                             @csrf
                             <button type="submit" class="dropdown-item text-danger">
                                 <i class="ph-sign-out me-2"></i> Đăng xuất
