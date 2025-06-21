@@ -239,9 +239,6 @@
 
         <div class="login-form">
             <h5>Đăng nhập hệ thống</h5>
-            <a href="{{ route('sso.redirect') }}" class="btn btn-outline-primary w-100 mb-3">
-                Đăng nhập với SSO
-            </a>
             <form method="POST" action="#">
                 @csrf
                 <div class="form-group">
@@ -253,13 +250,24 @@
                     <input type="password" name="password" class="form-control" placeholder="Mật khẩu">
                 </div>
 
-                <div class="text-end mb-3">
-                    <a href="/quen-mat-khau" class="text-decoration-none" style="font-size: 0.9rem; color: #007bff;">
-                        <i class="bi bi-question-circle"></i> Quên mật khẩu?
-                    </a>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="showPassword">
+                    <label class="form-check-label" for="showPassword">
+                        Hiện mật khẩu
+                    </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-login">Đăng nhập</button>
+                <button type="submit" class="btn btn-primary btn-login mb-3">Đăng nhập</button>
+
+                <div class="d-flex align-items-center my-3">
+                    <hr class="flex-grow-1">
+                    <span class="mx-2 text-muted">hoặc đăng nhập với</span>
+                    <hr class="flex-grow-1">
+                </div>
+
+                <a href="{{ route('sso.redirect') }}" class="btn btn-outline-primary w-100">
+                    Đăng nhập với SSO
+                </a>
             </form>
             <p class="note">
                 Lưu ý: Hệ thống quản lý sinh viên dành cho ban chủ nhiệm khoa, cán bộ, giảng viên của từng khoa.
@@ -314,6 +322,11 @@
                 document.getElementById("loading-overlay").style.display = "none";
             });
         });
+        document.getElementById('showPassword').addEventListener('change', function () {
+            const passwordInput = document.querySelector('input[name="password"]');
+            passwordInput.type = this.checked ? 'text' : 'password';
+        });
+
     </script>
 
 </body>
