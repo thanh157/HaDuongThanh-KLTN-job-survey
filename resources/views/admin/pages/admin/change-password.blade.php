@@ -1,5 +1,7 @@
 @extends('admin.layouts.master')
 
+@section('title', 'Thay đổi mật khẩu')
+
 @section('content')
     <div class="container py-4">
         <!-- Header -->

@@ -172,23 +172,26 @@
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
                 <li
-                    class="nav-item-header {{ request()->is('admin/chart*') || request()->is('admin/report*') ? 'active-section' : '' }}">
+                    class="nav-item-header {{ request()->routeIs('admin.charts.*') || request()->routeIs('admin.report.*') ? 'active-section' : '' }}">
                     <span>Báo cáo - Thống kê</span>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{ request()->is('admin/chart*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.charts.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.charts.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-chart-column"></i>
                         <span>Biểu đồ thống kê</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{ request()->is('admin/report*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.report.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.report.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-list-check"></i>
                         <span>Báo cáo tổng hợp</span>
                     </a>
                 </li>
             </ul>
         </div>
+
 
         <!-- Hệ thống -->
         <div class="sidebar-section">

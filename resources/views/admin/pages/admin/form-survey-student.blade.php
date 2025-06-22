@@ -1,6 +1,6 @@
-@extends('admin.layouts.master')
+@extends('admin.layouts.no-master')
 
-@section('title', 'Chi tiết Form')
+@section('title', 'Form-student')
 
 @section('content')
     <style>
@@ -351,15 +351,10 @@
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-end gap-2">
-                    <!-- Back Button -->
-                    <a href="{{ route('admin.survey.form-edit-survey') }}" class="btn btn-primary">
-                        <i class="bi bi-arrow-left me-1"></i> Quay lại
-                    </a>
-
-                    <!-- Export Button -->
-                    <a href="{{ route('admin.survey.form-survey-student') }}" class="btn btn-success">
-                        <i class="bi bi-download me-1"></i> Xuất
+                <!-- Submit button -->
+                <div class="text-end mt-3">
+                    <a href="{{ route('admin.survey.form-survey') }}" class="btn btn-success px-4 shadow-sm">
+                        <i class="bi bi-send me-1"></i> Gửi phản hồi
                     </a>
                 </div>
 

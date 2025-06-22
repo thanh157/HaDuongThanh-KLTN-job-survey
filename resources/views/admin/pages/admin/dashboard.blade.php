@@ -28,12 +28,12 @@
                         <div class="p-3 rounded shadow-sm d-flex flex-column justify-content-between h-100 bg-white">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <p class="fw-semibold text-muted mb-1 small text-uppercase">Tổng số sinh viên</p>
-                                    <h4 class="mb-0">1111</h4>
+                                    <p class="fw-semibold text-muted mb-1 small text-uppercase">PHIẾU ĐÃ KHẢO SÁT</p>
+                                    <h4 class="mb-0">280</h4>
                                 </div>
-                                <i class="fa-solid fa-users text-primary"></i>
+                                <i class="fa-solid fa-file-circle-check text-primary"></i>
                             </div>
-                            <small class="text-muted mt-2">Tổng số sinh viên đang theo học</small>
+                            <small class="text-muted mt-2">Tổng số sinh viên đã phản hồi khảo sát</small>
                         </div>
                     </div>
                     <!-- #2 -->
@@ -41,12 +41,12 @@
                         <div class="p-3 rounded shadow-sm d-flex flex-column justify-content-between h-100 bg-white">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <p class="fw-semibold text-muted mb-1 small text-uppercase">SINH VIÊN TỐT NGHIỆP</p>
-                                    <h4 class="mb-0">3333</h4>
+                                    <p class="fw-semibold text-muted mb-1 small text-uppercase">TỶ LỆ CÓ VIỆC LÀM</p>
+                                    <h4 class="mb-0">88%</h4>
                                 </div>
-                                <i class="fa-solid fa-graduation-cap text-primary"></i>
+                                <i class="fa-solid fa-briefcase text-primary"></i>
                             </div>
-                            <small class="text-muted mt-2">Tổng số sinh viên đã tốt nghiệp</small>
+                            <small class="text-muted mt-2">Tỷ lệ sinh viên đã có việc làm sau tốt nghiệp</small>
                         </div>
                     </div>
                     <!-- #3 -->
@@ -54,12 +54,12 @@
                         <div class="p-3 rounded shadow-sm d-flex flex-column justify-content-between h-100 bg-white">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <p class="fw-semibold text-muted mb-1 small text-uppercase">CẢNH BÁO SINH VIÊN</p>
-                                    <h4 class="mb-0">2223</h4>
+                                    <p class="fw-semibold text-muted mb-1 small text-uppercase">LỚP HỌC</p>
+                                    <h4 class="mb-0">15</h4>
                                 </div>
-                                <i class="fa-solid fa-circle-exclamation text-primary"></i>
+                                <i class="fa-solid fa-users-line text-primary"></i>
                             </div>
-                            <small class="text-muted mt-2">Sinh viên thuộc diện cảnh cáo</small>
+                            <small class="text-muted mt-2">Tổng số lớp học có trong hệ thống</small>
                         </div>
                     </div>
                     <!-- #4 -->
@@ -67,16 +67,17 @@
                         <div class="p-3 rounded shadow-sm d-flex flex-column justify-content-between h-100 bg-white">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <p class="fw-semibold text-muted mb-1 small text-uppercase">LỚP HỌC</p>
-                                    <h4 class="mb-0">2222</h4>
+                                    <p class="fw-semibold text-muted mb-1 small text-uppercase">ĐỢT TỐT NGHIỆP</p>
+                                    <h4 class="mb-0">6</h4>
                                 </div>
-                                <i class="fa-solid fa-book text-primary"></i>
+                                <i class="fa-solid fa-calendar-check text-primary"></i>
                             </div>
-                            <small class="text-muted mt-2">Tổng số lớp học đang hoạt động</small>
+                            <small class="text-muted mt-2">Số đợt tốt nghiệp đã thực hiện khảo sát</small>
                         </div>
                     </div>
                 </div>
             </div>
+
             {{-- chart  --}}
             <div style="max-width: 960px; margin: 30px auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
                 <h3 style="text-align: center; margin-bottom: 25px; color: #333;">Thống kê việc làm sinh viên theo đợt tốt
