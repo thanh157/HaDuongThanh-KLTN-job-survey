@@ -133,8 +133,38 @@
                         </tr>
                         <tr>
                             <td>7480201</td>
-                            <td>Công nghệ thông tin</td>
-                            <td><span class="badge bg-danger">ẨN</span></td>
+                            <td>Công nghệ phần mềm</td>
+                            <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
+                            <td>20:19 16/11/2024</td>
+                            <td class="text-center">
+                                <a href="{{ route('admin.department.edit-department', ['id' => 3]) }}"
+                                    class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>7485431</td>
+                            <td>Khoa học máy tính</td>
+                            <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
+                            <td>20:19 16/11/2024</td>
+                            <td class="text-center">
+                                <a href="{{ route('admin.department.edit-department', ['id' => 3]) }}"
+                                    class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>7480451</td>
+                            <td>Mạng và Hệ thống thông tin</td>
+                            <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>20:19 16/11/2024</td>
                             <td class="text-center">
                                 <a href="{{ route('admin.department.edit-department', ['id' => 3]) }}"

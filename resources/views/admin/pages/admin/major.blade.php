@@ -118,7 +118,7 @@
                         </tr>
                         <tr>
                             <td>7480102</td>
-                            <td>Mạng máy tính và truyền thông dữ liệu</td>
+                            <td>TRí tuệ nhân tạo</td>
                             <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>20:46 11/11/2024</td>
                             <td class="text-center">
@@ -134,6 +134,21 @@
                         <tr>
                             <td>7480201</td>
                             <td>Công nghệ thông tin</td>
+                            <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
+                            <td>20:19 16/11/2024</td>
+                            <td class="text-center">
+                                <a href="{{ route('admin.major.edit-major', ['id' => 3]) }}"
+                                    class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>7480201</td>
+                            <td>Mạng máy tính và truyền thông dữ liệu</td>
                             <td><span class="badge bg-success">HOẠT ĐỘNG</span></td>
                             <td>20:19 16/11/2024</td>
                             <td class="text-center">

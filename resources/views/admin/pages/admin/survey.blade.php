@@ -94,7 +94,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>PHIẾU KHẢO SÁT 1</td>
+                            <td>PHIẾU KHẢO SÁT SINH VIÊN TỐT NGHIỆP THÁNG 7/2024</td>
                             <td>2025</td>
                             <td>18:00 20/10/2024</td>
                             <td>23:00 23/12/2025</td>
