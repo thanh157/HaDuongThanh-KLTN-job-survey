@@ -1,0 +1,32 @@
+
+[
+    {
+        "id": 1,
+        "code": "7480102",
+        "name": "Toán",
+        "status": "active",
+        "created_at": "2024-11-30 23:56"
+    },
+    {
+        "id": 2,
+        "code": "7480102",
+        "name": "Vật lý",
+        "status": "active",
+
+        "created_at": "2024-11-11 20:46"
+    },
+    {
+        "id": 3,
+        "code": "7480201",
+        "name": "Công nghệ phần mềm",
+        "status": "active",
+        "created_at": "2024-11-16 20:19"
+    },
+    {
+        "id": 4,
+        "code": "7481101",
+        "name": "Khoa học máy tính",
+        "status": "active",
+        "created_at": "2024-11-16 20:19"
+    }
+]

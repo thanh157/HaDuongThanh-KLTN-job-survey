@@ -6,8 +6,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticateController;
-
-
+// use App\Http\Controllers\DepartmentController;
 
 // // web.php
 // Route::get('/login/microsoft', [AuthController::class, 'redirectToProvider'])->name('sso.redirect');
@@ -17,7 +16,11 @@ use App\Http\Controllers\Auth\AuthenticateController;
 //     return view('admin.pages.admin.login');
 // })->name('admin.login');
 
-
+use App\Http\Controllers\System\DepartmentController;
+use App\Http\Controllers\System\MajorController;
+use App\Http\Controllers\System\GraduationController;
+use App\Http\Controllers\System\ClassController;
+use App\Http\Controllers\System\ClassDetailController;
 
 
 // Route::get('/login/sso', [AuthController::class, 'redirectToSSO'])->name('sso.redirect');
@@ -39,26 +42,37 @@ Route::middleware('auth.sso')->group(function (): void {
         return view('admin.pages.admin.dashboard');
     })->name('admin.dashboard');
 
-    Route::get('/department', function () {
-        return view('admin.pages.admin.department');
-    })->name('admin.department.index');
+    Route::get('/department', [DepartmentController::class, 'index'])->name('admin.department.index');
+
+    // Route::get('/department', function () {
+    //     return view('admin.pages.admin.department');
+    // })->name('admin.department.index');
 
     Route::get('/create-department', function () {
         return view('admin.pages.admin.create-department');
     })->name('admin.department.create-department');
 
-    Route::get('/major', function () {
-        return view('admin.pages.admin.major');
-    })->name('admin.major.index');
+    Route::get('/major', [MajorController::class, 'index'])->name('admin.major.index');
+
+    Route::prefix('admin/class')->group(function () {
+        Route::get('/', [ClassController::class, 'index'])->name('admin.class.index');
+        Route::get('/{id}/detail', [ClassController::class, 'detail'])->name('admin.class.class-detail');
+    });
+
+
+
+    // Route::get('/major', function () {
+    //     return view('admin.pages.admin.major');
+    // })->name('admin.major.index');
 
     Route::get('/create-major', function () {
         return view('admin.pages.admin.create-major');
     })->name('admin.major.create-major');
 
-    Route::get('/class', function () {
-        return view('admin.pages.admin.class');
-    })->name('admin.class.index');
 
+    // Route::get('/class', function () {
+    //     return view('admin.pages.admin.class');
+    // })->name('admin.class.index');
 
     Route::get('/edit-major', function () {
         return view('admin.pages.admin.edit-major');
@@ -87,9 +101,9 @@ Route::middleware('auth.sso')->group(function (): void {
         return view('admin.pages.admin.create-survey');
     })->name('admin.survey.create-survey');
 
-    Route::get('/class-detail;', function () {
-        return view('admin.pages.admin.class-detail');
-    })->name('admin.class.class-detail');
+    // Route::get('/class-detail;', function () {
+    //     return view('admin.pages.admin.class-detail');
+    // })->name('admin.class.class-detail');
 
     Route::get('/form-survey;', function () {
         return view('admin.pages.admin.form-survey');
@@ -104,9 +118,11 @@ Route::middleware('auth.sso')->group(function (): void {
     })->name('admin.survey.form-survey-student');
 
 
-    Route::get('/graduation;', function () {
-        return view('admin.pages.admin.graduation');
-    })->name('admin.graduation.index');
+
+    Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
+    // Route::get('/graduation;', function () {
+    //     return view('admin.pages.admin.graduation');
+    // })->name('admin.graduation.index');
 
     Route::get('/infor-account;', function () {
         return view('admin.pages.admin.infor-account');

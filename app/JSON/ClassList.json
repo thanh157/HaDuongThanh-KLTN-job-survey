@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "khoa": "Khóa 66",
+        "nam": 2021,
+        "tong_so_lop": 7,
+        "nhap_hoc": 522,
+        "hien_tai": 450
+    },
+    {
+        "id": 2,
+        "khoa": "Khóa 67",
+        "nam": 2022,
+        "tong_so_lop": 8,
+        "nhap_hoc": 800,
+        "hien_tai": 628
+    },
+    {
+        "id": 3,
+        "khoa": "Khóa 68",
+        "nam": 2023,
+        "tong_so_lop": 8,
+        "nhap_hoc": 722,
+        "hien_tai": 640
+    },
+    {
+        "id": 4,
+        "khoa": "Khóa 69",
+        "nam": 2024,
+        "tong_so_lop": 7,
+        "nhap_hoc": 549,
+        "hien_tai": 537
+    }
+]
