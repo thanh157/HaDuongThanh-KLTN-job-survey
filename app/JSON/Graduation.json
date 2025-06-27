@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "dot_tot_nghiep": "T12/2024",
+        "nam_tot_nghiep": "2024",
+        "tong_sinh_vien": 80,
+        "created_at": "2024-12-10 10:12:00"
+    },
+    {
+        "id": 2,
+        "dot_tot_nghiep": "T6/2024",
+        "nam_tot_nghiep": "2024",
+        "tong_sinh_vien": 56,
+        "created_at": "2024-06-11 14:24:00"
+    },
+    {
+        "id": 3,
+        "dot_tot_nghiep": "T12/2023",
+        "nam_tot_nghiep": "2023",
+        "tong_sinh_vien": 71,
+        "created_at": "2023-12-05 08:30:00"
+    },
+    {
+        "id": 4,
+        "dot_tot_nghiep": "T6/2023",
+        "nam_tot_nghiep": "2023",
+        "tong_sinh_vien": 42,
+        "created_at": "2023-06-15 09:00:00"
+    },
+    {
+        "id": 5,
+        "dot_tot_nghiep": "T12/2022",
+        "nam_tot_nghiep": "2022",
+        "tong_sinh_vien": 95,
+        "created_at": "2022-12-20 16:45:00"
+    }
+]
