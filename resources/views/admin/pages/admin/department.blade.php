@@ -22,7 +22,7 @@
                     <thead class="table-light">
                         <tr class="text-nowrap">
                             <!-- Mã bộ môn -->
-                            <th>
+                            {{-- <th>
                                 <form method="GET" class="position-relative d-inline-block">
                                     <span>Mã bộ môn</span>
                                     <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
@@ -35,7 +35,7 @@
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
                                 </form>
-                            </th>
+                            </th> --}}
 
                             <!-- Tên bộ môn -->
                             <th>
@@ -95,9 +95,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($departments as $department)
+                        @forelse ($departments['data'] as $department)
                             <tr>
-                                <td>{{ $department['code'] }}</td>
+                                {{-- <td>{{ $department['code'] }}</td> --}}
                                 <td>{{ $department['name'] }}</td>
                                 <td>
                                     <span

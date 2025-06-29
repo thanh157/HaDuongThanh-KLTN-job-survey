@@ -119,4 +119,12 @@ return [
         'client_secret' => env('SSO_CLIENT_SECRET', 'client_secret'),
         'api_key' => env('SSO_API_KEY', 'api_key'),
     ],
+
+    'student' => [
+        'uri' => env('STUDENT_URL', 'https://st.student.dev:8882'),
+        'ip' => env('STUDENT_IP', '127.0.0.1:8000'),
+        'client_id' => env('STUDENT_CLIENT_ID', 'client_id'),
+        'client_secret' => env('STUDENT_CLIENT_SECRET', 'client_secret'),
+        'api_key' => env('STUDENT_API_KEY', 'api_key'),
+    ],
 ];

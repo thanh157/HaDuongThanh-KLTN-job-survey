@@ -6,7 +6,6 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticateController;
-// use App\Http\Controllers\DepartmentController;
 
 // // web.php
 // Route::get('/login/microsoft', [AuthController::class, 'redirectToProvider'])->name('sso.redirect');

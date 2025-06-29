@@ -8,10 +8,11 @@ use App\Enums\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Session;
 use Throwable;
+use Illuminate\Support\Arr;
 
-class SsoService
+class StudentService
 {
     private $accessToken;
 
@@ -30,8 +31,9 @@ class SsoService
                 $accessToken = Arr::get($data, 'access_token');
             }
 
-            $response = Http::withToken($accessToken)->get(config('auth.sso.ip') . $endPoint, $data);
-
+            
+            $response = Http::withToken($accessToken)->get(config('auth.student.ip') . $endPoint, $data);
+            
             return $response->json();
         } catch (Throwable $th) {
             Log::error($th->getMessage());
@@ -45,7 +47,7 @@ class SsoService
     public function post(string $endPoint, $data = [])
     {
         try {
-            $response = Http::withToken($this->accessToken)->post(config('auth.sso.ip') . $endPoint, $data);
+            $response = Http::withToken($this->accessToken)->post(config('auth.student.ip') . $endPoint, $data);
 
             return $response->json();
         } catch (Throwable $th) {
@@ -84,7 +86,7 @@ class SsoService
         // Nếu không có dữ liệu trong database và có access token, thử lấy dữ liệu từ API
         if ($this->accessToken) {
             try {
-                $response = Http::withToken($this->accessToken)->get(config('auth.sso.ip') . '/api/user');
+                $response = Http::withToken($this->accessToken)->get(config('auth.student.ip') . '/api/user');
                 if ($response->successful()) {
                     $userData = $response->json();
 
@@ -104,7 +106,7 @@ class SsoService
         }
 
         // Nếu vẫn không có dữ liệu, xóa auth và trả về null
-        app(SsoService::class)->clearAuth();
+        app(StudentService::class)->clearAuth();
         return null;
     }
 
