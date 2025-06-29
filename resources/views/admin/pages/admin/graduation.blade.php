@@ -83,11 +83,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($graduations as $graduation)
+                        @forelse ($graduations['data'] as $graduation)
                             <tr class="text-center">
-                                <td><a href="#">{{ $graduation['dot_tot_nghiep'] }}</a></td>
-                                <td>{{ $graduation['nam_tot_nghiep'] }}</td>
-                                <td>{{ $graduation['tong_sinh_vien'] }}</td>
+                                <td><a href="#">{{ $graduation['name'] }}</a></td>
+                                <td>{{ $graduation['school_year'] }}</td>
+                                <td>{{ $graduation['student_count'] }}</td>
                                 <td>{{ \Carbon\Carbon::parse($graduation['created_at'])->format('H:i d/m/Y') }}</td>
                             </tr>
                         @empty

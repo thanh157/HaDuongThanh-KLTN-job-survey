@@ -4,47 +4,39 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
+use App\Services\StudentService;
+use Illuminate\Support\Arr;
 
 class GraduationController extends Controller
 {
+    public function __construct(private StudentService $studentService)
+    {
+    }
+
     public function index(Request $request)
     {
-        $path = base_path('app/JSON/Graduation.json');
-        $graduations = [];
+        $facultyId = $this->studentService->getFacultyId();
+        // get department from sso platform
+        // generate token from client_id and client_secret from .env
+        $token = cache()->remember(
+            'token_client1', 
+            60 * 5, // Cache trong 5 phút
+            fn () => $this->studentService->post('/oauth/token', [
+                'grant_type' => 'client_credentials',
+                'client_id' => config('auth.student.client_id'),
+                'client_secret' => config('auth.student.client_secret'),
+            ])
+        );
 
-        if (File::exists($path)) {
-            $data = File::get($path);
-            $graduations = json_decode($data, true);
-        }
+        $graduations = cache()->remember(
+            'api_departments_2' . $facultyId, 
+            60 * 5, // Cache trong 5 phút
+            fn () => $this->studentService->get('/api/v1/external/graduation-ceremonies/faculty/' . $facultyId, [
+                'access_token' => Arr::get($token, 'access_token')
+            ])
+        );
 
-        // Lọc theo đợt tốt nghiệp
-        if ($request->filled('dot_tot_nghiep')) {
-            $graduations = array_filter($graduations, function ($item) use ($request) {
-                return Str::contains(Str::lower($item['dot_tot_nghiep']), Str::lower($request->dot_tot_nghiep));
-            });
-        }
-
-        // Lọc theo năm tốt nghiệp
-        if ($request->filled('nam_tot_nghiep')) {
-            $graduations = array_filter($graduations, function ($item) use ($request) {
-                return Str::contains(Str::lower($item['nam_tot_nghiep']), Str::lower($request->nam_tot_nghiep));
-            });
-        }
-
-        // Sắp xếp ngày tạo
-        if ($request->filled('sap_xep')) {
-            usort($graduations, function ($a, $b) use ($request) {
-                $timeA = strtotime($a['created_at']);
-                $timeB = strtotime($b['created_at']);
-
-                return $request->sap_xep === 'cu_nhat'
-                    ? $timeA <=> $timeB
-                    : $timeB <=> $timeA;
-            });
-        }
-
+        // return data to view
         return view('admin.pages.admin.graduation', [
             'graduations' => $graduations
         ]);

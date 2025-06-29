@@ -4,53 +4,41 @@ namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
+use App\Services\SsoService;
+use Illuminate\Support\Arr;
 
 class DepartmentController extends Controller
 {
+    public function __construct(private SsoService $ssoService)
+    {
+    }
+
     public function index(Request $request)
     {
-        $path = base_path('app/JSON/Department.json');
-        $departments = [];
+        $facultyId = $this->ssoService->getFacultyId();
+        // get department from sso platform
+        // generate token from client_id and client_secret from .env
+        $token = cache()->remember(
+            'token_client', 
+            60 * 5, // Cache trong 5 phút
+            fn () => $this->ssoService->post('/oauth/token', [
+                'grant_type' => 'client_credentials',
+                'client_id' => config('auth.sso.client_id'),
+                'client_secret' => config('auth.sso.client_secret'),
+            ])
+        );
 
-        if (File::exists($path)) {
-            $data = File::get($path);
-            $departments = json_decode($data, true);
-        }
+        $departments = cache()->remember(
+            'api_departments_' . $facultyId, 
+            60 * 5, // Cache trong 5 phút
+            fn () => $this->ssoService->get('/api/faculties/' . $facultyId . '/departments', [
+                'access_token' => Arr::get($token, 'access_token')
+            ])
+        );
 
-        $departments = collect($departments);
-
-        // Lọc theo mã bộ môn
-        if ($request->filled('ma_bo_mon')) {
-            $departments = $departments->filter(function ($item) use ($request) {
-                return Str::contains(Str::lower($item['code']), Str::lower($request->ma_bo_mon));
-            });
-        }
-
-        // Lọc theo tên bộ môn
-        if ($request->filled('ten_bo_mon')) {
-            $departments = $departments->filter(function ($item) use ($request) {
-                return Str::contains(Str::lower($item['name']), Str::lower($request->ten_bo_mon));
-            });
-        }
-
-        // Lọc theo trạng thái
-        if ($request->filled('trang_thai')) {
-            $departments = $departments->filter(function ($item) use ($request) {
-                return $item['status'] === $request->trang_thai;
-            });
-        }
-
-        // Sắp xếp theo ngày tạo
-        if ($request->sap_xep === 'moi_nhat') {
-            $departments = $departments->sortByDesc('created_at');
-        } elseif ($request->sap_xep === 'cu_nhat') {
-            $departments = $departments->sortBy('created_at');
-        }
-
+        // return data to view
         return view('admin.pages.admin.department', [
-            'departments' => $departments->values()
+            'departments' => $departments
         ]);
     }
 }
