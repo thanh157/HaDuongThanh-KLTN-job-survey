@@ -20,6 +20,9 @@ use App\Http\Controllers\System\MajorController;
 use App\Http\Controllers\System\GraduationController;
 use App\Http\Controllers\System\ClassController;
 use App\Http\Controllers\System\ClassDetailController;
+use App\Http\Controllers\GraduationStudentController;
+use App\Http\Controllers\Admin\SurveyPeriodController;
+
 
 
 // Route::get('/login/sso', [AuthController::class, 'redirectToSSO'])->name('sso.redirect');
@@ -43,6 +46,18 @@ Route::middleware('auth.sso')->group(function (): void {
 
     Route::get('/department', [DepartmentController::class, 'index'])->name('admin.department.index');
 
+    Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
+    Route::get('/graduation/create', [GraduationController::class, 'create'])->name('admin.graduation.create');
+    Route::post('/graduation', [GraduationController::class, 'store'])->name('admin.graduation.store');
+    Route::get('/graduation/{id}/edit', [GraduationController::class, 'edit'])->name('admin.graduation.edit');
+    Route::put('/graduation/{id}', [GraduationController::class, 'update'])->name('admin.graduation.update');
+    Route::delete('/graduation/{id}', [GraduationController::class, 'destroy'])->name('admin.graduation.destroy');
+    Route::get('/graduation/{graduationId}/students', [GraduationStudentController::class, 'index'])->name('admin.graduation-student.index');
+    Route::get('/graduation/{graduationId}/students/create', [GraduationStudentController::class, 'create'])->name('admin.graduation-student.create');
+    // Xử lý lưu
+    Route::post('/graduation/{graduationId}/students', [GraduationStudentController::class, 'store'])->name('admin.graduation-student.store');
+
+
     // Route::get('/department', function () {
     //     return view('admin.pages.admin.department');
     // })->name('admin.department.index');
@@ -57,8 +72,6 @@ Route::middleware('auth.sso')->group(function (): void {
         Route::get('/', [ClassController::class, 'index'])->name('admin.class.index');
         Route::get('/{id}/detail', [ClassController::class, 'detail'])->name('admin.class.class-detail');
     });
-
-
 
     // Route::get('/major', function () {
     //     return view('admin.pages.admin.major');
@@ -100,9 +113,9 @@ Route::middleware('auth.sso')->group(function (): void {
         return view('admin.pages.admin.create-survey');
     })->name('admin.survey.create-survey');
 
-    // Route::get('/class-detail;', function () {
-    //     return view('admin.pages.admin.class-detail');
-    // })->name('admin.class.class-detail');
+    Route::get('/class-detail;', function () {
+        return view('admin.pages.admin.class-detail');
+    })->name('admin.class.class-detail');
 
     Route::get('/form-survey;', function () {
         return view('admin.pages.admin.form-survey');
