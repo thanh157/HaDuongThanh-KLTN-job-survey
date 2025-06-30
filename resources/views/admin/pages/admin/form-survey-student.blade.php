@@ -78,13 +78,7 @@
                     <h6 class="fw-bold">Phần I. Thông tin cá nhân</h6>
 
                     <div class="mb-3">
-                        <label for="ma_sv">1. Mã sinh viên</label>
-                        <input type="text" class="form-control" id="ma_sv" name="ma_sv" value="637084"
-                            placeholder="Nhập mã sinh viên">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="ho_ten">2. Họ và tên</label>
+                        <label for="ho_ten">1. Họ và tên</label>
                         <input type="text" class="form-control" id="ho_ten" name="ho_ten"
                             placeholder="Nhập họ và tên đầy đủ">
                     </div>
@@ -101,6 +95,13 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="ma_sv">4. Mã sinh viên</label>
+                        <input type="text" class="form-control" id="ma_sv" name="ma_sv" value="637084"
+                            placeholder="Nhập mã sinh viên" oninput="setKhoaHocFromMaSV()">
+
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">5. Số căn cước công dân</label>
                         <input type="text" class="form-control mb-2" placeholder="Nhập số CCCD">
                         <label class="form-label">Ngày cấp</label>
@@ -112,12 +113,31 @@
                     <div class="row">
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">6. Khóa học</label>
-                            <input type="text" class="form-control" placeholder="Nhập khóa học">
+                            <input type="text" class="form-control" id="khoa_hoc" name="khoa_hoc"
+                                placeholder="Khóa học sẽ tự động hiển thị">
                         </div>
-                        <div class="col-12 col-md-6 mb-3">
-                            <label class="form-label">7. Tên ngành đào tạo</label>
-                            <input type="text" class="form-control" placeholder="Nhập tên ngành">
+                        <div class="col-md-6 mb-3">
+                            <label for="major" class="form-label">Ngành đào tạo</label>
+                            <select class="form-select" name="major" id="major" required>
+                                <option value="">-- Chọn ngành đào tạo --</option>
+
+                                @isset($majors)
+                                    @foreach ($majors as $major)
+                                        <option value="{{ $major->id }}">{{ $major->name }}</option>
+                                    @endforeach
+
+                                @endisset
+
+                            </select>
                         </div>
+
+                        {{-- <select class="form-select" name="major" id="major" required>
+                            <option value="">-- Chọn ngành đào tạo --</option>
+                            @foreach ($majors as $major)
+                                <option value="{{ $major['id'] }}">{{ $major['name'] }}</option>
+                            @endforeach
+                        </select> --}}
+
                     </div>
 
                     <div class="row">
@@ -131,10 +151,12 @@
                         </div>
                     </div>
 
+                    {{-- chưa api major được --}}
                     <!-- 10. Tình trạng việc làm hiện tại -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold">10. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại</label>
-                        @php $tinh_trang = ['Đã có việc làm', 'Đang học tiếp/học văn bằng 2', 'Chưa có việc làm', 'Chưa đi làm']; @endphp
+                        <label class="form-label fw-bold">10. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của
+                            Anh/chị</label>
+                        @php $tinh_trang = ['Đã có việc làm', 'Tiếp tục học', 'Chưa có việc làm']; @endphp
                         @foreach ($tinh_trang as $index => $value)
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="radio" name="vieclam_hientai"
@@ -146,25 +168,25 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">11. Tên đơn vị tuyển dụng</label>
+                        <label class="form-label">11. Cơ quan công tác</label>
                         <input type="text" class="form-control" placeholder="Nhập tên công ty / tổ chức">
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">12. Địa chỉ đơn vị</label>
+                        <label class="form-label">12. Địa chỉ cơ quan</label>
                         <div class="form-text mb-3">vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ</div>
                         <input type="text" class="form-control mb-1" placeholder="Nhập địa chỉ cụ thể">
                         <label class="form-label">Địa chỉ đơn vị thuộc Tỉnh/Thành phố</label>
                         <input type="text" class="form-control" placeholder="Nhập Tỉnh/Thành phố">
                     </div>
 
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label class="form-label">13. Thời gian tuyển dụng</label>
                         <input type="text" class="form-control" placeholder="Nhập năm tuyển dụng (vd: 2025)">
-                    </div>
+                    </div> --}}
 
                     <div class="mb-3">
-                        <label class="form-label">14. Chức vụ, vị trí việc làm</label>
+                        <label class="form-label">13. Chức vụ, vị trí việc làm</label>
                         <input type="text" class="form-control"
                             placeholder="VD: Nhân viên kinh doanh, Trưởng phòng sale...">
                     </div>
@@ -175,8 +197,8 @@
 
                 <!-- 15. Khu vực làm việc -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">15. Đơn vị Anh/Chị đang làm việc thuộc khu vực nào?</label>
-                    @foreach (['Nhà nước', 'Tư nhân', 'Có yếu tố nước ngoài', 'Tự tạo việc làm'] as $key => $item)
+                    <label class="form-label fw-bold">14. Đơn vị Anh/Chị đang làm việc thuộc khu vực nào?</label>
+                    @foreach (['Khu vực nhà nước', 'Khu vực tư nhân', 'Có yếu tố nước ngoài', 'Tự tạo việc làm'] as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="khu_vuc_lam_viec"
                                 id="kv_{{ $key }}" value="{{ $item }}">
@@ -188,8 +210,8 @@
 
                 <!-- 16. Thời gian có việc sau tốt nghiệp -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">16. Sau khi tốt nghiệp, Anh/Chị có việc làm từ khi nào?</label>
-                    @foreach (['Dưới 3 tháng', 'Từ 3-6 tháng', 'Từ 6-12 tháng', 'Trên 12 tháng'] as $key => $item)
+                    <label class="form-label fw-bold">15. Sau khi tốt nghiệp, Anh/Chị có việc làm từ khi nào?</label>
+                    @foreach (['Dưới 3 tháng', 'Từ 3 tháng đến 6 tháng', 'Từ 6 tháng đến 12 tháng', 'Trên 12 tháng'] as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="thoigian_co_viec"
                                 id="tg_{{ $key }}" value="{{ $item }}">
@@ -201,7 +223,7 @@
 
                 <!-- 17. Công việc có phù hợp với ngành đào tạo -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">17. Công việc Anh/Chị đang làm có phù hợp với ngành đào tạo
+                    <label class="form-label fw-bold">16. Công việc Anh/Chị đang làm có phù hợp với ngành đào tạo
                         không?</label>
                     @foreach (['Đúng ngành đào tạo', 'Liên quan đến ngành đào tạo', 'Không liên quan đến ngành đào tạo'] as $key => $item)
                         <div class="form-check mb-2">
@@ -213,9 +235,9 @@
                     @endforeach
                 </div>
 
-                <!-- 18. Công việc có phù hợp với trình độ chuyên môn -->
+                {{-- <!-- 18. Công việc có phù hợp với trình độ chuyên môn -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">18. Công việc Anh/Chị đang đảm nhận có phù hợp với trình độ chuyên
+                    <label class="form-label fw-bold">17. Công việc Anh/Chị đang đảm nhận có phù hợp với trình độ chuyên
                         môn không?</label>
                     @foreach (['Chưa phù hợp với trình độ chuyên môn', 'Phù hợp với trình độ chuyên môn'] as $key => $item)
                         <div class="form-check mb-2">
@@ -225,13 +247,13 @@
                                 for="trinhdo_{{ $key }}">{{ $item }}</label>
                         </div>
                     @endforeach
-                </div>
+                </div> --}}
 
                 <!-- 19. Kiến thức kỹ năng từ trường có phù hợp công việc -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">19. Anh/Chị có học được kiến thức/kỹ năng cần thiết từ trường cho
-                        công việc không?</label>
-                    @foreach (['Đã học được', 'Không học được', 'Chỉ học được 1 phần'] as $key => $item)
+                    <label class="form-label fw-bold">17. Anh/Chị có học được kiến thức/kỹ năng cần thiết từ trường cho
+                        công việc theo nghành tốt nghiệp không?</label>
+                    @foreach (['Đã học được', 'Không học được', 'Chỉ học được một phần'] as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="kienthuc_tu_truong"
                                 id="kt_{{ $key }}" value="{{ $item }}">
@@ -241,16 +263,17 @@
                     @endforeach
                 </div>
 
-                <!-- 20. Mức lương khởi điểm -->
+                {{-- <!-- 20. Mức lương khởi điểm -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">20. Mức lương khởi điểm (triệu đồng/tháng)</label>
+                    <label class="form-label fw-bold">18. Mức thu nhập bình quân/tháng tính theo VNĐ của Anh/chị hiện nay</label>
                     <input type="text" class="form-control" name="luong_khoidiem" placeholder="10">
-                </div>
+                </div> --}}
 
                 <!-- 21. Mức thu nhập hiện tại -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">21. Mức thu nhập bình quân/tháng hiện nay (triệu đồng)</label>
-                    @foreach (['Dưới 5 triệu', '5 - 10 triệu', '10 - 15 triệu', 'Trên 15 triệu'] as $key => $item)
+                    <label class="form-label fw-bold">18. Mức thu nhập bình quân/tháng theo VNĐ của anh/chị hiện
+                        nay?</label>
+                    @foreach (['Dưới 5 triệu', 'từ 5 triệu đến 10 triệu', 'Từ trên 10 triệu đến 15 triệu', 'Trên 15 triệu'] as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="thu_nhap_hientai"
                                 id="tn_{{ $key }}" value="{{ $item }}">
@@ -262,104 +285,211 @@
 
                 <!-- 22. Hình thức tìm được việc làm -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">22. Anh/Chị tìm được việc làm thông qua những hình thức nào? <span
-                            class="fw-normal">(Có thể chọn nhiều lựa chọn)</span></label>
-                    @php $tim_viec = ['Do Học viện/Khoa giới thiệu', 'Bạn bè, người quen giới thiệu', 'Tự tìm việc làm', 'Tự tạo việc làm', 'Khác']; @endphp
+                    <label class="form-label fw-bold">
+                        19. Anh/Chị tìm được việc làm thông qua những hình thức nào?
+                        <span class="fw-normal">(Có thể chọn nhiều lựa chọn)</span>
+                    </label>
+                    @php
+                        $tim_viec = [
+                            'Do Học viện/Khoa giới thiệu',
+                            'Bạn bè, người quen giới thiệu',
+                            'Tự tìm việc làm',
+                            'Tự tạo việc làm',
+                            'Hình thức khác',
+                        ];
+                    @endphp
                     @foreach ($tim_viec as $index => $value)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" name="hinh_thuc_tim_viec[]"
-                                id="ht_{{ $index }}" value="{{ $value }}">
+                                id="ht_{{ $index }}" value="{{ $value }}"
+                                @if ($value === 'Hình thức khác') onchange="toggleOtherInput(this)" @endif>
                             <label class="form-check-label fw-normal"
                                 for="ht_{{ $index }}">{{ $value }}</label>
                         </div>
                     @endforeach
+
+                    <!-- Ô nhập hiện khi chọn 'Hình thức khác' -->
+                    <div id="other_input_box" class="mt-2" style="display: none;">
+                        <label class="form-label fw-normal" for="other_input">Vui lòng ghi rõ:</label>
+                        <input type="text" class="form-control" name="hinh_thuc_khac" id="other_input"
+                            placeholder="Nhập hình thức khác...">
+                    </div>
                 </div>
 
-                <!-- 23. Hình thức tuyển -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">23. Anh/Chị được tuyển theo hình thức nào?</label>
-                    @foreach (['Thi tuyển', 'Xét tuyển', 'Hợp đồng', 'Điều động', 'Khác'] as $key => $item)
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="hinh_thuc_tuyen"
-                                id="ht_tuyen_{{ $key }}" value="{{ $item }}">
-                            <label class="form-check-label fw-normal"
-                                for="ht_tuyen_{{ $key }}">{{ $item }}</label>
-                        </div>
-                    @endforeach
+                    <label class="form-label fw-bold">20. Mức độ Anh/Chị áp dụng kiến thức, kỹ năng đã được đào tạo vào
+                        thực tế công việc?</label>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle text-center">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-start">Nội dung áp dụng</th>
+                                    <th>Áp dụng rất nhiều</th>
+                                    <th>Áp dụng tương đối nhiều</th>
+                                    <th>Áp dụng ít</th>
+                                    <th>Áp dụng rất ít</th>
+                                    <th>Không áp dụng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $muc_do = ['rất nhiều', 'tương đối nhiều', 'ít', 'rất ít', 'không áp dụng'];
+                                    $noi_dung = ['Kiến thức', 'Kỹ năng'];
+                                @endphp
+
+                                @foreach ($noi_dung as $key => $nd)
+                                    <tr>
+                                        <td class="text-start">{{ $nd }}</td>
+                                        @foreach ($muc_do as $index => $md)
+                                            <td>
+                                                <input class="form-check-input" type="radio"
+                                                    name="muc_do_{{ strtolower(str_replace(' ', '_', $nd)) }}"
+                                                    value="{{ $md }}"
+                                                    id="{{ $nd }}_{{ $index }}">
+                                            </td>
+                                        @endforeach
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
 
                 <!-- 24. Kỹ năng mềm -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">24. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau
+                    <label class="form-label fw-bold">21. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào
+                        sau
                         đây? <span class="fw-normal">(Có thể chọn nhiều lựa chọn)</span></label>
-                    @php $ky_nang = ['Kỹ năng giao tiếp', 'Kỹ năng lãnh đạo', 'Kỹ năng thuyết trình', 'Kỹ năng Tiếng Anh', 'Kỹ năng làm việc nhóm', 'Kỹ năng tin học', 'Kỹ năng viết báo cáo tài liệu', 'Kỹ năng hội nhập quốc tế', 'Khác']; @endphp
+                    @php $ky_nang = ['Kỹ năng giao tiếp', 'Kỹ năng lãnh đạo', 'Kỹ năng thuyết trình', 'Kỹ năng Tiếng Anh', 'Kỹ năng làm việc nhóm', 'Kỹ năng tin học', 'Kỹ năng viết báo cáo tài liệu', 'Khác']; @endphp
                     @foreach ($ky_nang as $index => $value)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" name="ky_nang_mem[]"
-                                id="kn_{{ $index }}" value="{{ $value }}">
+                                id="kn_{{ $index }}" value="{{ $value }}"
+                                @if ($value === 'Khác') onchange="toggleOtherInput(this, 'ky_nang_khac_box')" @endif>
                             <label class="form-check-label fw-normal"
                                 for="kn_{{ $index }}">{{ $value }}</label>
                         </div>
                     @endforeach
+
+                    <!-- Textbox cho 'Khác' -->
+                    <div id="ky_nang_khac_box" class="mt-2" style="display: none;">
+                        <label class="form-label fw-normal" for="ky_nang_khac">Vui lòng ghi rõ kỹ năng khác:</label>
+                        <input type="text" class="form-control" name="ky_nang_khac" id="ky_nang_khac"
+                            placeholder="Nhập kỹ năng khác...">
+                    </div>
+
                 </div>
 
                 <!-- 25. Khóa học nâng cao -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">25. Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học nâng
+                    <label class="form-label fw-bold">22. Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học
+                        nâng
                         cao nào dưới đây để đáp ứng công việc không? <span class="fw-normal">(Có thể chọn nhiều lựa
                             chọn)</span></label>
                     @php $nang_cao = ['Nâng cao kiến thức chuyên môn', 'Nâng cao kỹ năng chuyên môn nghiệp vụ', 'Nâng cao về kỹ năng công nghệ thông tin', 'Nâng cao kỹ năng ngoại ngữ', 'Phát triển kỹ năng quản lý', 'Tiếp tục học lên cao', 'Khác']; @endphp
                     @foreach ($nang_cao as $index => $value)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" name="khoa_hoc_nang_cao[]"
-                                id="nc_{{ $index }}" value="{{ $value }}">
+                                id="nc_{{ $index }}" value="{{ $value }}"
+                                @if ($value === 'Khác') onchange="toggleOtherInput(this, 'nang_cao_khac_box')" @endif>
                             <label class="form-check-label fw-normal"
                                 for="nc_{{ $index }}">{{ $value }}</label>
                         </div>
                     @endforeach
+
+                    <!-- Textbox cho 'Khác' -->
+                    <div id="nang_cao_khac_box" class="mt-2" style="display: none;">
+                        <label class="form-label fw-normal" for="nang_cao_khac">Vui lòng ghi rõ khóa học khác:</label>
+                        <input type="text" class="form-control" name="nang_cao_khac" id="nang_cao_khac"
+                            placeholder="Nhập khóa học khác...">
+                    </div>
+
                 </div>
 
-                <!-- 26. Giải pháp nâng tỷ lệ có việc làm -->
+                <!-- 23. Giải pháp nâng tỷ lệ có việc làm đúng ngành -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">26. Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc
-                        làm đúng ngành của sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học? <span
-                            class="fw-normal">(Có thể chọn nhiều lựa chọn)</span></label>
-                    @php $giai_phap = ['Học viện tổ chức các buổi trao đổi, chia sẻ kinh nghiệm việc làm giữa cựu sinh viên và sinh viên', 'Học viện tổ chức các buổi gặp gỡ với đơn vị sử dụng lao động', 'Đơn vị sử dụng lao động tham gia vào quá trình đào tạo', 'Chương trình đào tạo được cập nhật theo nhu cầu thị trường', 'Tăng cường các hoạt động thực hành và chuyên môn tại cơ sở', 'Khác']; @endphp
+                    <label class="form-label fw-bold">
+                        23. Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc làm đúng ngành của sinh
+                        viên
+                        tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
+                        <span class="fw-normal">(Có thể chọn nhiều đáp án)</span>
+                    </label>
+
+                    @php
+                        $giai_phap = [
+                            'Học viện tổ chức chương trình để cựu sinh viên chia sẻ kinh nghiệm tìm việc làm cho sinh viên',
+                            'Học viện tổ chức các buổi trao đổi giữa sinh viên với các đơn vị sử dụng lao động',
+                            'Đơn vị sử dụng lao động tham gia vào quá trình đào tạo',
+                            'Chương trình đào tạo được điều chỉnh và cập nhật theo nhu cầu của thị trường lao động',
+                            'Tăng cường các hoạt động thực hành và chuyên môn tại cơ sở',
+                            'Khác',
+                        ];
+                    @endphp
+
                     @foreach ($giai_phap as $index => $value)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="checkbox" name="giai_phap_viec_lam[]"
-                                id="gp_{{ $index }}" value="{{ $value }}">
+                                id="gp_{{ $index }}" value="{{ $value }}"
+                                @if ($value === 'Khác') onchange="toggleOtherInput(this, 'giai_phap_khac_box')" @endif>
                             <label class="form-check-label fw-normal"
                                 for="gp_{{ $index }}">{{ $value }}</label>
                         </div>
                     @endforeach
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Các giải pháp khác (nếu có, xin ghi rõ)</label>
-                        <textarea class="form-control" name="giai_phap_khac" rows="3" placeholder="Nhập ý kiến của bạn tại đây..."></textarea>
-                    </div>
 
-                    <!-- Reminder to review -->
-                    <div class="alert alert-warning mt-4" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                        Vui lòng kiểm tra kỹ thông tin trước khi gửi. Mỗi sinh viên chỉ được gửi phiếu khảo sát một lần.
-                    </div>
-
-                    <!-- Cảm ơn -->
-                    <div class="text-center mt-4">
-                        <p class="fw-semibold mb-1">Xin trân trọng cảm ơn sự hợp tác của Anh/Chị!</p>
-                        <p class="text-muted fst-italic mb-3">Kính chúc Anh/Chị sức khỏe và thành công!</p>
+                    <!-- Ô nhập hiện ra khi tích 'Khác' -->
+                    <div id="giai_phap_khac_box" class="mt-2" style="display: none;">
+                        <label class="form-label fw-normal" for="giai_phap_khac">Các giải pháp khác (xin ghi
+                            rõ)</label>
+                        <textarea class="form-control" name="giai_phap_khac" id="giai_phap_khac" rows="3"
+                            placeholder="Nhập giải pháp khác..."></textarea>
                     </div>
                 </div>
 
-                <!-- Submit button -->
-                <div class="text-end mt-3">
-                    <a href="{{ route('admin.survey.form-survey') }}" class="btn btn-success px-4 shadow-sm">
-                        <i class="bi bi-send me-1"></i> Gửi phản hồi
-                    </a>
+
+                <!-- Lời kết -->
+                <div class="text-center mt-4">
+                    {{-- <p class="fw-semibold mb-1"></p> --}}
+                    <p class="text-muted fst-italic mb-3">Xin trân trọng cảm ơn!</p>
                 </div>
 
-
-            </form>
         </div>
+
+        <!-- Submit button -->
+        <div class="text-end mt-3">
+            <a href="{{ route('admin.survey.form-survey') }}" class="btn btn-success px-4 shadow-sm">
+                <i class="bi bi-send me-1"></i> Gửi phản hồi
+            </a>
+        </div>
+
+
+        </form>
     </div>
+    </div>
+    <script>
+        function toggleOtherInput(checkbox, targetId = 'other_input_box') {
+            const inputBox = document.getElementById(targetId);
+            const inputField = inputBox?.querySelector('input, textarea');
+            if (checkbox.checked) {
+                inputBox.style.display = 'block';
+            } else {
+                inputBox.style.display = 'none';
+                if (inputField) inputField.value = '';
+            }
+        }
+
+        function setKhoaHocFromMaSV() {
+            const maSV = document.getElementById('ma_sv').value;
+            const khoaHocInput = document.getElementById('khoa_hoc');
+
+            if (maSV.length >= 2 && !isNaN(maSV)) {
+                const khoa = maSV.substring(0, 2);
+                khoaHocInput.value = 'Khóa ' + khoa;
+            } else {
+                khoaHocInput.value = '';
+            }
+        }
+    </script>
+
 @endsection

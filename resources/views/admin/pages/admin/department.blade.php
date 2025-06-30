@@ -21,64 +21,46 @@
                 <table class="table align-middle table-bordered mb-0">
                     <thead class="table-light">
                         <tr class="text-nowrap">
-                            <!-- Mã bộ môn -->
-                            {{-- <th>
-                                <form method="GET" class="position-relative d-inline-block">
-                                    <span>Mã bộ môn</span>
-                                    <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
-                                        onclick="toggleFilter('filter-ma')"></i>
-                                    <div id="filter-ma" class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="input-group mb-2">
-                                            <input type="text" name="ma_bo_mon" class="form-control"
-                                                placeholder="vd: 7480102" value="{{ request('ma_bo_mon') }}">
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
-                                    </div>
-                                </form>
-                            </th> --}}
-
-                            <!-- Tên bộ môn -->
+                            <th>STT</th>
+                            <th>Mã bộ môn</th>
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
                                     <span>Tên bộ môn</span>
-                                    <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
-                                        onclick="toggleFilter('filter-ten')"></i>
+                                    <i class="bi bi-funnel-fill text-primary ms-1" onclick="toggleFilter('filter-ten')"
+                                        style="cursor: pointer;"></i>
                                     <div id="filter-ten" class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="input-group mb-2">
-                                            <input type="text" name="ten_bo_mon" class="form-control"
-                                                placeholder="vd: Tin học" value="{{ request('ten_bo_mon') }}">
-                                        </div>
+                                        <input type="text" name="ten_bo_mon" class="form-control mb-2"
+                                            placeholder="vd: Tin học" value="{{ request('ten_bo_mon') }}">
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
                                 </form>
                             </th>
-
-                            <!-- Trạng thái -->
+                            <th>Mô tả</th>
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
                                     <span>Trạng thái</span>
-                                    <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
-                                        onclick="toggleFilter('filter-trangthai')"></i>
+                                    <i class="bi bi-funnel-fill text-primary ms-1"
+                                        onclick="toggleFilter('filter-trangthai')" style="cursor: pointer;"></i>
                                     <div id="filter-trangthai"
                                         class="shadow rounded p-3 bg-white position-absolute filter-popup">
                                         <select name="trang_thai" class="form-select mb-2">
                                             <option value="">Tất cả</option>
                                             <option value="active"
-                                                {{ request('trang_thai') == 'active' ? 'selected' : '' }}>Hoạt động</option>
+                                                {{ request('trang_thai') == 'active' ? 'selected' : '' }}>
+                                                Hoạt động</option>
                                             <option value="hidden"
-                                                {{ request('trang_thai') == 'hidden' ? 'selected' : '' }}>Ẩn</option>
+                                                {{ request('trang_thai') == 'hidden' ? 'selected' : '' }}>
+                                                Ẩn</option>
                                         </select>
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
                                 </form>
                             </th>
-
-                            <!-- Ngày tạo -->
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
                                     <span>Ngày tạo</span>
-                                    <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
-                                        onclick="toggleFilter('filter-ngay')"></i>
+                                    <i class="bi bi-funnel-fill text-primary ms-1" onclick="toggleFilter('filter-ngay')"
+                                        style="cursor: pointer;"></i>
                                     <div id="filter-ngay"
                                         class="shadow rounded p-3 bg-white position-absolute filter-popup">
                                         <select name="sap_xep" class="form-select mb-2">
@@ -95,10 +77,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($departments['data'] as $department)
+                        @forelse ($departments['data'] as $index => $department)
                             <tr>
-                                {{-- <td>{{ $department['code'] }}</td> --}}
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $department['code'] ?? '---' }}</td>
                                 <td>{{ $department['name'] }}</td>
+                                <td>{{ $department['description'] ?? '---' }}</td>
                                 <td>
                                     <span
                                         class="badge {{ $department['status'] == 'active' ? 'bg-success' : 'bg-secondary' }}">
@@ -109,7 +93,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center">Không có dữ liệu phù hợp.</td>
+                                <td colspan="6" class="text-center">Không có dữ liệu phù hợp.</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -16,28 +16,79 @@
             </div>
         </div>
 
-        <!-- Bộ lọc -->
         <form id="filterForm" class="row g-3 mb-4">
+            <!-- Nhóm: Bắt buộc -->
             <div class="col-md-3">
-                <label for="year" class="form-label">Năm tốt nghiệp</label>
-                <select id="year" class="form-select">
-                    <option value="">-- Chọn năm --</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
+                <label for="survey_period" class="form-label">Đợt khảo sát <span class="text-danger">*</span></label>
+                <select id="survey_period" class="form-select" required>
+                    <option value="">-- Chọn đợt khảo sát --</option>
+                    <option value="dot1">Khảo sát T6/2023</option>
+                    <option value="dot2">Khảo sát T12/2023</option>
                 </select>
             </div>
+
+            <!-- Nhóm: Thông tin sinh viên -->
             <div class="col-md-3">
-                <label for="region" class="form-label">Vùng miền</label>
-                <select id="region" class="form-select">
+                <label class="form-label">Sinh viên khảo sát</label>
+                <select class="form-select filter-option" data-chart="chart_surveyed">
                     <option value="">-- Tất cả --</option>
-                    <option value="bac">Miền Bắc</option>
-                    <option value="trung">Miền Trung</option>
-                    <option value="nam">Miền Nam</option>
+                    <option value="yes">Đã khảo sát</option>
+                    <option value="no">Chưa khảo sát</option>
                 </select>
             </div>
+
+            <!-- Nhóm: Việc làm -->
             <div class="col-md-3">
-                <label for="position" class="form-label">Vị trí việc làm</label>
-                <select id="position" class="form-select">
+                <label class="form-label">Tình trạng việc làm</label>
+                <select class="form-select filter-option" data-chart="chart_employment_status">
+                    <option value="">-- Tất cả --</option>
+                    <option value="co_viec">Đã có việc</option>
+                    <option value="chua_co_viec">Chưa có việc</option>
+                    <option value="tiep_tuc_hoc">Tiếp tục học</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Thời gian có việc</label>
+                <select class="form-select filter-option" data-chart="chart_employment_time">
+                    <option value="">-- Tất cả --</option>
+                    <option value="lt3">Dưới 3 tháng</option>
+                    <option value="3to6">3 - 6 tháng</option>
+                    <option value="6to12">6 - 12 tháng</option>
+                    <option value="gt12">Trên 12 tháng</option>
+                </select>
+            </div>
+
+            <!-- Nhóm: Cơ quan công tác -->
+            <div class="col-md-3">
+                <label class="form-label">Tên cơ quan công tác</label>
+                <select class="form-select filter-option" data-chart="chart_company_name">
+                    <option value="">-- Chọn cơ quan --</option>
+                    <option value="FPT Software">FPT Software</option>
+                    <option value="VNPT">VNPT</option>
+                    <option value="VinGroup">VinGroup</option>
+                    <option value="EVN">EVN</option>
+                    <option value="Mobifone">Mobifone</option>
+                    <option value="Viettel">Viettel</option>
+                    <option value="CMC Corporation">CMC Corporation</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Khu vực đơn vị làm việc</label>
+                <select class="form-select filter-option" data-chart="chart_work_sector">
+                    <option value="">-- Tất cả --</option>
+                    <option value="state">Nhà nước</option>
+                    <option value="private">Tư nhân</option>
+                    <option value="foreign">Có yếu tố nước ngoài</option>
+                    <option value="self_employed">Tự tạo việc làm</option>
+                </select>
+            </div>
+
+            <!-- Nhóm: Thông tin nghề nghiệp -->
+            <div class="col-md-3">
+                <label class="form-label">Chức danh công việc</label>
+                <select class="form-select filter-option" data-chart="chart_job_position">
                     <option value="">-- Tất cả --</option>
                     <option value="dev">Developer</option>
                     <option value="tester">Tester</option>
@@ -46,238 +97,168 @@
                     <option value="pm">Project Manager</option>
                 </select>
             </div>
+
             <div class="col-md-3">
-                <label for="jobArea" class="form-label">Khu vực làm việc</label>
-                <select id="jobArea" class="form-select">
+                <label class="form-label">Liên quan ngành đào tạo</label>
+                <select class="form-select filter-option" data-chart="chart_job_relevance">
                     <option value="">-- Tất cả --</option>
-                    <option value="trongnuoc">Trong nước</option>
-                    <option value="ngoainuoc">Ngoài nước</option>
+                    <option value="dung_nganh">Đúng ngành</option>
+                    <option value="lien_quan">Liên quan</option>
+                    <option value="khong_lien_quan">Không liên quan</option>
                 </select>
             </div>
-            <div class="col-md-12 text-end">
-                <button type="button" id="showReportBtn" class="btn btn-success px-4">Xem biểu đồ</button>
+
+            <!-- Nhóm: Thu nhập -->
+            <div class="col-md-3">
+                <label class="form-label">Thu nhập hiện tại</label>
+                <select class="form-select filter-option" data-chart="chart_income">
+                    <option value="">-- Tất cả --</option>
+                    <option value="lt5m">Dưới 5 triệu</option>
+                    <option value="5to10m">5 - 10 triệu</option>
+                    <option value="10to15m">Trên 10 - 15 triệu</option>
+                    <option value="gt15m">Trên 15 triệu</option>
+                </select>
             </div>
         </form>
 
-        <!-- Khu vực báo cáo -->
-        <div id="reportSection" style="display: none;">
-            <div class="row charts-bar-section">
-                <div class="col-md-6"><canvas id="chart1" class="chart-canvas"></canvas></div>
-                <div class="col-md-6"><canvas id="chart2" class="chart-canvas"></canvas></div>
-            </div>
-            <div class="row charts-pie-section">
-                <div class="col-md-4"><canvas id="chart3" class="chart-canvas"></canvas></div>
-                <div class="col-md-4"><canvas id="chart4" class="chart-canvas"></canvas></div>
-                <div class="col-md-4"><canvas id="chart5" class="chart-canvas"></canvas></div>
-            </div>
-        </div>
+        <div id="reportSection" class="row g-4"></div>
     </div>
 
-    <style>
-        .chart-canvas {
-            width: 100% !important;
-            height: 350px !important;
-            /* chiều cao canvas */
-        }
-
-        /* Đường kẻ phân cách nhóm biểu đồ cột và tròn */
-        .charts-bar-section {
-            border-bottom: 3px solid #b7b8b9;
-            /* màu xanh Bootstrap primary */
-            padding-bottom: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .charts-pie-section {
-            padding-top: 1.5rem;
-        }
-    </style>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
-        document.getElementById('showReportBtn').addEventListener('click', function() {
-            document.getElementById('reportSection').style.display = 'block';
-            renderCharts();
-        });
+        const surveyPeriodSelect = document.getElementById('survey_period');
+        const reportSection = document.getElementById('reportSection');
 
-        function renderCharts() {
-            const nganhCNTT = ['Khoa học MT', 'Trí tuệ NT', 'CN thông tin', 'Mạng MT & truyền thông', 'CN phần mềm'];
-            const phanHoi = [75, 70, 85, 68, 80];
-            const coViec = [65, 60, 75, 55, 72];
-            const chuaCoViec = [10, 10, 10, 13, 8];
-            const dungNganh = [45, 40, 60, 43, 55];
-            const lienQuan = [15, 12, 10, 10, 12];
-            const khongLienQuan = [5, 8, 5, 2, 5];
-            const tiepTucHoc = [3, 5, 4, 5, 3];
-            const trongNuoc = [60, 55, 70, 50, 60];
-            const ngoaiNuoc = [5, 5, 5, 5, 12];
-
-            new Chart(document.getElementById('chart1'), {
+        const mockData = {
+            chart_surveyed: {
+                type: 'pie',
+                labels: ["Đã khảo sát", "Chưa khảo sát"],
+                data: [120, 30]
+            },
+            chart_employment_status: {
+                type: 'pie',
+                labels: ["Đã có việc", "Chưa có việc", "Tiếp tục học"],
+                data: [80, 20, 50]
+            },
+            chart_employment_time: {
                 type: 'bar',
-                data: {
-                    labels: nganhCNTT,
-                    datasets: [{
-                            label: 'Có việc làm',
-                            data: coViec,
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)'
-                        },
-                        {
-                            label: 'Chưa có việc làm',
-                            data: chuaCoViec,
-                            backgroundColor: 'rgba(255, 99, 132, 0.7)'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        title: {
-                            display: true,
-                            text: 'So sánh sinh viên có và chưa có việc làm'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                maxRotation: 0,
-                                minRotation: 0,
-                                font: {
-                                    size: 12
-                                },
-                                autoSkip: false,
-                                maxTicksLimit: nganhCNTT.length,
-                            }
-                        }
-                    }
-                }
-            });
-
-            new Chart(document.getElementById('chart2'), {
+                labels: ["<3 tháng", "3-6 tháng", "6-12 tháng", ">12 tháng"],
+                data: [30, 40, 25, 15]
+            },
+            chart_company_name: {
+                type: 'pie',
+                labels: ["FPT Software", "VNPT", "VinGroup", "EVN", "Mobifone"],
+                data: [40, 20, 15, 10, 5],
+                // horizontal: true
+            },
+            chart_work_sector: {
+                type: 'pie',
+                labels: ["Nhà nước", "Tư nhân", "Nước ngoài", "Tự tạo việc làm"],
+                data: [50, 60, 20, 10]
+            },
+            chart_job_position: {
+                type: 'pie',
+                labels: ["Developer", "Tester", "Data Analyst", "System Admin", "PM"],
+                data: [30, 15, 10, 5, 10]
+            },
+            chart_job_relevance: {
+                type: 'pie',
+                labels: ["Đúng ngành", "Liên quan", "Không liên quan"],
+                data: [60, 30, 10]
+            },
+            chart_income: {
                 type: 'bar',
-                data: {
-                    labels: nganhCNTT,
-                    datasets: [{
-                            label: 'Đúng ngành',
-                            data: dungNganh,
-                            backgroundColor: 'rgba(75, 192, 192, 0.7)'
-                        },
-                        {
-                            label: 'Liên quan',
-                            data: lienQuan,
-                            backgroundColor: 'rgba(255, 205, 86, 0.7)'
-                        },
-                        {
-                            label: 'Không liên quan',
-                            data: khongLienQuan,
-                            backgroundColor: 'rgba(255, 99, 132, 0.7)'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Mức độ liên quan ngành của việc làm'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                maxRotation: 0,
-                                minRotation: 0,
-                                font: {
-                                    size: 12
-                                },
-                                autoSkip: false,
-                                maxTicksLimit: nganhCNTT.length,
-                            }
-                        }
-                    }
-                }
-            });
+                labels: ["<5 triệu", "5-10 triệu", "10-15 triệu", ">15 triệu"],
+                data: [10, 50, 25, 15]
+            }
+        };
 
-            new Chart(document.getElementById('chart3'), {
-                type: 'pie',
-                data: {
-                    labels: ['Trong nước', 'Ngoài nước'],
-                    datasets: [{
-                        data: [trongNuoc.reduce((a, b) => a + b, 0), ngoaiNuoc.reduce((a, b) => a + b, 0)],
-                        backgroundColor: ['#4bc0c0', '#ff6384']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Khu vực làm việc'
-                        }
-                    }
-                }
-            });
+        function renderChart(canvas, chartId) {
+            const ctx = canvas.getContext('2d');
+            const dataset = mockData[chartId];
+            const chartType = dataset.horizontal ? 'bar' : dataset.type;
 
-            new Chart(document.getElementById('chart4'), {
-                type: 'pie',
+            return new Chart(ctx, {
+                type: chartType,
                 data: {
-                    labels: ['Tiếp tục học', 'Chưa có việc làm'],
+                    labels: dataset.labels,
                     datasets: [{
-                        data: [tiepTucHoc.reduce((a, b) => a + b, 0), chuaCoViec.reduce((a, b) => a + b,
-                            0)],
-                        backgroundColor: ['rgba(255, 206, 86, 0.7)', 'rgba(255, 99, 132, 0.7)']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Tình trạng khác'
-                        }
-                    }
-                }
-            });
-
-            new Chart(document.getElementById('chart5'), {
-                type: 'pie',
-                data: {
-                    labels: ['Developer', 'Tester', 'Data Analyst', 'Sys Admin', 'Project Manager'],
-                    datasets: [{
-                        data: [90, 30, 25, 20, 35],
+                        label: 'Số lượng',
+                        data: dataset.data,
                         backgroundColor: [
-                            'rgba(54, 162, 235, 0.7)',
-                            'rgba(255, 206, 86, 0.7)',
-                            'rgba(153, 102, 255, 0.7)',
-                            'rgba(255, 159, 64, 0.7)',
-                            'rgba(75, 192, 192, 0.7)'
-                        ]
+                            '#007bff', '#28a745', '#ffc107', '#dc3545', '#6610f2', '#20c997', '#fd7e14'
+                        ],
+                        borderWidth: 1
                     }]
                 },
                 options: {
-                    responsive: true,
+                    responsive: false,
+                    animation: false,
+                    indexAxis: dataset.horizontal ? 'y' : 'x',
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: dataset.type === 'bar' ? 'top' : 'bottom'
+                        },
+                        tooltip: {
+                            enabled: true
                         },
                         title: {
-                            display: true,
-                            text: 'Chức vụ của sinh viên làm việc'
+                            display: false
                         }
-                    }
+                    },
+                    scales: dataset.type === 'bar' || dataset.horizontal ? {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    } : {}
                 }
             });
         }
+
+        document.querySelectorAll('.filter-option').forEach(select => {
+            select.addEventListener('change', function() {
+                const chartId = this.dataset.chart;
+
+                if (!surveyPeriodSelect.value) {
+                    alert('Vui lòng chọn đợt khảo sát trước khi lọc dữ liệu.');
+                    this.value = '';
+                    return;
+                }
+
+                if (!chartId || !mockData[chartId]) return;
+
+                const existingChart = document.getElementById(chartId);
+                if (!existingChart) {
+                    const div = document.createElement('div');
+                    div.classList.add('col-md-6');
+                    div.id = chartId;
+
+                    const canvasId = chartId + '_canvas';
+                    div.innerHTML = `
+                    <div class="card shadow">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Biểu đồ: ${this.options[this.selectedIndex].text}</span>
+                            <button type="button" class="btn-close" onclick="document.getElementById('${chartId}').remove()"></button>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="${canvasId}" width="400" height="400"></canvas>
+                        </div>
+                    </div>
+                `;
+                    reportSection.appendChild(div);
+                    renderChart(document.getElementById(canvasId), chartId);
+                }
+            });
+        });
     </script>
+
+
+
 @endsection
