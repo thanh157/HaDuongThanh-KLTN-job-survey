@@ -23,9 +23,9 @@
                     </div>
                 @endif
             </div>
-            <a href="{{ route('admin.graduation.create') }}" class="btn btn-primary">
+            {{-- <a href="{{ route('admin.graduation.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-circle me-1"></i> Thêm mới
-            </a>
+            </a> --}}
         </div>
 
         <!-- Bảng dữ liệu -->
@@ -43,8 +43,10 @@
                                     <div id="filter-dot" class="shadow rounded p-3 bg-white position-absolute filter-popup">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="dot_tot_nghiep" class="form-control"
-                                                placeholder="VD: T12/2024" value="{{ request('dot_tot_nghiep') }}">
+                                            <input type="text" name="name" class="form-control"
+                                                placeholder="VD: Đợt xét tốt nghiệp tháng 05/2023"
+                                                value="{{ request('name') }}">
+
                                         </div>
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
@@ -60,8 +62,8 @@
                                     <div id="filter-nam" class="shadow rounded p-3 bg-white position-absolute filter-popup">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="nam_tot_nghiep" class="form-control"
-                                                placeholder="VD: 2024" value="{{ request('nam_tot_nghiep') }}">
+                                            <input type="text" name="year" class="form-control" placeholder="VD: 2024"
+                                                value="{{ request('year') }}">
                                         </div>
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
@@ -93,13 +95,19 @@
                                 </form>
                             </th>
 
-                            <th class="text-center">Hành động</th>
+                            {{-- <th class="text-center">Hành động</th> --}}
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($graduations['data'] as $graduation)
+                        @forelse ($graduations as $graduation)
                             <tr class="text-center">
-                                <td><a href="#">{{ $graduation['name'] }}</a></td>
+                                <td>
+                                    <a href="{{ route('admin.graduation-student.index', $graduation['id']) }}">
+                                        {{ $graduation['name'] }}
+                                    </a>
+                                </td>
+
+                                {{-- <td><a href="#">{{ $graduation['name'] }}</a></td> --}}
                                 <td>{{ $graduation['school_year'] }}</td>
                                 <td>{{ $graduation['student_count'] }}</td>
                                 <td>{{ \Carbon\Carbon::parse($graduation['created_at'])->format('H:i d/m/Y') }}</td>
@@ -139,6 +147,10 @@
                     </tbody>
                 </table>
             </div>
+            <div class="mt-3">
+                {{ $graduations->withQueryString()->links() }}
+            </div>
+
         </div>
     </div>
 @endsection

@@ -4,7 +4,6 @@
 
 @section('content')
     <div class="container py-4">
-        <!-- Tiêu đề -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
             <div>
                 <h4 class="fw-bold mb-1">Quản lí chung - Ngành đào tạo</h4>
@@ -17,47 +16,26 @@
             </div>
         </div>
 
-        <!-- Bảng -->
         <div class="card shadow-sm">
             <div class="table-responsive">
-                <table class="table align-middle mb-0 table-bordered">
+                <table class="table align-middle table-bordered mb-0">
                     <thead class="table-light">
                         <tr class="text-nowrap">
-                            <!-- Mã ngành -->
+                            <th>STT</th>
+                            <th>Mã ngành</th>
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
-                                    <span>Mã ngành</span>
-                                    <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
-                                        onclick="toggleFilter('filter-ma')"></i>
-                                    <div id="filter-ma" class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="ma_nganh" class="form-control"
-                                                placeholder="VD: 7480102" value="{{ request('ma_nganh') }}">
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
-                                    </div>
-                                </form>
-                            </th>
-
-                            <!-- Tên ngành -->
-                            <th>
-                                <form method="GET" class="position-relative d-inline-block">
-                                    <span>Tên ngành</span>
+                                    <span>Tên ngành đào tạo</span>
                                     <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
                                         onclick="toggleFilter('filter-ten')"></i>
                                     <div id="filter-ten" class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="ten_nganh" class="form-control"
-                                                placeholder="VD: CNTT" value="{{ request('ten_nganh') }}">
-                                        </div>
+                                        <input type="text" name="ten_nganh" class="form-control mb-2"
+                                            placeholder="vd: Công nghệ" value="{{ request('ten_nganh') }}">
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
                                 </form>
                             </th>
-
-                            <!-- Trạng thái -->
+                            <th>Mô tả</th>
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
                                     <span>Trạng thái</span>
@@ -65,22 +43,15 @@
                                         onclick="toggleFilter('filter-trangthai')"></i>
                                     <div id="filter-trangthai"
                                         class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="mb-2">
-                                            <select class="form-select" name="trang_thai">
-                                                <option value="">Tất cả</option>
-                                                <option value="active"
-                                                    {{ request('trang_thai') == 'active' ? 'selected' : '' }}>Hoạt động
-                                                </option>
-                                                <option value="hidden"
-                                                    {{ request('trang_thai') == 'hidden' ? 'selected' : '' }}>Ẩn</option>
-                                            </select>
-                                        </div>
+                                        <select name="trang_thai" class="form-select mb-2">
+                                            <option value="">Tất cả</option>
+                                            <option value="active" {{ request('trang_thai') == 'active' ? 'selected' : '' }}>Hoạt động</option>
+                                            <option value="hidden" {{ request('trang_thai') == 'hidden' ? 'selected' : '' }}>Ẩn</option>
+                                        </select>
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
                                 </form>
                             </th>
-
-                            <!-- Ngày tạo -->
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
                                     <span>Ngày tạo</span>
@@ -88,39 +59,34 @@
                                         onclick="toggleFilter('filter-ngay')"></i>
                                     <div id="filter-ngay"
                                         class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="mb-2">
-                                            <select class="form-select" name="sap_xep">
-                                                <option value="moi_nhat"
-                                                    {{ request('sap_xep') == 'moi_nhat' ? 'selected' : '' }}>Mới nhất
-                                                </option>
-                                                <option value="cu_nhat"
-                                                    {{ request('sap_xep') == 'cu_nhat' ? 'selected' : '' }}>Cũ nhất</option>
-                                            </select>
-                                        </div>
+                                        <select name="sap_xep" class="form-select mb-2">
+                                            <option value="">Tất cả</option>
+                                            <option value="moi_nhat" {{ request('sap_xep') == 'moi_nhat' ? 'selected' : '' }}>Mới nhất</option>
+                                            <option value="cu_nhat" {{ request('sap_xep') == 'cu_nhat' ? 'selected' : '' }}>Cũ nhất</option>
+                                        </select>
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
                                 </form>
                             </th>
                         </tr>
                     </thead>
-
                     <tbody>
-                        @forelse ($majors as $major)
+                        @forelse ($majors as $index => $major)
                             <tr>
-                                <td>{{ $major['code'] }}</td>
-                                <td>{{ $major['name'] }}</td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $major['code'] ?? '---' }}</td>
+                                <td>{{ $major['name'] ?? '---' }}</td>
+                                <td>{{ $major['description'] ?? '---' }}</td>
                                 <td>
-                                    @if ($major['status'] === 'active')
-                                        <span class="badge bg-success">HOẠT ĐỘNG</span>
-                                    @else
-                                        <span class="badge bg-secondary">ẨN</span>
-                                    @endif
+                                    <span class="badge {{ $major['status'] == 'active' ? 'bg-success' : 'bg-secondary' }}">
+                                        {{ $major['status'] == 'active' ? 'HOẠT ĐỘNG' : 'ẨN' }}
+                                    </span>
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($major['created_at'])->format('H:i d/m/Y') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center">Không có dữ liệu ngành đào tạo</td>
+                                <td colspan="6" class="text-center">Không có dữ liệu phù hợp.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -128,20 +94,22 @@
             </div>
         </div>
     </div>
-@endsection
 
-@push('scripts')
     <style>
         .filter-popup {
-            display: none;
-            z-index: 999;
-            min-width: 240px;
             top: 100%;
             left: 0;
+            z-index: 10;
+            min-width: 250px;
+            display: none;
         }
 
         .filter-popup.show {
             display: block;
+        }
+
+        .breadcrumb {
+            font-size: 13px;
         }
     </style>
 
@@ -152,10 +120,10 @@
             if (popup) popup.classList.toggle('show');
         }
 
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.filter-popup') && !e.target.classList.contains('bi-funnel-fill')) {
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.filter-popup') && !event.target.classList.contains('bi-funnel-fill')) {
                 document.querySelectorAll('.filter-popup').forEach(p => p.classList.remove('show'));
             }
         });
     </script>
-@endpush
+@endsection

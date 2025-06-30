@@ -13,38 +13,136 @@ use App\Models\Graduation;
 
 class GraduationController extends Controller
 {
-    public function __construct(private StudentService $studentService)
-    {
-    }
+    public function __construct(private StudentService $studentService) {}
 
     public function index(Request $request)
     {
         $facultyId = $this->studentService->getFacultyId();
-        // get department from sso platform
-        // generate token from client_id and client_secret from .env
+
         $token = cache()->remember(
-            'token_client1', 
-            60 * 5, // Cache trong 5 phút
-            fn () => $this->studentService->post('/oauth/token', [
+            'token_client1',
+            60 * 5,
+            fn() =>
+            $this->studentService->post('/oauth/token', [
                 'grant_type' => 'client_credentials',
                 'client_id' => config('auth.student.client_id'),
                 'client_secret' => config('auth.student.client_secret'),
             ])
         );
 
-        $graduations = cache()->remember(
-            'api_departments_2' . $facultyId, 
-            60 * 5, // Cache trong 5 phút
-            fn () => $this->studentService->get('/api/v1/external/graduation-ceremonies/faculty/' . $facultyId, [
-                'access_token' => Arr::get($token, 'access_token')
-            ])
+        $response = $this->studentService->get('/api/v1/external/graduation-ceremonies/faculty/' . $facultyId, [
+            'access_token' => Arr::get($token, 'access_token')
+        ]);
+
+        $graduations = collect($response['data'] ?? []);
+
+        // Lọc theo tên
+        if ($request->filled('name')) {
+            $graduations = $graduations->filter(
+                fn($item) =>
+                str_contains(Str::lower($item['name']), Str::lower($request->input('name')))
+            );
+        }
+
+        // Lọc theo năm
+        if ($request->filled('year')) {
+            $graduations = $graduations->filter(
+                fn($item) =>
+                str_contains(Str::lower($item['school_year']), Str::lower($request->input('year')))
+            );
+        }
+
+        // Sắp xếp
+        if ($request->input('sap_xep') === 'moi_nhat') {
+            $graduations = $graduations->sortByDesc('created_at');
+        } elseif ($request->input('sap_xep') === 'cu_nhat') {
+            $graduations = $graduations->sortBy('created_at');
+        }
+
+        // Phân trang thủ công
+        $perPage = 10;
+        $currentPage = $request->get('page', 1);
+        $paged = $graduations->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        $graduationsPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $paged,
+            $graduations->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
         );
 
-        // return data to view
         return view('admin.pages.admin.graduation', [
-            'graduations' => $graduations
+            'graduations' => $graduationsPaginated
         ]);
     }
+
+
+    public function showStudents(Request $request, $graduationId)
+    {
+        $facultyId = $this->studentService->getFacultyId();
+
+        $token = cache()->remember('token_client1', 60 * 5, fn() => $this->studentService->post('/oauth/token', [
+            'grant_type' => 'client_credentials',
+            'client_id' => config('auth.student.client_id'),
+            'client_secret' => config('auth.student.client_secret'),
+        ]));
+
+        $graduations = $this->studentService->get('/api/v1/external/graduation-ceremonies/faculty/' . $facultyId, [
+            'access_token' => $token['access_token'],
+        ]);
+
+        $graduation = collect($graduations['data'])->firstWhere('id', (int) $graduationId);
+
+        if (!$graduation) {
+            return redirect()->route('admin.graduation.index')->with('error', 'Không tìm thấy đợt tốt nghiệp.');
+        }
+
+        // --- LỌC ---
+        $students = collect($graduation['students'] ?? [])->filter(function ($student) use ($request) {
+            if ($request->filled('name')) {
+                $keyword = Str::lower(Str::ascii($request->input('name')));
+                $studentName = Str::lower(Str::ascii($student['full_name']));
+                if (!Str::contains($studentName, $keyword)) return false;
+            }
+
+            if ($request->filled('code') && !Str::contains($student['code'], $request->input('code'))) {
+                return false;
+            }
+
+            if ($request->filled('email')) {
+                $keyword = Str::lower(Str::ascii($request->input('email')));
+                $studentEmail = Str::lower(Str::ascii($student['email']));
+                if (!Str::contains($studentEmail, $keyword)) return false;
+            }
+
+            return true;
+        });
+
+        // --- SẮP XẾP ---
+        if ($request->filled('sap_xep')) {
+            $students = $students->sortBy(function ($student) {
+                return Carbon::parse($student['created_at']);
+            }, descending: $request->input('sap_xep') === 'moi_nhat');
+        }
+
+        // --- PHÂN TRANG ---
+        $perPage = 10;
+        $currentPage = request()->get('page', 1);
+        $pagedStudents = $students->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        $studentsPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+            $pagedStudents,
+            $students->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        return view('admin.pages.admin.graduation-students', [
+            'students' => $studentsPaginated,
+            'graduation' => $graduation,
+        ]);
+    }
+
     public function create()
     {
         return view('admin.pages.admin.graduation-create');
