@@ -18,6 +18,7 @@ class AuthenticateSSO
      */
     public function handle(Request $request, Closure $next): Response
     {
+//        return $next($request);
         if (! Auth::check()) {
             $query = http_build_query([
                 'client_id' => config('auth.sso.client_id'),

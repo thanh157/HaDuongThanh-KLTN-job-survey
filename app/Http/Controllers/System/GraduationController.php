@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\DotTotnghiep;
+use App\Models\DotTotNghiepStudent;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
 use Illuminate\Support\Arr;
@@ -35,6 +38,51 @@ class GraduationController extends Controller
         ]);
 
         $graduations = collect($response['data'] ?? []);
+//        dd($graduations);
+
+        foreach ($graduations as $item) {
+            DotTotnghiep::query()->updateOrCreate(
+                [
+                    'id' => data_get($item, 'id')
+                ],
+                [
+                    'name' => data_get($item, 'name'),
+                    'school_year' => data_get($item, 'school_year'),
+                    'certification' => data_get($item, 'certification'),
+                    'certification_date' => Carbon::parse(data_get($item, 'certification_date'))->toDateString(),
+                    'faculty_id' => data_get($item, 'faculty_id'),
+                    'created_at' => Carbon::parse(data_get($item, 'created_at')),
+                    'updated_at' => Carbon::parse(data_get($item, 'updated_at')),
+                ]
+            );
+
+            $students = data_get($item, 'students', []);
+            if (count($students) > 0) {
+                DotTotNghiepStudent::query()->where('dot_tot_nghiep_id', data_get($item, 'id'))->delete();
+            }
+            foreach ($students as $item2) {
+                Student::query()->updateOrCreate(
+                    [
+                        'id' => data_get($item2, 'id'),
+                        'code' => data_get($item2, 'code'),
+                        'email' => data_get($item2, 'email'),
+                    ],
+                    [
+                        'last_name' => data_get($item2, 'last_name'),
+                        'first_name' => data_get($item2, 'first_name'),
+                        'full_name' => data_get($item2, 'full_name'),
+                        'training_industry_id' => data_get($item2, 'training_industry_id'),
+                        'created_at' => Carbon::parse(data_get($item2, 'created_at')),
+                        'updated_at' => Carbon::parse(data_get($item2, 'updated_at')),
+                    ]
+                );
+                DotTotNghiepStudent::create([
+                    'student_id' => data_get($item, 'id'),
+                    'dot_tot_nghiep_id' => data_get($item2, 'id'),
+                ]);
+            }
+        }
+
 
         // Lọc theo tên
         if ($request->filled('name')) {

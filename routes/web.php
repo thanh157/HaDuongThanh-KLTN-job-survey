@@ -103,7 +103,7 @@ Route::middleware('auth.sso')->group(function (): void {
     //     Route::post('/store', [SurveyPeriodController::class, 'store'])->name('store');
     // });
 
-    Route::get('/survey/form', [FormSurveyController::class, 'showForm'])->name('admin.survey.form-survey');
+    Route::get('/survey/form', [FormSurveyController::class, 'showForm'])->name('admin.survey.form-survey.form');
     // Route::get('/major', function () {
     //     return view('admin.pages.admin.major');
     // })->name('admin.major.index');
@@ -158,9 +158,17 @@ Route::middleware('auth.sso')->group(function (): void {
         return view('admin.pages.admin.form-survey-student');
     })->name('admin.survey.form-survey-student');
 
+
+
+
     Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
+
+
+
+
+
     Route::get('/admin/graduation/{id}/students', [GraduationController::class, 'showStudents'])
-        ->name('admin.graduation-student.index');
+        ->name('admin.graduation-student.index.show');
 
     // Route::get('/graduation;', function () {
     //     return view('admin.pages.admin.graduation');
