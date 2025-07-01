@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('code')->unique()->nullable();
             $table->unsignedBigInteger('training_industry_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\System;
 use App\Http\Controllers\Controller;
 use App\Models\DotTotnghiep;
 use App\Models\DotTotNghiepStudent;
+use App\Models\GraduationStudent;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
@@ -38,10 +39,9 @@ class GraduationController extends Controller
         ]);
 
         $graduations = collect($response['data'] ?? []);
-//        dd($graduations);
 
         foreach ($graduations as $item) {
-            DotTotnghiep::query()->updateOrCreate(
+            Graduation::query()->updateOrCreate(
                 [
                     'id' => data_get($item, 'id')
                 ],
@@ -51,6 +51,7 @@ class GraduationController extends Controller
                     'certification' => data_get($item, 'certification'),
                     'certification_date' => Carbon::parse(data_get($item, 'certification_date'))->toDateString(),
                     'faculty_id' => data_get($item, 'faculty_id'),
+                    'student_count' => data_get($item, 'student_count'),
                     'created_at' => Carbon::parse(data_get($item, 'created_at')),
                     'updated_at' => Carbon::parse(data_get($item, 'updated_at')),
                 ]
@@ -58,7 +59,7 @@ class GraduationController extends Controller
 
             $students = data_get($item, 'students', []);
             if (count($students) > 0) {
-                DotTotNghiepStudent::query()->where('dot_tot_nghiep_id', data_get($item, 'id'))->delete();
+                GraduationStudent::query()->where('graduation_id', data_get($item, 'id'))->delete();
             }
             foreach ($students as $item2) {
                 Student::query()->updateOrCreate(
@@ -76,9 +77,9 @@ class GraduationController extends Controller
                         'updated_at' => Carbon::parse(data_get($item2, 'updated_at')),
                     ]
                 );
-                DotTotNghiepStudent::create([
+                GraduationStudent::create([
                     'student_id' => data_get($item, 'id'),
-                    'dot_tot_nghiep_id' => data_get($item2, 'id'),
+                    'graduation_id' => data_get($item2, 'id'),
                 ]);
             }
         }

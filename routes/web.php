@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\System\SurveyController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticateController;
@@ -134,13 +135,18 @@ Route::middleware('auth.sso')->group(function (): void {
     //     return view('admin.pages.admin.create-class');
     // })->name('admin.class.create-class');
 
-    Route::get('/survey', function () {
-        return view('admin.pages.admin.survey');
-    })->name('admin.survey.index');
+    Route::name('admin.')->group(function () {
+        Route::get('graduation', [GraduationController::class, 'index'])->name('graduation.index');
+        Route::prefix('survey')->name('survey.')->group(function () {
+            Route::get('/', [SurveyController::class, 'index'])->name('index');
+            Route::get('create', [SurveyController::class, 'create'])->name('create');
+            Route::post('store', [SurveyController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [SurveyController::class, 'edit'])->name('edit');
+            Route::put('update/{id}', [SurveyController::class, 'update'])->name('update');
+            Route::delete('delete/{id}', [SurveyController::class, 'destroy'])->name('destroy');
+        });
+    });
 
-    Route::get('/create-survey', function () {
-        return view('admin.pages.admin.create-survey');
-    })->name('admin.survey.create-survey');
 
     // Route::get('/class-detail;', function () {
     //     return view('admin.pages.admin.class-detail');
@@ -161,7 +167,7 @@ Route::middleware('auth.sso')->group(function (): void {
 
 
 
-    Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
+
 
 
 

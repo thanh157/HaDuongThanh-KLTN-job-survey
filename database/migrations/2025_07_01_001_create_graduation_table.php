@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dot_tot_nghiep', function (Blueprint $table) {
+        Schema::create('graduation', function (Blueprint $table) {
             $table->unsignedBigInteger('id')->primary();
             $table->string('name')->index()->nullable();
             $table->string('certification')->index()->nullable();
             $table->date('certification_date')->index()->nullable();
             $table->integer('school_year')->nullable();
+            $table->integer('student_count')->nullable();
             $table->integer('faculty_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dot_tot_nghiep');
+        Schema::dropIfExists('graduation');
     }
 };

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
@@ -12,6 +13,7 @@ class Student extends Model
     public $incrementing = false;
     protected $keyType = 'int';
     public $timestamps = false;
+    use SoftDeletes;
 
     protected $fillable = [
         'id',
