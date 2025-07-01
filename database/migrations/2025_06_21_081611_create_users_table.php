@@ -3,8 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\Status;
-use App\Enums\UserType;
 
 return new class extends Migration
 {
@@ -23,8 +21,8 @@ return new class extends Migration
             $table->json('user_data')->nullable();
             $table->unsignedBigInteger('faculty_id')->nullable()->index();
             $table->string('role')->nullable();
-            $table->string('status')->default(Status::Active->value);
-            $table->string('type')->default(UserType::Student->value);
+            $table->string('status')->default();
+            $table->string('type')->default();
             $table->timestamps();
         });
     }
