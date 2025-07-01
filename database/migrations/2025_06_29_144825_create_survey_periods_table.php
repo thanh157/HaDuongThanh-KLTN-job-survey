@@ -28,8 +28,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    // public function down(): void
-    // {
-    //     Schema::dropIfExists('survey_periods');
-    // }
+     public function down(): void
+     {
+         Schema::dropIfExists('survey_periods');
+     }
 };
