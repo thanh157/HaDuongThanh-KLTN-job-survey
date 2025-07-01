@@ -31,7 +31,7 @@
                     @endforeach
                 </ul>
             </div>
-    @endif
+        @endif
 
     <!-- Form chỉ giao diện -->
         <form action="{{ route('admin.survey.store') }}" method="post">

@@ -67,40 +67,60 @@
                 </p>
             </div>
 
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+        @endif
+
             <!-- Form Start -->
-            <form>
-                <div class="form-section">
+            <form action="{{ route("survey.submit") }}" method="POST" id="form-wrapper">
+                @csrf
+                @method('POST')
+                @include('admin.layouts.noti')
+
+                <!-- Gắn thêm -->
+                <input type="hidden" name="survey_id" value="{{ $survey->id }}">
+                <input type="hidden" name="student_id" id="student_id" value="">
+                    <input type="hidden" name="mssv_verified" value="{{ old('mssv_verified') }}">
+
+
+                    <div class="form-section">
                     <h6 class="fw-bold">Phần I. Thông tin cá nhân</h6>
 
                     <div class="mb-3">
                         <label for="ho_ten">1. Họ và tên</label>
-                        <input type="text" class="form-control" id="ho_ten" name="ho_ten" placeholder="Nhập họ và tên đầy đủ">
+                        <input type="text" class="form-control" id="ho_ten" name="ho_ten" placeholder="Nhập họ và tên đầy đủ" value="{{ old('ho_ten') }}">
                     </div>
 
                     <div class="row">
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">3. Giới tính</label>
-                            <input type="text" class="form-control" placeholder="Nam / Nữ">
+                            <input type="text" class="form-control" placeholder="Nam / Nữ" name="gender">
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">4. Ngày sinh</label>
-                            <input type="date" class="form-control">
+                            <input type="date" class="form-control" name="birthday">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label for="ma_sv">4. Mã sinh viên</label>
-                        <input type="text" class="form-control" id="ma_sv" name="ma_sv" value="637084"
+                        <input type="text" class="form-control" id="ma_sv" name="ma_sv" value="{{ old('ma_sv') }}"
                                placeholder="Nhập mã sinh viên" oninput="setKhoaHocFromMaSV()">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">5. Số căn cước công dân</label>
-                        <input type="text" class="form-control mb-2" placeholder="Nhập số CCCD">
+                        <input type="text" class="form-control mb-2" placeholder="Nhập số CCCD" name="cccd">
                         <label class="form-label">Ngày cấp</label>
-                        <input type="date" class="form-control mb-2">
+                        <input type="date" class="form-control mb-2" name="ngay_cap">
                         <label class="form-label">Nơi cấp</label>
-                        <input type="text" class="form-control" placeholder="Nhập nơi cấp">
+                        <input type="text" class="form-control" placeholder="Nhập nơi cấp" name="noi_cap">
                     </div>
 
                     <div class="row">
@@ -111,7 +131,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="major" class="form-label">Ngành đào tạo</label>
-                            <select class="form-select" name="major" id="major" required>
+                            <select class="form-select" name="major" id="major">
                                 <option value="">-- Chọn ngành đào tạo --</option>
 
                                 @isset($majors)
@@ -123,32 +143,23 @@
                             </select>
                         </div>
 
-                        {{-- <select class="form-select" name="major" id="major" required>
-                            <option value="">-- Chọn ngành đào tạo --</option>
-                            @foreach ($majors as $major)
-                                <option value="{{ $major['id'] }}">{{ $major['name'] }}</option>
-                            @endforeach
-                        </select> --}}
-
                     </div>
 
                     <div class="row">
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">8. Số điện thoại</label>
-                            <input type="text" class="form-control" placeholder="Nhập số điện thoại">
+                            <input type="text" class="form-control" placeholder="Nhập số điện thoại" name="phone" value="{{ old('phone') }}">
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">9. Email</label>
-                            <input type="email" class="form-control" placeholder="Nhập email" id="email">
+                            <input type="email" class="form-control" placeholder="Nhập email" id="email" name="email" value="{{ old('email') }}">
                         </div>
                     </div>
 
                 {{-- chưa api major được --}}
                 <!-- 10. Tình trạng việc làm hiện tại -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold">10. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại
-                            của
-                            Anh/chị</label>
+                        <label class="form-label fw-bold">10. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/chị</label>
                         @php $tinh_trang = ['Đã có việc làm', 'Tiếp tục học', 'Chưa có việc làm']; @endphp
                         @foreach ($tinh_trang as $index => $value)
                             <div class="form-check mb-2">
@@ -162,26 +173,21 @@
 
                     <div class="mb-3">
                         <label class="form-label">11. Cơ quan công tác</label>
-                        <input type="text" class="form-control" placeholder="Nhập tên công ty / tổ chức">
+                        <input type="text" class="form-control" placeholder="Nhập tên công ty / tổ chức" name="coquan">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">12. Địa chỉ cơ quan</label>
                         <div class="form-text mb-3">vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ</div>
-                        <input type="text" class="form-control mb-1" placeholder="Nhập địa chỉ cụ thể">
+                        <input type="text" class="form-control mb-1" placeholder="Nhập địa chỉ cụ thể" name="dia_chi_co_quan">
                         <label class="form-label">Địa chỉ đơn vị thuộc Tỉnh/Thành phố</label>
-                        <input type="text" class="form-control" placeholder="Nhập Tỉnh/Thành phố">
+                        <input type="text" class="form-control" placeholder="Nhập Tỉnh/Thành phố" name="thanhpho">
                     </div>
-
-                    {{-- <div class="mb-3">
-                        <label class="form-label">13. Thời gian tuyển dụng</label>
-                        <input type="text" class="form-control" placeholder="Nhập năm tuyển dụng (vd: 2025)">
-                    </div> --}}
 
                     <div class="mb-3">
                         <label class="form-label">13. Chức vụ, vị trí việc làm</label>
                         <input type="text" class="form-control"
-                               placeholder="VD: Nhân viên kinh doanh, Trưởng phòng sale...">
+                               placeholder="VD: Nhân viên kinh doanh, Trưởng phòng sale..." name="chucvu">
                     </div>
                 </div>
 
@@ -235,9 +241,9 @@
                             @endforeach
                         @endif
                     </div>
-            @endforeach
+                @endforeach
 
-            <!-- Lời kết -->
+                <!-- Lời kết -->
                 <div class="text-center mt-4">
                     {{-- <p class="fw-semibold mb-1"></p> --}}
                     <p class="text-muted fst-italic mb-3">Xin trân trọng cảm ơn!</p>
@@ -245,9 +251,9 @@
 
                 <!-- Submit button -->
                 <div class="text-end mt-3">
-                    <a href="{{ route('admin.survey.form-survey') }}" class="btn btn-success px-4 shadow-sm">
+                    <button type="submit" class="btn btn-success px-4 shadow-sm">
                         <i class="bi bi-send me-1"></i> Gửi phản hồi
-                    </a>
+                    </button>
                 </div>
             </form>
         </div>
@@ -341,16 +347,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const modalEl = document.getElementById('mssvModal');
-            const modal = new bootstrap.Modal(modalEl, {
-                backdrop: 'static',
-                keyboard: false
-            });
-            modal.show();
+            const verified = '{{ old('mssv_verified') }}';
+            if (!verified) {
+                const modalEl = document.getElementById('mssvModal');
+                const modal = new bootstrap.Modal(modalEl, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                modal.show();
+            }
         });
-    </script>
 
-    <script>
         $(document).ready(function () {
             const graduationId = {{ $survey->graduation_id }};
 
@@ -384,8 +391,17 @@
                                 $('#ho_ten').val(data.ho_ten);
                                 $('#ma_sv').val(data.ma_sv);
                                 $('#email').val(data.email);
+                                $('#student_id').val(data.id);
                                 // Các input khác nếu có
                             }
+
+                            // Truyền 1 hidden input flag
+                            $('<input>').attr({
+                                type: 'hidden',
+                                name: 'mssv_verified',
+                                value: '1'
+                            }).appendTo("form");
+
                         } else {
                             $error.text(res.message || 'MSSV không hợp lệ').removeClass('d-none');
                         }

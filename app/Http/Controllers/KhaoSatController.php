@@ -6,9 +6,12 @@ use App\Models\Graduation;
 use App\Models\GraduationStudent;
 use App\Models\Student;
 use App\Models\Survey;
+use App\Models\SurveyAnswer;
 use App\Models\SurveyAnswers;
+use App\Models\SurveyResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Validator;
 
 class KhaoSatController extends Controller
 {
@@ -43,6 +46,7 @@ class KhaoSatController extends Controller
                 return response()->json([
                     'success' => true,
                     'student' => [
+                        'id' => $student->id,
                         'ho_ten' => $student->full_name,
                         'ma_sv' => $student->code,
                         'email' => $student->email,
@@ -60,35 +64,69 @@ class KhaoSatController extends Controller
 
     public function submit(Request $request)
     {
-        $request->validate([
-            'survey_id' => 'required|exists:surveys,id',
-            'student_id' => 'required|exists:students,id',
-            'answers' => 'required|array',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'survey_id' => 'required|exists:survey,id',
+                'answers' => 'required|array',
+            ], [], [
+                'answers' => 'Nội dung khảo sát'
+            ]);
 
-        foreach ($request->answers as $questionId => $answer) {
-            $values = is_array($answer) ? $answer : [$answer];
-
-            foreach ($values as $val) {
-                SurveyAnswers::create([
-                    'survey_id' => $request->survey_id,
-                    'student_id' => $request->student_id,
-                    'question_id' => $questionId,
-                    'answer_text' => $val,
-                ]);
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
             }
 
-            // ✅ Nếu có nội dung "Khác"
-            if ($request->filled("answers_other.$questionId")) {
-                SurveyAnswers::create([
-                    'survey_id' => $request->survey_id,
-                    'student_id' => $request->student_id,
-                    'question_id' => $questionId,
-                    'answer_text' => $request->input("answers_other.$questionId"),
-                ]);
+            // Bước 1: lưu lượt nộp khảo sát
+            $response = SurveyResponse::create([
+                'survey_id' => $request->survey_id,
+                'student_id' => $request->student_id,
+                'ma_sv'      => $request->ma_sv,
+                'ho_ten'     => $request->ho_ten,
+                'email'      => $request->email,
+                'phone'      => $request->phone,
+                'student_info' => json_encode($request->only([
+                    'gender','birthday','cccd','ngay_cap','noi_cap','khoa_hoc',
+                    'major','vieclam_hientai','coquan','dia_chi_co_quan','thanhpho','chucvu'
+                ])),
+                'submitted_at' => now(),
+            ]);
+
+// Bước 2: lưu các câu trả lời
+            foreach ($request->answers as $questionId => $answers) {
+                $values = is_array($answers) ? $answers : [$answers];
+
+                foreach ($values as $val) {
+                    if (strtolower($val) === 'khác' && $request->filled("answers_other.$questionId")) {
+                        continue;
+                    }
+
+                    SurveyAnswer::create([
+                        'survey_response_id' => $response->id,
+                        'question_id' => $questionId,
+                        'answer_text' => $val,
+                    ]);
+                }
+
+                // Nếu có phần "Khác"
+                if ($request->has("answers_other.$questionId")) {
+                    $others = (array) $request->input("answers_other.$questionId");
+
+                    foreach ($others as $otherVal) {
+                        if (trim($otherVal)) {
+                            SurveyAnswer::create([
+                                'survey_response_id' => $response->id,
+                                'question_id' => $questionId,
+                                'answer_text' => $otherVal,
+                            ]);
+                        }
+                    }
+                }
             }
+
+            return redirect()->route('survey.thankyou')->with('success', 'Ghi nhận khảo sát thành công!');
+        } catch (\Exception $e) {
+            Log::error($e);
+            return redirect()->back()->with('error', 'System error');
         }
-
-        return redirect()->route('survey.thankyou');
     }
 }

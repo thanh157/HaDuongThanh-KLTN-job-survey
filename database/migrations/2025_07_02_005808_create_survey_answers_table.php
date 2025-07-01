@@ -9,23 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('survey_answers', function (Blueprint $table) {
             $table->id();
-            $table->integer('survey_id')->nullable();
-            $table->integer('student_id')->nullable();
-            $table->integer('question_id')->nullable();
+            $table->integer('survey_response_id');
+            $table->integer('question_id');
             $table->text('answer_text');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('survey_answers');
     }
