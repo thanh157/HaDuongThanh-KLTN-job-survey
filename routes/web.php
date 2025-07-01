@@ -22,6 +22,8 @@ use App\Http\Controllers\System\ClassController;
 use App\Http\Controllers\GraduationStudentController;
 use App\Http\Controllers\Admin\SurveyPeriodController;
 use App\Http\Controllers\Admin\FormSurveyController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Admin\ChartStatisticController;
 // Route::get('/login/sso', [AuthController::class, 'redirectToSSO'])->name('sso.redirect');
 // Route::get('/login/sso/callback', [AuthController::class, 'handleSSOCallback'])->name('sso.callback');
 
@@ -96,6 +98,13 @@ Route::middleware('auth.sso')->group(function (): void {
     });
 
 
+    // Route::get('/report', [ReportController::class, 'index'])->name('admin.report');
+
+    // Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/report', [ReportController::class, 'index'])->name('admin.report.index');
+    // Route::get('/charts', [ChartStatisticController::class, 'index'])->name('admin.charts.index');
+    Route::get('/charts', [ChartStatisticController::class, 'index'])->name('admin.charts.index');
+    Route::get('/charts/data', [ChartStatisticController::class, 'getChartData;'])->name('admin.charts.data');
 
     // Route::prefix('admin/survey')->name('admin.survey.')->group(function () {
     //     Route::get('/', [SurveyPeriodController::class, 'index'])->name('index');
@@ -178,11 +187,9 @@ Route::middleware('auth.sso')->group(function (): void {
         return view('admin.pages.admin.change-password');
     })->name('admin.infor-account.change-password');
 
-    Route::get('/charts', function () {
-        return view('admin.pages.admin.charts');
-    })->name('admin.charts.index');
 
-    Route::get('/report', function () {
-        return view('admin.pages.admin.report');
-    })->name('admin.report.index');
+
+    // Route::get('/report', function () {
+    //     return view('admin.pages.admin.report');
+    // })->name('admin.report.index');
 });

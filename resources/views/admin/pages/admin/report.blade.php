@@ -3,6 +3,26 @@
 @section('title', 'Báo cáo - Tổng hợp khảo sát việc làm')
 
 @section('content')
+    <style>
+        .custom-select {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            background-color: #fff;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            min-width: 220px;
+            font-weight: 500;
+        }
+
+        .custom-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+        }
+
+        .custom-select:hover {
+            border-color: #0d6efd;
+        }
+    </style>
     <div class="container py-4">
         <!-- Header cải tiến -->
         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
@@ -28,6 +48,21 @@
             <li class="nav-item">
                 <a class="nav-link" data-bs-toggle="tab" href="#tab3">Mẫu báo cáo 3</a>
             </li>
+            <form method="GET" action="{{ route('admin.report.index') }}" class="ms-auto">
+                <div class="d-flex align-items-center gap-2">
+                    <label for="graduation_id" class="col-form-label fw-semibold mb-0">Đợt tốt nghiệp:</label>
+                    <select name="graduation_id" id="graduation_id" class="form-select custom-select"
+                        onchange="this.form.submit()">
+                        <option value="">-- Chọn đợt --</option>
+                        @foreach ($graduationList as $graduation)
+                            <option value="{{ $graduation['id'] }}"
+                                {{ $selectedGraduationId == $graduation['id'] ? 'selected' : '' }}>
+                                {{ $graduation['name'] }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </form>
         </ul>
 
         <!-- Nội dung tab -->
@@ -60,60 +95,66 @@
                                     style="font-size: 12px; min-width: 2000px;">
                                     <thead class="align-middle">
                                         <tr>
-                                            <th rowspan="3"><br>TT</th>
-                                            <th rowspan="3"><br>Mã ngành<br><small>(Ghi bằng số theo mã ngành tuyển
+                                            <th rowspan="3">TT</th>
+                                            <th rowspan="3">Mã ngành<br><small>(Ghi bằng số theo mã ngành tuyển
                                                     sinh)</small></th>
-                                            <th rowspan="3"><br>Tên ngành đào tạo</th>
+                                            <th rowspan="3">Tên ngành đào tạo</th>
                                             <th colspan="2" rowspan="2">(4)<br>Số sinh viên tốt nghiệp</th>
                                             <th colspan="2" rowspan="2">(5)<br>Số sinh viên phản hồi</th>
-                                            <th colspan="5"><br>Tình hình việc làm</th>
-                                            <th rowspan="3"><br>Tỷ lệ có việc làm/ tổng số sinh viên phản hồi</th>
-                                            <th rowspan="3"><br>Tỷ lệ có việc làm/ tổng số sinh viên tốt nghiệp</th>
-                                            <th colspan="4" rowspan="2"><br>Khu vực làm việc</th>
-                                            <th rowspan="3"><br>Nơi làm việc<br>(Tỉnh/TP)</th>
+                                            <th colspan="5">Tình hình việc làm</th>
+                                            <th rowspan="3">Tỷ lệ có việc làm / phản hồi</th>
+                                            <th rowspan="3">Tỷ lệ có việc làm / tốt nghiệp</th>
+                                            <th colspan="4" rowspan="2">Khu vực làm việc</th>
+                                            <th rowspan="3">Nơi làm việc<br>(Tỉnh/TP)</th>
                                         </tr>
                                         <tr>
                                             <th colspan="3">Có việc làm</th>
-                                            <th rowspan="2"><br>Tiếp tục học</th>
-                                            <th rowspan="2"><br>Chưa có việc làm</th>
+                                            <th rowspan="2">Tiếp tục học</th>
+                                            <th rowspan="2">Chưa có việc làm</th>
                                         </tr>
                                         <tr>
                                             <th>Tổng số</th>
                                             <th>Nữ</th>
                                             <th>Tổng số</th>
                                             <th>Nữ</th>
-                                            <th><br>Đúng ngành đào tạo</th>
-                                            <th><br>Liên quan đến ngành đào tạo</th>
-                                            <th><br>Không liên quan đến nghành đào tạo</th>
-                                            <th><br>Nhà nước</th>
-                                            <th><br>Tư nhân</th>
-                                            <th><br>Tự tạo việc làm</th>
-                                            <th><br>Có yếu tố nước ngoài</th>
+                                            <th>Đúng ngành</th>
+                                            <th>Liên quan</th>
+                                            <th>Không liên quan</th>
+                                            <th>Nhà nước</th>
+                                            <th>Tư nhân</th>
+                                            <th>Tự tạo</th>
+                                            <th>Nước ngoài</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>7480201</td>
-                                            <td>Công nghệ thông tin</td>
-                                            <td>100</td>
-                                            <td>40</td>
-                                            <td>90</td>
-                                            <td>35</td>
-                                            <td>50</td>
-                                            <td>30</td>
-                                            <td>10</td>
-                                            <td>3</td>
-                                            <td>2</td>
-                                            <td>94.4%</td>
-                                            <td>85%</td>
-                                            <td>10</td>
-                                            <td>60</td>
-                                            <td>10</td>
-                                            <td>5</td>
-                                            <td>Hà Nội</td>
-                                        </tr>
-                                        <!-- Thêm dòng dữ liệu khác tại đây -->
+                                        @forelse ($report1 as $key => $row)
+                                            <tr>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $row->training_industry_id }}</td>
+                                                <td>{{ $row->ten_nganh }}</td>
+                                                <td>{{ $row->sv_tot_nghiep ?? '-' }}</td>
+                                                <td>{{ $row->sv_nu_tot_nghiep ?? '-' }}</td>
+                                                <td>{{ $row->tong_phan_hoi ?? '-' }}</td>
+                                                <td>{{ $row->nu_phan_hoi ?? '-' }}</td>
+                                                <td>{{ $row->co_viec_lam ?? '-' }}</td>
+                                                <td>{{ $row->viec_lam_dung_nganh ?? '-' }}</td>
+                                                <td>{{ $row->viec_lam_lien_quan ?? '-' }}</td>
+                                                <td>{{ $row->viec_lam_khong_lien_quan ?? '-' }}</td>
+                                                <td>{{ $row->tiep_tuc_hoc ?? '-' }}</td>
+                                                <td>{{ $row->chua_co_viec ?? '-' }}</td>
+                                                <td>{{ $row->ty_le_co_viec_phan_hoi ?? '-' }}%</td>
+                                                <td>{{ $row->ty_le_co_viec_tot_nghiep ?? '-' }}%</td>
+                                                <td>{{ $row->lam_viec_nha_nuoc ?? '-' }}</td>
+                                                <td>{{ $row->lam_viec_tu_nhan ?? '-' }}</td>
+                                                <td>{{ $row->tu_tao_viec_lam ?? '-' }}</td>
+                                                <td>{{ $row->yeu_to_nuoc_ngoai ?? '-' }}</td>
+                                                <td>{{ $row->noi_lam_viec ?? '-' }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="20" class="text-center text-muted">Không có dữ liệu</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
