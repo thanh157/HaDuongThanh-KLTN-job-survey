@@ -26,5 +26,10 @@ class Student extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function graduations()
+    {
+        return $this->belongsToMany(Graduation::class, 'graduation_student', 'student_id', 'graduation_id');
+    }
 }
 

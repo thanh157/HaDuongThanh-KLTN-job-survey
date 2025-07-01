@@ -101,7 +101,7 @@
         .wave-loader span:nth-child(5) { animation-delay: -0.8s; }
 
         @keyframes wave {
-            0%, 40%, 100% { transform: scaleY(0.4); }  
+            0%, 40%, 100% { transform: scaleY(0.4); }
             20% { transform: scaleY(1); }
         }
 
@@ -131,6 +131,7 @@
         @yield('content')
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- JS Libraries -->
     <script src="{{ asset('assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -163,6 +164,8 @@
             });
         });
     </script>
+
+    @stack('script')
 </body>
 
 </html>

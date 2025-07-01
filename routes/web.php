@@ -50,7 +50,6 @@ Route::middleware('auth.sso')->group(function (): void {
     Route::get('/graduation/{id}/edit', [GraduationController::class, 'edit'])->name('admin.graduation.edit');
     Route::put('/graduation/{id}', [GraduationController::class, 'update'])->name('admin.graduation.update');
     Route::delete('/graduation/{id}', [GraduationController::class, 'destroy'])->name('admin.graduation.destroy');
-    Route::get('/graduation/{graduationId}/students', [GraduationStudentController::class, 'index'])->name('admin.graduation-student.index');
     Route::get('/graduation/{graduationId}/students/create', [GraduationStudentController::class, 'create'])->name('admin.graduation-student.create');
     // Xử lý lưu
     Route::post('/graduation/{graduationId}/students', [GraduationStudentController::class, 'store'])->name('admin.graduation-student.store');
@@ -104,7 +103,7 @@ Route::middleware('auth.sso')->group(function (): void {
     //     Route::post('/store', [SurveyPeriodController::class, 'store'])->name('store');
     // });
 
-    Route::get('/survey/form', [FormSurveyController::class, 'showForm'])->name('admin.survey.form-survey.form');
+
     // Route::get('/major', function () {
     //     return view('admin.pages.admin.major');
     // })->name('admin.major.index');
@@ -137,6 +136,8 @@ Route::middleware('auth.sso')->group(function (): void {
 
     Route::name('admin.')->group(function () {
         Route::get('graduation', [GraduationController::class, 'index'])->name('graduation.index');
+        Route::get('graduation/{id}/students', [GraduationController::class, 'showStudents'])->name('graduation-student.show');
+
         Route::prefix('survey')->name('survey.')->group(function () {
             Route::get('/', [SurveyController::class, 'index'])->name('index');
             Route::get('create', [SurveyController::class, 'create'])->name('create');
@@ -144,6 +145,7 @@ Route::middleware('auth.sso')->group(function (): void {
             Route::get('/{id}/edit', [SurveyController::class, 'edit'])->name('edit');
             Route::put('update/{id}', [SurveyController::class, 'update'])->name('update');
             Route::delete('delete/{id}', [SurveyController::class, 'destroy'])->name('destroy');
+            Route::get('/{id}/form', [SurveyController::class, 'showForm'])->name('form');
         });
     });
 
@@ -173,8 +175,7 @@ Route::middleware('auth.sso')->group(function (): void {
 
 
 
-    Route::get('/admin/graduation/{id}/students', [GraduationController::class, 'showStudents'])
-        ->name('admin.graduation-student.index.show');
+
 
     // Route::get('/graduation;', function () {
     //     return view('admin.pages.admin.graduation');

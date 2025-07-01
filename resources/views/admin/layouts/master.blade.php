@@ -29,6 +29,10 @@
             background: #0d6efd;
             animation: wave 1.2s infinite ease-in-out;
         }
+        table thead tr td {
+            font-weight: 600;
+        }
+
         .wave-loader span:nth-child(2) { animation-delay: -1.1s; }
         .wave-loader span:nth-child(3) { animation-delay: -1.0s; }
         .wave-loader span:nth-child(4) { animation-delay: -0.9s; }

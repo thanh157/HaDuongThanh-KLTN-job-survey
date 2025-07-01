@@ -58,6 +58,7 @@ class GraduationController extends Controller
             );
 
             $students = data_get($item, 'students', []);
+
             if (count($students) > 0) {
                 GraduationStudent::query()->where('graduation_id', data_get($item, 'id'))->delete();
             }
@@ -78,8 +79,8 @@ class GraduationController extends Controller
                     ]
                 );
                 GraduationStudent::create([
-                    'student_id' => data_get($item, 'id'),
-                    'graduation_id' => data_get($item2, 'id'),
+                    'student_id' => data_get($item2, 'id'),
+                    'graduation_id' => data_get($item, 'id'),
                 ]);
             }
         }
@@ -128,68 +129,17 @@ class GraduationController extends Controller
 
     public function showStudents(Request $request, $graduationId)
     {
-        $facultyId = $this->studentService->getFacultyId();
+        $graduation = Graduation::with('students')->findOrFail($graduationId);
+        $students = Student::whereHas('graduations', function($q) use ($graduationId) {
+            $q->where('graduation_id', $graduationId);
+        })->paginate(25);
 
-        $token = cache()->remember('token_client1', 60 * 5, fn() => $this->studentService->post('/oauth/token', [
-            'grant_type' => 'client_credentials',
-            'client_id' => config('auth.student.client_id'),
-            'client_secret' => config('auth.student.client_secret'),
-        ]));
-
-        $graduations = $this->studentService->get('/api/v1/external/graduation-ceremonies/faculty/' . $facultyId, [
-            'access_token' => $token['access_token'],
-        ]);
-
-        $graduation = collect($graduations['data'])->firstWhere('id', (int) $graduationId);
-
-        if (!$graduation) {
-            return redirect()->route('admin.graduation.index')->with('error', 'Không tìm thấy đợt tốt nghiệp.');
-        }
-
-        // --- LỌC ---
-        $students = collect($graduation['students'] ?? [])->filter(function ($student) use ($request) {
-            if ($request->filled('name')) {
-                $keyword = Str::lower(Str::ascii($request->input('name')));
-                $studentName = Str::lower(Str::ascii($student['full_name']));
-                if (!Str::contains($studentName, $keyword)) return false;
-            }
-
-            if ($request->filled('code') && !Str::contains($student['code'], $request->input('code'))) {
-                return false;
-            }
-
-            if ($request->filled('email')) {
-                $keyword = Str::lower(Str::ascii($request->input('email')));
-                $studentEmail = Str::lower(Str::ascii($student['email']));
-                if (!Str::contains($studentEmail, $keyword)) return false;
-            }
-
-            return true;
-        });
-
-        // --- SẮP XẾP ---
-        if ($request->filled('sap_xep')) {
-            $students = $students->sortBy(function ($student) {
-                return Carbon::parse($student['created_at']);
-            }, descending: $request->input('sap_xep') === 'moi_nhat');
-        }
-
-        // --- PHÂN TRANG ---
-        $perPage = 10;
-        $currentPage = request()->get('page', 1);
-        $pagedStudents = $students->slice(($currentPage - 1) * $perPage, $perPage)->values();
-        $studentsPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $pagedStudents,
-            $students->count(),
-            $perPage,
-            $currentPage,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
-
-        return view('admin.pages.admin.graduation-students', [
-            'students' => $studentsPaginated,
+        $viewData = [
+            'students' => $students,
             'graduation' => $graduation,
-        ]);
+        ];
+
+        return view('admin.pages.admin.graduation-students', $viewData);
     }
 
     public function create()

@@ -14,64 +14,13 @@
         <div class="card shadow-sm">
             <div class="table-responsive">
                 <table class="table table-bordered align-middle text-center">
-                    <thead class="table-light text-center text-nowrap">
+                    <thead>
                         <tr>
-                            <th>STT</th> 
-                            <!-- Mã sinh viên -->
-                            <th>
-                                <form method="GET" class="position-relative d-inline-block">
-                                    <span>Mã SV</span>
-                                    <i class="bi bi-funnel-fill text-primary ms-1" onclick="toggleFilter('filter-code')"
-                                        style="cursor:pointer;"></i>
-                                    <div id="filter-code"
-                                        class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="code" class="form-control"
-                                                placeholder="VD: 621066" value="{{ request('code') }}">
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
-                                    </div>
-                                </form>
-                            </th>
-
-                            <!-- Tên -->
-                            <th>
-                                <form method="GET" class="position-relative d-inline-block">
-                                    <span>Họ tên</span>
-                                    <i class="bi bi-funnel-fill text-primary ms-1" onclick="toggleFilter('filter-name')"
-                                        style="cursor:pointer;"></i>
-                                    <div id="filter-name"
-                                        class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="name" class="form-control"
-                                                placeholder="VD: Nguyễn Văn A" value="{{ request('name') }}">
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
-                                    </div>
-                                </form>
-                            </th>
-
-                            <!-- Email -->
-                            <th>
-                                <form method="GET" class="position-relative d-inline-block">
-                                    <span>Email</span>
-                                    <i class="bi bi-funnel-fill text-primary ms-1" onclick="toggleFilter('filter-email')"
-                                        style="cursor:pointer;"></i>
-                                    <div id="filter-email"
-                                        class="shadow rounded p-3 bg-white position-absolute filter-popup">
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                            <input type="text" name="email" class="form-control"
-                                                placeholder="VD: 621066@sv.vnua.edu.vn" value="{{ request('email') }}">
-                                        </div>
-                                        <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
-                                    </div>
-                                </form>
-                            </th>
-
-                            <th>Ngày tạo</th>
+                            <td>STT</td>
+                            <td>Mã SV</td>
+                            <td>Họ tên</td>
+                            <td>Email</td>
+                            <td>Ngày tạo</td>
                         </tr>
                     </thead>
 

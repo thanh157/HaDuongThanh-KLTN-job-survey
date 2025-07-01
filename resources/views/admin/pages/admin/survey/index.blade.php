@@ -34,6 +34,7 @@
                             <td><strong>Đợt tốt nghiệp</strong></td>
                             <td><strong>Ngày bắt đầu</strong></td>
                             <td><strong>Ngày kết thúc</strong></td>
+                            <td><strong>Số câu hỏi khảo sát</strong></td>
                             <td><strong>Hành động</strong></td>
                         </tr>
                     </thead>
@@ -45,11 +46,20 @@
                                 <td>{{ !empty($item->graduation->name) ? $item->graduation->name : "" }}</td>
                                 <td>{{ $item->start_time }}</td>
                                 <td>{{ $item->end_time }}</td>
+                                <td>{{ $item->questions()->count() }}</td>
                                 <td class="text-center d-flex justify-content-center gap-2">
                                     <a href="{{ route('admin.survey.edit', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
                                        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
+
+                                    @if ($item->questions()->count() > 0)
+                                        <a href="{{ route('admin.survey.form', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
+                                           style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-list-nested"></i>
+                                        </a>
+                                    @endif
+
                                     <form action="{{ route('admin.survey.destroy', $item->id) }}" method="POST"
                                           onsubmit="return confirm('Xác nhận xoá khảo sát này?');" style="display:inline;">
                                         @csrf

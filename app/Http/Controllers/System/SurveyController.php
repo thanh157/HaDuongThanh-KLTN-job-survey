@@ -168,4 +168,19 @@ class SurveyController extends Controller
             return redirect()->route('admin.survey.index')->with('error', 'Lỗi');
         }
     }
+
+    public function showForm($id)
+    {
+        $survey = Survey::with('questions')->findOrFail($id);
+        // Ép cast lại từng câu hỏi nếu cần
+        $survey->questions->transform(function ($q) {
+            $q->options = is_string($q->options) ? json_decode($q->options, true) : $q->options;
+            return $q;
+        });
+
+        $viewData = [
+            'survey' => $survey
+        ];
+        return view('admin.pages.admin.survey.form', $viewData);
+    }
 }

@@ -59,7 +59,7 @@ class GraduationStudentController extends Controller
 
         File::put($path, json_encode($students, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-        return redirect()->route('admin.graduation-student.index', $graduationId)
+        return redirect()->route('admin.graduation-student.show', $graduationId)
             ->with('success', 'Đã thêm sinh viên tốt nghiệp!');
     }
 }

@@ -21,4 +21,9 @@ class Graduation extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'graduation_student', 'graduation_id', 'student_id');
+    }
 }
