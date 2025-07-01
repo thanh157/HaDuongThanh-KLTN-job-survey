@@ -240,15 +240,6 @@
                 </div>
 
         </div>
-
-        <!-- Submit button -->
-        <div class="text-end mt-3">
-            <a href="{{ route('admin.survey.form-survey') }}" class="btn btn-success px-4 shadow-sm">
-                <i class="bi bi-send me-1"></i> Gửi phản hồi
-            </a>
-        </div>
-
-
         </form>
     </div>
     </div>
