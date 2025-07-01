@@ -194,54 +194,56 @@
                 {{-- PHẦN II: NỘI DUNG KHẢO SÁT --}}
                 <h6 class="mb-4 fw-bold">Phần II: Nội dung khảo sát</h6>
 
-                @foreach($survey->questions as $qIndex => $question)
-                    <div class="form-section mb-4">
-                        <label class="form-label fw-semibold">{{ $loop->iteration }}
-                            . {{ $question->question_text }}</label>
+                <div class="p2">
+                    @foreach($survey->questions as $qIndex => $question)
+                        <div class="form-section mb-4">
+                            <label class="form-label fw-semibold">{{ $loop->iteration }}
+                                . {{ $question->question_text }}</label>
 
-                        @if($question->type === 'single')
-                            @foreach($question->options as $optIndex => $option)
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input"
-                                           type="radio"
-                                           name="answers[{{ $question->id }}]"
-                                           id="q{{ $question->id }}_{{ $optIndex }}"
-                                           value="{{ $option['text'] }}"
-                                           data-is-other="{{ $option['is_other'] ? 'true' : 'false' }}">
-                                    <label class="form-check-label" for="q{{ $question->id }}_{{ $optIndex }}">
-                                        {{ $option['text'] }}
-                                    </label>
-                                    @if($option['is_other'])
-                                        <input type="text"
-                                               class="form-control mt-2 d-none other-input"
-                                               name="answers_other[{{ $question->id }}]"
-                                               placeholder="Vui lòng ghi rõ lý do...">
-                                    @endif
-                                </div>
-                            @endforeach
-                        @elseif($question->type === 'multiple')
-                            @foreach($question->options as $optIndex => $option)
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input"
-                                           type="checkbox"
-                                           name="answers[{{ $question->id }}][]"
-                                           id="q{{ $question->id }}_{{ $optIndex }}"
-                                           value="{{ $option['text'] }}"
-                                           data-is-other="{{ $option['is_other'] ? 'true' : 'false' }}">
-                                    <label class="form-check-label" for="q{{ $question->id }}_{{ $optIndex }}">
-                                        {{ $option['text'] }}
-                                    </label>
-                                    @if($option['is_other'])
-                                        <input type="text"
-                                               class="form-control mt-2 d-none other-input"
-                                               name="answers_other[{{ $question->id }}][]"
-                                               placeholder="Vui lòng ghi rõ lý do...">
-                                    @endif
-                                </div>
-                            @endforeach
-                        @endif
-                    </div>
-                @endforeach
+                            @if($question->type === 'single')
+                                @foreach($question->options as $optIndex => $option)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input"
+                                               type="radio"
+                                               name="answers[{{ $question->id }}]"
+                                               id="q{{ $question->id }}_{{ $optIndex }}"
+                                               value="{{ $option['text'] }}"
+                                               data-is-other="{{ $option['is_other'] ? 'true' : 'false' }}">
+                                        <label class="form-check-label" for="q{{ $question->id }}_{{ $optIndex }}">
+                                            {{ $option['text'] }}
+                                        </label>
+                                        @if($option['is_other'])
+                                            <input type="text"
+                                                   class="form-control mt-2 d-none other-input"
+                                                   name="answers_other[{{ $question->id }}]"
+                                                   placeholder="Vui lòng ghi rõ lý do...">
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @elseif($question->type === 'multiple')
+                                @foreach($question->options as $optIndex => $option)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               name="answers[{{ $question->id }}][]"
+                                               id="q{{ $question->id }}_{{ $optIndex }}"
+                                               value="{{ $option['text'] }}"
+                                               data-is-other="{{ $option['is_other'] ? 'true' : 'false' }}">
+                                        <label class="form-check-label" for="q{{ $question->id }}_{{ $optIndex }}">
+                                            {{ $option['text'] }}
+                                        </label>
+                                        @if($option['is_other'])
+                                            <input type="text"
+                                                   class="form-control mt-2 d-none other-input"
+                                                   name="answers_other[{{ $question->id }}][]"
+                                                   placeholder="Vui lòng ghi rõ lý do...">
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
 
                 <!-- Lời kết -->
                 <div class="text-center mt-4">
@@ -402,6 +404,7 @@
                                 value: '1'
                             }).appendTo("form");
 
+                            $('#p2').find('input[type=radio], input[type=checkbox], input[type=text], textarea').prop('checked', false).val('');
                         } else {
                             $error.text(res.message || 'MSSV không hợp lệ').removeClass('d-none');
                         }

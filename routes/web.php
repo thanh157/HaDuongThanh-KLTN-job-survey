@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\KhaoSatController;
 use App\Http\Controllers\System\SurveyController;
+use App\Http\Controllers\System\SurveyResultController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticateController;
@@ -147,6 +148,9 @@ Route::middleware('auth.sso')->group(function (): void {
             Route::put('update/{id}', [SurveyController::class, 'update'])->name('update');
             Route::delete('delete/{id}', [SurveyController::class, 'destroy'])->name('destroy');
             Route::get('/{id}/form', [SurveyController::class, 'showForm'])->name('form');
+            Route::get('/{id}/form', [SurveyController::class, 'showForm'])->name('form');
+            Route::get('/khao-sat/{id}/ket-qua', [SurveyResultController::class, 'index'])->name('result');
+
         });
     });
 

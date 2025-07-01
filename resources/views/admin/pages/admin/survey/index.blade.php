@@ -53,6 +53,14 @@
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
 
+                                    @if ($item->surveyResponses()->count() > 0)
+                                        <a href="{{ route('admin.survey.result', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
+                                           style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="bi bi-bar-chart-fill"></i>
+                                        </a>
+                                    @endif
+
+
                                     @if ($item->questions()->count() > 0)
                                         <a href="{{ route('admin.survey.form', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
                                            style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
@@ -74,7 +82,6 @@
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </form>
-
 
 
                                     <a href="#" class="btn btn-sm btn-outline-info" title="Xem thông tin sinh viên"
