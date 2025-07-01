@@ -58,6 +58,12 @@
                                            style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                             <i class="bi bi-list-nested"></i>
                                         </a>
+                                        <button class="btn btn-sm btn-outline-secondary" title="Sao chép đường dẫn"
+                                                style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
+                                                data-link="{{ route('my_form', ['id' => $item->id]) }}"
+                                                onclick="copySurveyLink(this)">
+                                            <i class="bi bi-clipboard"></i>
+                                        </button>
                                     @endif
 
                                     <form action="{{ route('admin.survey.destroy', $item->id) }}" method="POST"
@@ -70,12 +76,7 @@
                                     </form>
 
 
-                                    <button class="btn btn-sm btn-outline-secondary" title="Sao chép đường dẫn"
-                                            style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
-                                            data-link="https://yourdomain.com/survey/1"
-                                            onclick="copySurveyLink(this)">
-                                        <i class="bi bi-clipboard"></i>
-                                    </button>
+
                                     <a href="#" class="btn btn-sm btn-outline-info" title="Xem thông tin sinh viên"
                                        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                         <i class="bi bi-person-lines-fill"></i>

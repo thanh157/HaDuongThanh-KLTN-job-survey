@@ -57,11 +57,18 @@
                                 <label class="form-label">Thời gian bắt đầu khảo sát <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="start_time" required
                                        value="{{ old('start_time') }}">
+
+                                @error('start_time')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Thời gian kết thúc khảo sát <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" name="end_time" required
                                        value="{{ old('end_time') }}">
+                                @error('end_time')
+                                <div class="text-danger small">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                     </div>

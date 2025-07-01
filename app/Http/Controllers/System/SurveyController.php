@@ -14,6 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use App\Models\Graduation;
@@ -46,13 +47,19 @@ class SurveyController extends Controller
     {
         DB::beginTransaction();
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'start_time' => 'required|date',
                 'end_time' => 'required|date|after_or_equal:start_time',
                 'questions.*.question_text' => 'required|string',
                 'questions.*.type' => 'required|in:single,multiple',
                 'questions.*.options' => 'required|array|min:1',
+            ], [
+                'end_time.after_or_equal' => 'Ngày kết thúc không được trước ngày bắt đầu.',
             ]);
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
 
             $survey = Survey::create([
                 'title' => $request->title,
@@ -111,13 +118,19 @@ class SurveyController extends Controller
     {
         DB::beginTransaction();
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'start_time' => 'required|date',
                 'end_time' => 'required|date|after_or_equal:start_time',
                 'questions.*.question_text' => 'required|string',
                 'questions.*.type' => 'required|in:single,multiple',
                 'questions.*.options' => 'required|array|min:1',
+            ], [
+                'end_time.after_or_equal' => 'Ngày kết thúc không được trước ngày bắt đầu.',
             ]);
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
 
             $survey = Survey::findOrFail($id);
 
@@ -130,26 +143,29 @@ class SurveyController extends Controller
             ]);
 
             // Xoá câu hỏi cũ để ghi đè
-            $survey->questions()->delete();
-            foreach ($request->questions as $qIndex => $q) {
-                $options = [];
-                foreach ($q['options'] as $optIndex => $text) {
-                    $options[] = [
-                        'text' => $text,
-                        'is_other' => isset($q['is_other'][$optIndex]) ? true : false,
-                    ];
-                }
+            if ($request->questions) {
+                $survey->questions()->delete();
+                foreach ($request->questions as $qIndex => $q) {
+                    $options = [];
+                    foreach ($q['options'] as $optIndex => $text) {
+                        $options[] = [
+                            'text' => $text,
+                            'is_other' => isset($q['is_other'][$optIndex]) ? true : false,
+                        ];
+                    }
 
-                $survey->questions()->create([
-                    'question_text' => $q['question_text'],
-                    'type' => $q['type'],
-                    'options' => json_encode($options),
-                ]);
+                    $survey->questions()->create([
+                        'question_text' => $q['question_text'],
+                        'type' => $q['type'],
+                        'options' => json_encode($options),
+                    ]);
+                }
             }
 
             DB::commit();
             return redirect()->route('admin.survey.index')->with('success', 'Cập nhật khảo sát thành công!');
         } catch (\Exception $e) {
+            dd($e);
             Log::error($e);
             DB::rollBack();
             return redirect()->route('admin.survey.index')->with('error', 'Lỗi');

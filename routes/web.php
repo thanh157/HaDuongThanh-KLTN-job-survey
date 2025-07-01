@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\KhaoSatController;
 use App\Http\Controllers\System\SurveyController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -201,3 +202,15 @@ Route::middleware('auth.sso')->group(function (): void {
         return view('admin.pages.admin.report');
     })->name('admin.report.index');
 });
+
+Route::get('khao_sat/{id}/form', [KhaoSatController::class, 'showForm'])->name('my_form');
+
+
+// API
+Route::post('/api/khao-sat/verify-student', [KhaoSatController::class, 'verify'])->name('verify');
+
+Route::post('/khao-sat/submit', [KhaoSatController::class, 'submit'])->name('survey.submit');
+
+Route::get('/khao-sat/hoan-thanh', function () {
+    return view('admin.pages.survey.thankyou');
+})->name('survey.thankyou');

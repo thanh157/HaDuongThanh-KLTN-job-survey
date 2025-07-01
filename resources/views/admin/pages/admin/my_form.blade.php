@@ -39,6 +39,10 @@
         }
     </style>
 
+
+    <!-- 🧾 Form khảo sát chính (ẩn lúc đầu) -->
+
+
     <div class="container py-4">
         <div class="google-form-style ">
             <!-- Header -->
@@ -46,7 +50,9 @@
                 <img src="{{ asset('assets/client/images/logo-vnua.jpg') }}" width="90" class="mb-2">
                 <h6 class="fw-bold mb-1 text-uppercase">Bộ Nông Nghiệp và Phát Triển Nông Thôn</h6>
                 <p class="mb-1 text-uppercase fw-semibold">Học Viện Nông Nghiệp Việt Nam</p>
-                <small class="text-muted fst-italic">Thị trấn Trâu Quỳ, huyện Gia Lâm, TP Hà Nội | ĐT: 024.62617586 – Fax:
+                <small class="text-muted fst-italic">Thị trấn Trâu Quỳ, huyện Gia Lâm, TP Hà Nội | ĐT: 024.62617586
+                    –
+                    Fax:
                     024.62617586</small>
             </div>
 
@@ -68,8 +74,7 @@
 
                     <div class="mb-3">
                         <label for="ho_ten">1. Họ và tên</label>
-                        <input type="text" class="form-control" id="ho_ten" name="ho_ten"
-                            placeholder="Nhập họ và tên đầy đủ">
+                        <input type="text" class="form-control" id="ho_ten" name="ho_ten" placeholder="Nhập họ và tên đầy đủ">
                     </div>
 
                     <div class="row">
@@ -86,8 +91,7 @@
                     <div class="mb-3">
                         <label for="ma_sv">4. Mã sinh viên</label>
                         <input type="text" class="form-control" id="ma_sv" name="ma_sv" value="637084"
-                            placeholder="Nhập mã sinh viên" oninput="setKhoaHocFromMaSV()">
-
+                               placeholder="Nhập mã sinh viên" oninput="setKhoaHocFromMaSV()">
                     </div>
 
                     <div class="mb-3">
@@ -103,7 +107,7 @@
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">6. Khóa học</label>
                             <input type="text" class="form-control" id="khoa_hoc" name="khoa_hoc"
-                                placeholder="Khóa học sẽ tự động hiển thị">
+                                   placeholder="Khóa học sẽ tự động hiển thị">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="major" class="form-label">Ngành đào tạo</label>
@@ -114,7 +118,6 @@
                                     @foreach ($majors as $major)
                                         <option value="{{ $major->id }}">{{ $major->name }}</option>
                                     @endforeach
-
                                 @endisset
 
                             </select>
@@ -136,22 +139,23 @@
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">9. Email</label>
-                            <input type="email" class="form-control" placeholder="Nhập email">
+                            <input type="email" class="form-control" placeholder="Nhập email" id="email">
                         </div>
                     </div>
 
-                    {{-- chưa api major được --}}
-                    <!-- 10. Tình trạng việc làm hiện tại -->
+                {{-- chưa api major được --}}
+                <!-- 10. Tình trạng việc làm hiện tại -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold">10. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của
+                        <label class="form-label fw-bold">10. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại
+                            của
                             Anh/chị</label>
                         @php $tinh_trang = ['Đã có việc làm', 'Tiếp tục học', 'Chưa có việc làm']; @endphp
                         @foreach ($tinh_trang as $index => $value)
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="radio" name="vieclam_hientai"
-                                    id="tt_{{ $index }}" value="{{ $value }}">
+                                       id="tt_{{ $index }}" value="{{ $value }}">
                                 <label class="form-check-label fw-normal"
-                                    for="tt_{{ $index }}">{{ $value }}</label>
+                                       for="tt_{{ $index }}">{{ $value }}</label>
                             </div>
                         @endforeach
                     </div>
@@ -177,7 +181,7 @@
                     <div class="mb-3">
                         <label class="form-label">13. Chức vụ, vị trí việc làm</label>
                         <input type="text" class="form-control"
-                            placeholder="VD: Nhân viên kinh doanh, Trưởng phòng sale...">
+                               placeholder="VD: Nhân viên kinh doanh, Trưởng phòng sale...">
                     </div>
                 </div>
 
@@ -186,7 +190,8 @@
 
                 @foreach($survey->questions as $qIndex => $question)
                     <div class="form-section mb-4">
-                        <label class="form-label fw-semibold">{{ $loop->iteration }}. {{ $question->question_text }}</label>
+                        <label class="form-label fw-semibold">{{ $loop->iteration }}
+                            . {{ $question->question_text }}</label>
 
                         @if($question->type === 'single')
                             @foreach($question->options as $optIndex => $option)
@@ -232,26 +237,39 @@
                     </div>
             @endforeach
 
-
             <!-- Lời kết -->
                 <div class="text-center mt-4">
                     {{-- <p class="fw-semibold mb-1"></p> --}}
                     <p class="text-muted fst-italic mb-3">Xin trân trọng cảm ơn!</p>
                 </div>
 
+                <!-- Submit button -->
+                <div class="text-end mt-3">
+                    <a href="{{ route('admin.survey.form-survey') }}" class="btn btn-success px-4 shadow-sm">
+                        <i class="bi bi-send me-1"></i> Gửi phản hồi
+                    </a>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <!-- Submit button -->
-        <div class="text-end mt-3">
-            <a href="{{ route('admin.survey.form-survey') }}" class="btn btn-success px-4 shadow-sm">
-                <i class="bi bi-send me-1"></i> Gửi phản hồi
-            </a>
+
+    <!-- 🛡️ Modal nhập MSSV -->
+    <div class="modal fade" id="mssvModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <h5 class="modal-title">Xác thực Sinh viên</h5>
+                <div class="modal-body">
+                    <input type="text" id="input-mssv" class="form-control" placeholder="Nhập MSSV">
+                    <div class="text-danger small d-none" id="mssv-error"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="verify-mssv-btn">Xác nhận</button>
+                </div>
+            </div>
         </div>
-
-
-        </form>
     </div>
-    </div>
+
     <script>
         function toggleOtherInput(checkbox, targetId = 'other_input_box') {
             const inputBox = document.getElementById(targetId);
@@ -314,5 +332,71 @@
             }
         });
     </script>
+
+    !-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap JS (bundle includes Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalEl = document.getElementById('mssvModal');
+            const modal = new bootstrap.Modal(modalEl, {
+                backdrop: 'static',
+                keyboard: false
+            });
+            modal.show();
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            const graduationId = {{ $survey->graduation_id }};
+
+            $('#verify-mssv-btn').on('click', function () {
+                const mssv = $('#input-mssv').val().trim();
+                const $error = $('#mssv-error');
+                $error.addClass('d-none');
+
+                if (!mssv) {
+                    $error.text('Vui lòng nhập Mã số sinh viên').removeClass('d-none');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/api/khao-sat/verify-student',
+                    method: 'POST',
+                    data: {
+                        mssv: mssv,
+                        graduation_id: graduationId,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('mssvModal'));
+                            modal.hide();
+                            $('#form-wrapper').fadeIn();
+
+                            // Đổ dữ liệu vào form
+                            const data = res.student;
+                            if (data) {
+                                $('#ho_ten').val(data.ho_ten);
+                                $('#ma_sv').val(data.ma_sv);
+                                $('#email').val(data.email);
+                                // Các input khác nếu có
+                            }
+                        } else {
+                            $error.text(res.message || 'MSSV không hợp lệ').removeClass('d-none');
+                        }
+                    },
+                    error: function () {
+                        $error.text('Đã có lỗi xảy ra, vui lòng thử lại.').removeClass('d-none');
+                    }
+                });
+            });
+        });
+    </script>
+
 
 @endpush
