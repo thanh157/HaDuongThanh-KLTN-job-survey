@@ -63,4 +63,9 @@ return [
         'code' => 'graduation.index',
         'group' => 'graduation'
     ],
+    [
+        'name' => 'Xem bảng điều khiển',
+        'code' => 'dashboard.index',
+        'group' => 'dashboard'
+    ],
 ];

@@ -28,7 +28,7 @@ return  [
         'code' => 'department'
     ],
     [
-        'name' => 'Chương trình đào tạo',
+        'name' => 'Ngành đào tạo',
         'code' => 'training-program'
     ]
 ];

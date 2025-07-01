@@ -206,7 +206,13 @@
                         <span>Tài khoản</span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.role.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.role.*') ? 'active' : '' }}">
+                        <i class="ph-shield"></i>
+                        <span>Vai trò</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
