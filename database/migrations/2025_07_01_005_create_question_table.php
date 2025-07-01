@@ -9,15 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('survey', function (Blueprint $table) {
+        Schema::create('question', function (Blueprint $table) {
             $table->id();
-            $table->string('title');               // Tiêu đề khảo sát
-            $table->text('description')->nullable(); // Mô tả khảo sát
-            $table->date('start_time')->nullable();   // Thời gian bắt đầu
-            $table->date('end_time')->nullable();     // Thời gian kết thúc
-            $table->integer('graduation_id')->nullable(); // Đợt tốt nghiệp (VD: Đợt 1, Đợt 2...)
+            $table->unsignedBigInteger('survey_id');           // Thuộc khảo sát nào
+            $table->string('question_text');                   // Nội dung câu hỏi
+            $table->enum('type', ['single', 'multiple']);      // Loại câu hỏi
+            $table->json('options')->nullable();                   // Mảng lựa chọn dưới dạng JSON
+
             $table->timestamps();
             $table->softDeletes();
         });
@@ -26,8 +26,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('survey');
+        Schema::dropIfExists('question');
     }
 };

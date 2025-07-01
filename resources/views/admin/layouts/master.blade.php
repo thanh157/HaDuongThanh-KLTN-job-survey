@@ -13,7 +13,7 @@
         <div class="wave-loader">
             <span></span><span></span><span></span><span></span><span></span>
         </div>
-    </div> 
+    </div>
     <!-- CSS hiệu ứng -->
     <style>
         .wave-loader {
@@ -35,7 +35,7 @@
         .wave-loader span:nth-child(5) { animation-delay: -0.8s; }
 
         @keyframes wave {
-            0%, 40%, 100% { transform: scaleY(0.4); }  
+            0%, 40%, 100% { transform: scaleY(0.4); }
             20% { transform: scaleY(1); }
         }
     </style>
@@ -71,6 +71,8 @@
 
     @include('admin.includes.script')
 
+
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const links = document.querySelectorAll("a[href]:not([target='_blank']):not([href^='#']):not([href^='javascript'])");
@@ -91,6 +93,8 @@
             });
         });
     </script>
+
+    @stack('script')
 </body>
 
 </html>

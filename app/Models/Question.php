@@ -5,26 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Survey extends Model
+class Question extends Model
 {
-    protected $table = 'survey';
+    protected $table = 'question';
 
     use SoftDeletes;
 
+    protected $casts = [
+        'options' => 'array',
+    ];
+
     protected $fillable = [
-        'id',
-        'title',
-        'description',
-        'start_time',
-        'end_time',
-        'school_year',
-        'graduation_id',
+        'survey_id',
+        'question_text',
+        'type',
+        'options',
         'created_at',
         'updated_at',
     ];
 
-    public function graduation()
+    public function survey()
     {
-        return $this->belongsTo(Graduation::class, 'graduation_id', 'id');
+        return $this->belongsTo(Survey::class, 'survey_id', 'id');
     }
 }

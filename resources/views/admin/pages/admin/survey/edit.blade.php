@@ -82,6 +82,61 @@
                 </div>
             </div>
 
+            <div class="card p-4 shadow-sm mt-4">
+                <h6 class="mb-3">Câu hỏi khảo sát</h6>
+                <div id="question-list">
+                    @foreach($survey->questions as $qIndex => $question)
+                        <div class="border p-3 mb-3 position-relative question-block">
+                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="this.closest('.question-block').remove()">
+                                <i class="bi bi-x"></i>
+                            </button>
+
+                            <div class="mb-2">
+                                <label class="form-label">Nội dung câu hỏi</label>
+                                <input type="text" name="questions[{{ $qIndex }}][question_text]" class="form-control" required
+                                       value="{{ $question->question_text }}">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label">Loại câu hỏi</label>
+                                <select name="questions[{{ $qIndex }}][type]" class="form-select" required>
+                                    <option value="single" {{ $question->type == 'single' ? 'selected' : '' }}>Chọn 1</option>
+                                    <option value="multiple" {{ $question->type == 'multiple' ? 'selected' : '' }}>Chọn nhiều</option>
+                                </select>
+                            </div>
+
+                            <div class="option-area" id="options-{{ $qIndex }}">
+                                <label class="form-label">Danh sách lựa chọn</label>
+                                <div class="option-group">
+                                    @foreach($question->options as $optIndex => $opt)
+                                        <div class="d-flex align-items-center mb-2 option-item">
+                                            <input type="text" name="questions[{{ $qIndex }}][options][]" class="form-control me-2"
+                                                   value="{{ $opt['text'] }}" required>
+                                            <div class="form-check me-2">
+                                                <input class="form-check-input" type="checkbox"
+                                                       name="questions[{{ $qIndex }}][is_other][{{ $optIndex }}]" value="1"
+                                                    {{ isset($opt['is_other']) && $opt['is_other'] ? 'checked' : '' }}>
+                                                <label class="form-check-label">Khác</label>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentNode.remove()">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-secondary mt-2"
+                                        onclick="addOption({{ $qIndex }})">+ Thêm lựa chọn</button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="add-question-btn">
+                    <i class="bi bi-plus-circle me-1"></i> Thêm câu hỏi
+                </button>
+            </div>
+
+
             <!-- Nút lưu -->
             <div class="mt-4 d-flex justify-content-end">
                 <button type="submit" class="btn btn-success">
@@ -91,3 +146,62 @@
         </form>
     </div>
 @endsection
+
+
+@push('script')
+    <script>
+        let questionIndex = {{ $survey->questions->count() }};
+
+        function renderQuestionBlock(index) {
+            return `
+                <div class="border p-3 mb-3 position-relative question-block">
+                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="this.closest('.question-block').remove()">
+                        <i class="bi bi-x"></i>
+                    </button>
+
+                    <div class="mb-2">
+                        <label class="form-label">Nội dung câu hỏi</label>
+                        <input type="text" name="questions[${index}][question_text]" class="form-control" required>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Loại câu hỏi</label>
+                        <select name="questions[${index}][type]" class="form-select" onchange="toggleOptionBlock(this, ${index})" required>
+                            <option value="single">Chọn 1</option>
+                            <option value="multiple">Chọn nhiều</option>
+                        </select>
+                    </div>
+
+                    <div class="option-area" id="options-${index}">
+                        <label class="form-label">Danh sách lựa chọn</label>
+                        <div class="option-group"></div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="addOption(${index})">+ Thêm lựa chọn</button>
+                    </div>
+                </div>`;
+        }
+
+        function addOption(qIndex) {
+            const optionHTML = `
+                <div class="d-flex align-items-center mb-2 option-item">
+                    <input type="text" name="questions[${qIndex}][options][]" class="form-control me-2" placeholder="Nội dung lựa chọn" required>
+                    <div class="form-check me-2">
+                        <input class="form-check-input" type="checkbox" name="questions[${qIndex}][is_other][]" value="1">
+                        <label class="form-check-label">Khác</label>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentNode.remove()"><i class="bi bi-trash"></i></button>
+                </div>
+            `;
+            $(`#options-${qIndex} .option-group`).append(optionHTML);
+        }
+
+        function toggleOptionBlock(select, index) {
+            $(`#options-${index}`).toggle(select.value === 'single' || select.value === 'multiple');
+        }
+
+        $('#add-question-btn').on('click', function () {
+            $('#question-list').append(renderQuestionBlock(questionIndex));
+            addOption(questionIndex); // Thêm 1 option mặc định
+            questionIndex++;
+        });
+    </script>
+@endpush

@@ -27,4 +27,9 @@ class Survey extends Model
     {
         return $this->belongsTo(Graduation::class, 'graduation_id', 'id');
     }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
 }
