@@ -23,10 +23,11 @@ use App\Http\Controllers\Admin\MajorController;
 use App\Http\Controllers\System\GraduationController;
 use App\Http\Controllers\System\ClassController;
 use App\Http\Controllers\GraduationStudentController;
-use App\Http\Controllers\Admin\SurveyPeriodController;
+use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\Admin\FormSurveyController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Admin\ChartStatisticController;
+
 // Route::get('/login/sso', [AuthController::class, 'redirectToSSO'])->name('sso.redirect');
 // Route::get('/login/sso/callback', [AuthController::class, 'handleSSOCallback'])->name('sso.callback');
 
@@ -46,7 +47,7 @@ Route::middleware('auth.sso')->group(function (): void {
         return view('admin.pages.admin.dashboard');
     })->name('admin.dashboard');
 
-    Route::get('/department', [DepartmentController::class, 'index'])->name('admin.department.index');
+    Route::get('/department', [DepartmentController::class, 'index'])->name('admin.department.index')->middleware('permission:department.index');
     // Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
     // Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
     Route::get('/graduation/create', [GraduationController::class, 'create'])->name('admin.graduation.create');
@@ -190,6 +191,8 @@ Route::middleware('auth.sso')->group(function (): void {
 
 
 
+    Route::get('/admin/graduation/{id}/students', [GraduationController::class, 'showStudents'])
+        ->name('admin.graduation-student.index.show');
 
     // Route::get('/graduation;', function () {
     //     return view('admin.pages.admin.graduation');
@@ -212,6 +215,19 @@ Route::middleware('auth.sso')->group(function (): void {
     // Route::get('/report', function () {
     //     return view('admin.pages.admin.report');
     // })->name('admin.report.index');
+    Route::get('/report', function () {
+        return view('admin.pages.admin.report');
+    })->name('admin.report.index');
+
+    Route::prefix('role')->group(function () {
+        Route::get('/', [RoleController::class, 'index'])->name('admin.role.index')->middleware('permission:role.index');
+        Route::get('/create', [RoleController::class, 'create'])->name('admin.role.create')->middleware('permission:role.create');
+        Route::post('/store', [RoleController::class, 'store'])->name('admin.role.store')->middleware('permission:role.create');
+        Route::get('/{role}', [RoleController::class, 'show'])->name('admin.role.show');
+        Route::get('/{role}/edit', [RoleController::class, 'edit'])->name('admin.role.edit')->middleware('permission:role.edit');
+        Route::put('/{id}', [RoleController::class, 'update'])->name('admin.role.update')->middleware('permission:role.edit');
+        Route::delete('/{id}', [RoleController::class, 'destroy'])->name('admin.role.destroy')->middleware('permission:role.delete');
+    });
 });
 
 Route::get('khao_sat/{id}/form', [KhaoSatController::class, 'showForm'])->name('my_form');
