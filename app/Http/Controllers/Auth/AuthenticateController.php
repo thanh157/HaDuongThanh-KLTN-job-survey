@@ -48,7 +48,6 @@ class AuthenticateController extends Controller
 
             return redirect()->route('admin.dashboard');
         } catch (Throwable $th) {
-            dd($th->getMessage());
             Log::error('SSO authentication error: ' . $th->getMessage(), [
                 'code' => $request->code,
                 'file' => $th->getFile(),
@@ -131,6 +130,10 @@ class AuthenticateController extends Controller
         if ($userData['role'] !== Role::SuperAdmin->value && empty($userData['faculty_id'])) {
             abort(403);
         }
+
+        if ($userData['role'] === Role::Normal->value || $userData['role'] === Role::Student->value) {
+            abort(403);
+        }
     }
 
     private function determineUserType(string $role): string
@@ -138,7 +141,6 @@ class AuthenticateController extends Controller
         return match ($role) {
             Role::SuperAdmin->value => UserType::Admin->value,
             Role::Officer->value => UserType::Officer->value,
-            Role::Student->value => UserType::Student->value,
             default => UserType::Teacher->value,
         };
     }

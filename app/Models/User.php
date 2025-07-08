@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Role;
+
 
 /**
  *
@@ -63,7 +66,7 @@ class User extends Authenticatable
         'access_token',
         'user_data',
         'faculty_id',
-        'role',
+        'role_id',
         'type',
     ];
 
@@ -75,9 +78,9 @@ class User extends Authenticatable
 
     protected $appends = ['role_name'];
 
-    public function userRoles(): BelongsToMany
+    public function role(): BelongsTo
     {
-        return $this->belongsToMany(Role::class, 'user_role');
+        return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
     public function hasPermission(string $permissionCode): bool
