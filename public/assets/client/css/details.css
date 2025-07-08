@@ -1,0 +1,88 @@
+.club-detail-page {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+}
+
+.club-header {
+    padding: 60px 0;
+}
+
+.club-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #1d1f27;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.club-description {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.club-banner img {
+    width: 100%;
+    border-radius: 15px;
+}
+
+.club-description-box,
+.club-info-box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+}
+
+.info-list li {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #495057;
+}
+
+.activity-gallery {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.activity-item {
+    flex: 1;
+    transition: transform 0.3s ease;
+}
+
+.activity-item:hover {
+    transform: scale(1.05);
+}
+
+.activity-item img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+    background-color: #00aaff;
+    border-color: #00aaff;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+
+.btn-primary:hover {
+    background-color: #0091cc;
+    border-color: #0091cc;
+}

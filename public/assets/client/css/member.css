@@ -1,0 +1,215 @@
+.containerr {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+.side {
+    width: 48%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+.side h2 {
+    text-align: center;
+    color: #333;
+    font-size: 18px;
+  }
+
+.member-list, .leader-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+.member-list li, .leader-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+
+.member-list li img, .leader-list li img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+  }
+
+.member-list li p, .leader-list li p {
+  margin: 0;
+    color: #333;
+  }
+
+.leader-list li {
+    background-color: #e8f4e8;
+  }
+
+.leader-list li p {
+    font-weight: bold;
+    color: #4CAF50;
+  }
+
+.avatar-container {
+    display: flex;
+    align-items: center;
+  }
+
+.avatar-container img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+
+.avatar-container div {
+    font-size: 1.1em;
+    color: #333;
+  }
+
+.member-info {
+    margin-left: 10px;
+  }
+
+.member-info p {
+    margin: 0;
+    color: #666;
+  }
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+.pagination button {
+    padding: 10px;
+    margin: 0 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+.pagination button:hover {
+    background-color: #45a049;
+  }
+
+.side {
+    margin-bottom: 20px; /* Giảm khoảng cách dưới mỗi khung */
+}
+
+/* Điều chỉnh khoảng cách giữa ban chỉ huy và thành viên */
+.container .side + h2 {
+    margin-top: 10px; /* Giảm khoảng cách giữa khung ban chỉ huy và tiêu đề thành viên */
+}
+
+
+.leader-item, .member-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.leader-item:hover, .member-list li:hover {
+    background-color: #f0f0f0;
+    transform: translateX(5px); /* Đẩy qua bên phải một chút */
+}
+
+.leader-item img, .member-list li img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.leader-item div, .member-list li div {
+    font-size: 14px;
+}
+
+.pagination button {
+    padding: 5px 15px;
+    margin: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.leader-item, .member-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Kiểu hover 1: Làm sáng nền và có bóng đổ */
+.leader-item:hover, .member-list li:hover {
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Kiểu hover 2: Thay đổi màu chữ */
+.leader-item:hover p, .member-list li:hover p {
+    color: #007bff;
+}
+
+/* Kiểu hover 3: Mở rộng mục khi hover */
+.leader-item:hover, .member-list li:hover {
+    transform: scale(1.05); /* Mở rộng mục */
+}
+
+.leader-item img, .member-list li img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.leader-item div, .member-list li div {
+    font-size: 14px;
+}
+
+.pagination button {
+    padding: 5px 15px;
+    margin: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #0056b3;
+}
+
+.pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

@@ -1,0 +1,23 @@
+#emptyRow img {
+    max-width: 90%;
+    width: 300px;
+    margin: auto;
+    display: block;
+}
+
+.filter-popup {
+      top: 120%;
+      left: 0;
+      min-width: 250px;
+      display: none;
+      z-index: 1000;
+    }
+
+    @media (max-width: 576px) {
+      .filter-popup {
+        min-width: 100%;
+        position: static;
+        display: block;
+        margin-top: 0.5rem;
+      }
+    }

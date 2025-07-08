@@ -1,0 +1,91 @@
+#toggleTheme {
+    width: 40px;
+    height: 20px;
+    background-color: #6c757d;
+    border-radius: 20px;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+#toggleTheme::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    top: 1px;
+    left: 1px;
+    background-color: white;
+    transition: transform 0.3s ease;
+}
+
+#toggleTheme:checked {
+    background-color: #f1c40f;
+}
+
+#toggleTheme:checked::before {
+    transform: translateX(20px);
+}
+
+body.light-mode {
+    background-color: #f8f9fa !important;
+    color: #212529 !important;
+}
+
+body.light-mode .sidebar-section {
+    background-color: #ffffff !important;
+}
+
+body.light-mode h6,
+body.light-mode .text-white {
+    color: #212529 !important;
+}
+
+
+
+/* Giao diện sáng cho toàn bộ sidebar */
+body.light-mode .sidebar {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+}
+
+body.light-mode .sidebar .sidebar-section {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+}
+
+body.light-mode .sidebar .nav-link {
+    color: #212529 !important;
+    background-color: transparent !important;
+}
+
+body.light-mode .sidebar .nav-link:hover,
+body.light-mode .sidebar .nav-link:focus,
+body.light-mode .sidebar .nav-link.active {
+    background-color: #e9ecef !important;
+    color: #000 !important;
+}
+
+body.light-mode .sidebar .nav-item-header {
+    color: #6c757d !important;
+    opacity: 1 !important;
+}
+
+body.light-mode .sidebar .fw-bold,
+body.light-mode .sidebar .text-white,
+body.light-mode .sidebar .text-white-50 {
+    color: #212529 !important;
+}
+
+body.light-mode .sidebar .rounded-circle.bg-white {
+    background-color: #dee2e6 !important;
+}
+
+body.light-mode .sidebar i {
+    color: #495057 !important;
+}
+

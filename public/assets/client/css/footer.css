@@ -1,0 +1,78 @@
+/* Đặt HTML và body để sử dụng Flexbox */
+html, body {
+    height: 100%; /* Chiều cao toàn màn hình */
+    margin: 0; /* Xóa margin mặc định */
+    display: flex;
+    flex-direction: column; /* Sắp xếp theo cột */
+}
+
+/* Nội dung chính sẽ đẩy footer xuống */
+main {
+    flex: 1; /* Chiếm không gian còn lại */
+}
+
+/* Footer */
+.footer5 {
+    background-color: #fdf9ec; /* Nền màu kem */
+    color: #333; /* Màu chữ chính */
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+}
+
+.footer5 .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer5 .row {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer5 .col {
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 20px;
+}
+
+.footer5 h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #4caf50; /* Màu xanh lá cây */
+}
+
+.footer5 p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.footer-copyright {
+    background-color: #3a9109; /* Nền xanh lá */
+    color: #fff; /* Chữ trắng */
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.footer-copyright p {
+    margin: 0;
+}
+
+.footer-copyright i {
+    margin-right: 5px;
+}
+
+.img {
+    border-radius: 50%; /* Tạo hình tròn cho logo */
+    width: 100px; /* Kích thước logo */
+    height: 100px; /* Đảm bảo chiều cao và chiều rộng bằng nhau */
+}
+
+.footer-copyright {
+    font-weight: 700;
+}
+
+

@@ -1,0 +1,31 @@
+.weather-effect::before, .weather-effect::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 2px;
+  height: 2px;
+  background: white;
+  box-shadow:
+    20px 10px white,
+    40px 30px white,
+    60px 50px white,
+    80px 70px white,
+    100px 90px white,
+    120px 110px white,
+    140px 130px white,
+    160px 150px white;
+  animation: weatherMove 5s linear infinite;
+  opacity: 0.4;
+  filter: blur(1px);
+  z-index: 0;
+  pointer-events: none;
+}
+.weather-effect::after {
+  animation-delay: 2.5s;
+}
+
+@keyframes weatherMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(120px); }
+}

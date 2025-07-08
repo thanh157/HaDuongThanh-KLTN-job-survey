@@ -1,0 +1,104 @@
+[
+    {
+        "id": 2,
+        "dot_tot_nghiep": "T6\/2024",
+        "nam_tot_nghiep": "2024",
+        "tong_sinh_vien": "5604",
+        "created_at": "2024-06-11 14:24:00",
+        "updated_at": "2025-06-29 10:36:11"
+    },
+    {
+        "id": 3,
+        "dot_tot_nghiep": "T12\/2023",
+        "nam_tot_nghiep": "2023",
+        "tong_sinh_vien": 71,
+        "created_at": "2023-12-05 08:30:00"
+    },
+    {
+        "id": 4,
+        "dot_tot_nghiep": "T6\/2023",
+        "nam_tot_nghiep": "2023",
+        "tong_sinh_vien": 42,
+        "created_at": "2023-06-15 09:00:00"
+    },
+    {
+        "id": 14,
+        "dot_tot_nghiep": "t5555",
+        "nam_tot_nghiep": "2015",
+        "tong_sinh_vien": 300,
+        "created_at": "2025-06-28 19:53:22"
+    },
+    {
+        "id": 15,
+        "dot_tot_nghiep": "T7\/2025",
+        "nam_tot_nghiep": "2026",
+        "tong_sinh_vien": "122",
+        "created_at": "2025-06-28 20:05:58"
+    },
+    {
+        "id": 16,
+        "dot_tot_nghiep": "T9\/2025",
+        "nam_tot_nghiep": "2025",
+        "tong_sinh_vien": 340,
+        "created_at": "2025-06-28 20:08:57"
+    },
+    {
+        "id": 17,
+        "dot_tot_nghiep": "T7\/2025",
+        "nam_tot_nghiep": "2013",
+        "tong_sinh_vien": 200,
+        "created_at": "2025-06-28 20:16:00"
+    },
+    {
+        "id": 18,
+        "dot_tot_nghiep": "test",
+        "nam_tot_nghiep": "2010",
+        "tong_sinh_vien": "20",
+        "created_at": "2025-06-28 20:20:24",
+        "updated_at": "2025-06-28 20:58:52"
+    },
+    {
+        "id": 19,
+        "dot_tot_nghiep": "T9\/2023",
+        "nam_tot_nghiep": "2018",
+        "tong_sinh_vien": "299999934333434444343434564677655",
+        "created_at": "2025-06-28 20:52:18",
+        "updated_at": "2025-06-29 04:31:55"
+    },
+    {
+        "id": 20,
+        "dot_tot_nghiep": "test 2",
+        "nam_tot_nghiep": "2021",
+        "tong_sinh_vien": 50,
+        "created_at": "2025-06-28 20:59:18"
+    },
+    {
+        "id": 21,
+        "dot_tot_nghiep": "test3",
+        "nam_tot_nghiep": "2020",
+        "tong_sinh_vien": "46",
+        "created_at": "2025-06-29 04:06:42",
+        "updated_at": "2025-06-29 04:14:31"
+    },
+    {
+        "id": 22,
+        "dot_tot_nghiep": "4",
+        "nam_tot_nghiep": "2024",
+        "tong_sinh_vien": "333",
+        "created_at": "2025-06-29 04:06:56"
+    },
+    {
+        "id": 24,
+        "dot_tot_nghiep": "T7\/2022",
+        "nam_tot_nghiep": "2022",
+        "tong_sinh_vien": "234",
+        "created_at": "2025-06-29 04:19:12"
+    },
+    {
+        "id": 25,
+        "dot_tot_nghiep": "T9\/2024",
+        "nam_tot_nghiep": "2024",
+        "tong_sinh_vien": "46767567",
+        "created_at": "2025-06-29 04:32:25"
+    }
+]

@@ -1,0 +1,1 @@
+@extends('admin.pages.admin.dashboard')

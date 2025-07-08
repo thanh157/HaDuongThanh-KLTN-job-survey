@@ -1,0 +1,464 @@
+body{
+    overflow: auto !important;
+}
+
+footer {
+    padding: 0 !important; /* Loại bỏ padding thừa */
+    margin: 0; /* Đảm bảo không có khoảng cách thừa */
+}
+  
+.nav-item{
+    position:relative;
+}
+
+.nav-link ::after {
+    content: "";
+    position: absolute;
+    right: 0px;
+    bottom: 50%;
+    transform: translateY(50%);
+    width: 1px;
+    height: 35px;
+    background-color: #dad8d8;
+    opacity: 0.5;
+}
+
+.container-fluid {
+    height: 56px;
+}
+
+.navbar-brand {
+    margin-left: 35px;
+}
+
+/* CSS cho nút "Tìm kiếm" */
+.search-btn {
+    color: #fff;
+    background-color: #dd0921cc;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+/* Đặt màu đỏ cho biểu tượng trái tim */
+.like-icon i {
+    color: red; 
+}
+
+/* Đổi màu khi hover vào "Xem thêm" */
+.see-more:hover {
+    color: #ff0000 !important; 
+    /* text-decoration: underline !important;  */
+}
+
+.like-icon:hover i {
+    color: red;
+}
+
+.container {
+    margin-bottom: 50px;
+}
+
+/* {{===style phần lợi ích tham gia CLBCLB===}} */
+
+/* Màu nền cho phần "Lợi ích tham gia câu lạc bộ" */
+.container.py-5 {
+    padding: 50px 20px;
+}
+
+/* Màu nền cho phần "Các câu lạc bộ nổi bật" */
+.container.py-3 {
+    background-color: #f8f9fa; /* Màu xám nhạt */
+    padding: 50px 20px;
+    border-radius: 10px;
+}
+
+/* Cải thiện khoảng cách dưới mỗi phần tử để tạo không gian */
+.row-cols-1, .row-cols-sm-2, .row-cols-lg-3 {
+    margin-bottom: 30px;
+}
+
+/* Thêm hiệu ứng cho các thẻ khi hover */
+.card-1:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+    transform: translateY(-5px); /* Nâng thẻ lên khi hover */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carousel-inner {
+    padding: 0 50px;
+}
+
+/* Khoảng cách giữa các phần */
+.container {
+    margin-bottom: 2rem;
+}
+
+/* Hiệu ứng hover card */
+.cards
+ {
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.cards:hover {
+    transform: scale(1.05);
+}
+
+/* Hiệu ứng cho ảnh */
+.cards-img-top {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.cards:hover .cards-img-top {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+/* Carousel điều chỉnh */
+.carousel-inner {
+    padding: 1rem 0;
+}
+
+.container  {
+    margin-top: -80px;
+
+}
+
+.highlight-title {
+    font-size: 2.15rem;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    background: linear-gradient(90deg, #FF6F61, #FF9966);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1.5rem;
+}
+
+/* Khoảng cách giữa các phần */
+.container {
+    margin-bottom: 2rem;
+}
+
+/* Hiệu ứng card */
+.cards {
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.cards:hover {
+    transform: scale(1.05);
+}
+
+/* Hiệu ứng ảnh */
+.cards-img-top {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.cards:hover .cards-img-top {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+
+/* Điều chỉnh footer */
+.cards-footer {
+    font-size: 0.875rem;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.benefit-item {
+    background: #ffffff; /* Màu nền trắng */
+    border: 1px solid #ddd; /* Viền mỏng */
+    border-radius: 10px; /* Bo góc mềm mại */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.benefit-item:hover {
+    transform: translateY(-5px); /* Nâng lên nhẹ khi hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng mượt */
+}
+
+.benefit-icon img {
+    border: 2px solid #ddd; /* Viền ảnh */
+    transition: border-color 0.3s ease;
+}
+
+.benefit-item:hover .benefit-icon img {
+    border-color: #444; /* Đổi màu viền ảnh khi hover */
+}
+
+/* Đảm bảo trái tim có màu đỏ khi được ấn */
+.text-red {
+    color: red !important;
+}
+
+/* Đảm bảo trái tim có màu đỏ khi được ấn */
+.text-red {
+    color: red !important;
+}
+
+/* Cấu hình container để trái tim bay lên */
+.heart-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    overflow: visible;
+}
+
+.heart {
+    position: absolute;
+    font-size: 1.5rem;
+    color: red;
+    animation: fly 1.5s ease-in-out forwards;
+    opacity: 0.8;
+}
+
+/* Keyframes cho hiệu ứng bay lên */
+@keyframes fly {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(0, -150px) scale(1.5);
+    }
+}
+
+.text-red {
+    color: red; /* Đảm bảo rằng màu đỏ được áp dụng */
+}
+
+.hero-section {
+    position: relative;
+    overflow: hidden; /* Đảm bảo các hoa không ra ngoài */
+}
+
+
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* Hiệu ứng hover khi di chuột qua dòng */
+.table tr:hover {
+    background-color: #f1f1f1; 
+}
+
+/* Hiệu ứng hover cho toàn bộ khung card */
+.card {
+    position: relative;
+    overflow: hidden; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Khi hover vào toàn bộ card, phóng to và thêm bóng đổ */
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+}
+
+/* Hiệu ứng hover cho hình ảnh trong card */
+.card-img-actions img {
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Khi hover vào card, hình ảnh phóng to lên */
+.card:hover .card-img-actions img {
+    transform: scale(1.1);
+}
+
+/* Nút play */
+.card-img-actions a {
+    padding: 15px;
+    transition: transform 0.3s ease, background-color 0.3s ease; 
+}
+
+/* Khi hover vào nút play, phóng to và đổi màu nền */
+.card-img-actions a:hover {
+    transform: scale(1.2);
+}
+
+/* Điều chỉnh kích thước icon play */
+.card-img-actions a i {
+    font-size: 3rem; 
+    color: white; 
+}
+
+/* Hiệu ứng hover cho các hàng trong bảng */
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Màu nền khi hover */
+    cursor: pointer; /* Hiển thị con trỏ chuột khi hover */
+}
+
+/* Tăng độ đậm khi hover vào ô */
+.table tbody tr td {
+    transition: background-color 0.3s ease; /* Thêm hiệu ứng mượt mà khi hover */
+}
+
+/* Hiệu ứng khi hover vào các tiêu đề của bảng */
+.table thead th:hover {
+    background-color: rgba(0, 123, 255, 0.2); /* Màu nền khi hover vào tiêu đề */
+    cursor: pointer;
+}
+
+/* Hiệu ứng mượt mà cho các hàng trong bảng */
+.table tbody tr {
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng nền và hiệu ứng chuyển động */
+}
+
+/* Khi hover vào hàng trong bảng */
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1); /* Màu nền khi hover */
+    cursor: pointer; /* Hiển thị con trỏ chuột khi hover */
+    transform: scale(1.01); /* Phóng to nhẹ khi hover */
+}
+
+/* Hiệu ứng mượt mà khi hover vào các tiêu đề của bảng */
+.table thead th {
+    transition: background-color 0.3s ease; /* Hiệu ứng nền cho tiêu đề */
+}
+
+.table thead th:hover {
+    background-color: rgba(0, 123, 255, 0.2); /* Màu nền khi hover vào tiêu đề */
+    cursor: pointer;
+}
+
+/* Khi hover vào hình ảnh, giảm kích thước icon */
+.card-img-actions-overlay.card-img:hover i {
+    font-size: 1rem;
+    transition: font-size 0.3s ease; 
+}
+
+/* Hiệu ứng hover mượt mà khi rê chuột vào hình ảnh */
+.card-img-actions-overlay.card-img {
+    transition: transform 0.3s ease;
+}
+
+/* Khi hover vào hình ảnh, có thể thêm hiệu ứng phóng to hình ảnh */
+.card-img-actions-overlay.card-img:hover {
+    transform: scale(1.05); 
+}
+
+/* Định nghĩa hiệu ứng đổi màu liên tục */
+@keyframes changeColor {
+    0% {
+        background-color: #007bff; /* Màu nền ban đầu */
+        color: white; /* Màu chữ ban đầu */
+    }
+    25% {
+        background-color: #28a745; /* Màu nền xanh lá */
+        color: white; /* Màu chữ trắng */
+    }
+    50% {
+        background-color: #ff5733; /* Màu nền đỏ */
+        color: white; /* Màu chữ trắng */
+    }
+    75% {
+        background-color: #ffc107; /* Màu nền vàng */
+        color: black; /* Màu chữ đen */
+    }
+    100% {
+        background-color: #007bff; /* Màu nền xanh dương */
+        color: white; /* Màu chữ trắng */
+    }
+}
+
+/* Áp dụng hiệu ứng animation cho nút */
+.btn-primaryy {
+    animation: changeColor 1.2s infinite; /* Áp dụng animation liên tục với thời gian 3 giây */
+}
+
+/* Flexbox cho phần thông tin */
+.info-item {
+    flex: 1 1 30%; /* Điều chỉnh để các phần tử không quá rộng, có thể thêm khoảng cách */
+}
+
+/* Giảm khoảng cách giữa các phần tử khi màn hình nhỏ */
+@media (max-width: 767px) {
+    .info-item {
+        flex: 1 1 100%; /* Đảm bảo mỗi phần tử chiếm full chiều rộng khi trên di động */
+        margin-bottom: 1rem; /* Thêm khoảng cách dưới mỗi phần tử */
+    }
+}
+
+
+/* Phần chủ tịch câu lạc bộ */
+.card-body .mb-4 h6 i.ph-crown {
+    color: #f8b400; /* Màu vàng cho biểu tượng vương miện */
+}
+
+.card-body .mb-4 .d-flex {
+    display: flex;
+    align-items: center;
+}
+
+.card-body .mb-4 img {
+    border: 2px solid #ddd;
+}
+
+.card-body .mb-4 .me-3 {
+    margin-right: 1rem;
+}
+
+.card-body .mb-4 h6 {
+    font-size: 1.0rem;
+    font-weight: bold;
+}
+
+.card-body .mb-4 .text-muted {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.card-body .mb-4 p.mb-3 {
+    font-size: 1rem;
+    color: #343a40;
+}
+
+.card-body .mb-4 .d-flex div {
+    max-width: 80%;
+}
+
+.card-body .mb-4 .d-flex img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Cải thiện hiệu ứng hover cho nút "Xem chi tiêu của bạn" */
+#expenditureLink {
+    text-decoration: underline;
+    transition: color 0.3s ease; /* Thêm hiệu ứng mượt mà khi đổi màu */
+    color: blue; /* Màu chữ ban đầu là xanh */
+}
+
+#expenditureLink:hover {
+    color: red; /* Màu chữ khi hover là đỏ */
+    text-decoration: none; /* Loại bỏ gạch chân khi hover */
+}
