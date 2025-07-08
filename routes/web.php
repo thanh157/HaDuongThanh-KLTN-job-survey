@@ -168,7 +168,7 @@ Route::middleware('auth.sso')->group(function (): void {
     //     return view('admin.pages.admin.class-detail');
     // })->name('admin.class.class-detail');
 
-    Route::get('/form-survey;', function () {
+    Route::get('/form-survey', function () {
         return view('admin.pages.admin.form-survey');
     })->name('admin.survey.form-survey');
 
