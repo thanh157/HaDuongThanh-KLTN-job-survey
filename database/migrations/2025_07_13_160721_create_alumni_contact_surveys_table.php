@@ -9,6 +9,7 @@ return new class extends Migration {
     {
         Schema::create('alumni_contact_surveys', function (Blueprint $table) {
             $table->id();
+            $table->integer('survey_batch_id')->nullable();
 
             // Thông tin sinh viên
             $table->string('student_code')->unique(); // Mã SV

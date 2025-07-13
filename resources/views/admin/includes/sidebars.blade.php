@@ -173,7 +173,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.alumni-contact.index') }}"
+                    <a href="#"
                        class="nav-link {{ request()->routeIs('admin.alumni-contact.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-clipboard-list"></i>
                         <span>Thu thập thông tin cựu sinh viên</span>

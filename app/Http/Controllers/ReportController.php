@@ -44,7 +44,7 @@ class ReportController extends Controller
 
         $industries = collect($industryList['data'] ?? [])->map(fn($i) => (object)$i);
 
-        $surveyResponses = DB::table('employment_survey_responses')->get();
+        $surveyResponses = DB::table('employment_survey_responses_v2')->get();
 
         $report1 = $industries->map(function ($industry) use ($surveyResponses) {
             $responses = $surveyResponses->filter(fn($r) => ($r->training_industry_id ?? null) == $industry->id);
