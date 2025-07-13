@@ -14,12 +14,26 @@
                     <li class="breadcrumb-item active" aria-current="page">Kết quả khảo sát</li>
                 </ol>
             </nav>
+            <br>
 
             <div>
-                - Nam khao sat: 2022 <br>
-                - dot khao sat: dot 1, dot 2, dot 3 <br>
-                - Khi click dot 1 sang chi tiet: http://127.0.0.1:8000/graduation/72/students <br>
-                - thống kê: 1/100 <br>
+                - Năm khảo sat: {{ $schoolYear }} <br>
+                - Đợt khảo sát:
+                <ul>
+                    @foreach($allDotTotNghiep as $item)
+                    <li><a target="_blank" href="{{ route('admin.graduation-student.show', ['id' => $item->id]) }}">{{ $item->name }}</a></li>
+                    @endforeach
+                </ul>
+                - Số lượt khảo sát:
+                @php
+                    $totalPhanHoi = App\Models\EmploymentSurveyResponse::where('survey_period_id', $survey->id)->count();
+                    $countDot = $survey->graduations()->pluck('id')->toArray();
+                    $countStudent = \App\Models\GraduationStudent::query()->whereIn('graduation_id', $countDot)->count();
+                @endphp
+
+                <strong class="text-primary">
+                    {{ $totalPhanHoi }} / {{ $countStudent }}
+                </strong>
             </div>
         </div>
         <div class="mt-2 mt-sm-0">
@@ -54,9 +68,12 @@
                         <td class="d-flex justify-content-center align-items-center">
                             <a href="{{ route('admin.survey.result_detail', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" title="Chi tiết"
                                style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 4px">
-                                <i class="bi bi-pencil-square"></i>
+                                <i class="bi bi-info"></i>
                             </a>
-                            <a href="#">Xuất pdf</a>
+                            <a href="#" class="btn btn-sm btn-outline-primary" title="Export Pdf"
+                               style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 4px">
+                                <i class="bi bi-file-earmark-pdf-fill"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach

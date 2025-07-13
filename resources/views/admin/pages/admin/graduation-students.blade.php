@@ -23,6 +23,14 @@
             </a>
         </div>
 
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{{ route('admin.graduation.index') }}">Đợt tốt nghiệp</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Danh sách sinh viên</li>
+            </ol>
+        </nav>
+        <br>
+
         <div class="card shadow-sm">
             <div class="table-responsive">
                 <table class="table table-bordered align-middle text-center">

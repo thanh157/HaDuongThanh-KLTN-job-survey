@@ -27,8 +27,16 @@ class SurveyResultController extends Controller
     public function index($surveyId)
     {
        $data = EmploymentSurveyResponse::query()->with(['student'])->where('survey_period_id', $surveyId)->orderBy('id', 'desc')->paginate(15);
+
+        $survey = Survey::with('graduations')->findOrFail($surveyId);
+        $allDotTotNghiep = $survey->graduations()->get();
+        $schoolYear = !empty($allDotTotNghiep[0]->school_year) ? $allDotTotNghiep[0]->school_year : '';
+
        $viewData = [
-           'data' => $data
+           'data' => $data,
+           'schoolYear' => $schoolYear,
+           'allDotTotNghiep' => $allDotTotNghiep,
+           'survey' => $survey,
        ];
        return view('admin.pages.admin.survey.result', $viewData);
     }

@@ -15,4 +15,10 @@
     .container {
         flex: 1;
     }
+
+    input[readonly], textarea[readonly] {
+        background-color: #e9ecef;  /* Màu xám nhạt */
+        cursor: not-allowed;
+        color: #6c757d;             /* Tăng độ rõ ràng */
+    }
 </style>

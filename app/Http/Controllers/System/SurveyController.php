@@ -74,19 +74,16 @@ class SurveyController extends Controller
     public function edit($id)
     {
         $survey = Survey::with('graduations')->findOrFail($id);
-        // Ép cast lại từng câu hỏi nếu cần
-        $survey->questions->transform(function ($q) {
-            $q->options = is_string($q->options) ? json_decode($q->options, true) : $q->options;
-            return $q;
-        });
         $namTotNghiep = Graduation::select('school_year')->groupBy('school_year')->pluck('school_year')->toArray();
         $dotTotNghiep = Graduation::get();
         $allDotTotNghiep = $survey->graduations()->get();
+        $schoolYear = !empty($allDotTotNghiep[0]->school_year) ? $allDotTotNghiep[0]->school_year : '';
         $viewData = [
             'survey' => $survey,
             'namTotNghiep' => $namTotNghiep,
             'dotTotNghiep' => $dotTotNghiep,
             'allDotTotNghiep' => $allDotTotNghiep,
+            'schoolYear' => $schoolYear,
         ];
         return view('admin.pages.admin.survey.edit', $viewData);
     }

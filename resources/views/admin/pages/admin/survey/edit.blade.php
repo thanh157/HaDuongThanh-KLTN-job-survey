@@ -93,7 +93,12 @@
                         <h6 class="mb-3">Thông tin tốt nghiệp</h6>
 
                         <div class="mb-3">
-                            <label class="form-label">Đợt tốt nghiệp <span class="text-danger">*</span></label>
+                            <label class="form-label">Năm tốt nghiệp</label>
+                            <input type="text" disabled value="{{ $schoolYear }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Đợt tốt nghiệp</label>
                             <select class="form-select" name="graduation_id[]" required multiple id="graduation_id" {{ $survey->isInActive() ? "readonly" : "" }} readonly="true">
                                 @php
                                     $selectedDots = old('graduation_id', $survey->graduations->pluck('id')->toArray());
