@@ -75,7 +75,7 @@
                             <!-- Sắp xếp theo ngày -->
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
-                                    <span>Ngày tạo</span>
+                                    <span>Ngày cập nhật</span>
                                     <i class="bi bi-funnel-fill text-primary ms-1" onclick="toggleFilter('filter-ngay')"
                                         style="cursor:pointer;"></i>
                                     <div id="filter-ngay"
@@ -102,9 +102,10 @@
                         @forelse ($graduations as $graduation)
                             <tr class="text-center">
                                 <td>
-                                    <a href="{{ route('admin.graduation-student.show', $graduation['id']) }}">
+                                    <a href="{{ route('admin.graduation.student', $graduation['id']) }}">
                                         {{ $graduation['name'] }}
                                     </a>
+
                                 </td>
 
                                 {{-- <td><a href="#">{{ $graduation['name'] }}</a></td> --}}
@@ -147,9 +148,44 @@
                     </tbody>
                 </table>
             </div>
-            <div class="mt-3">
-                {{ $graduations->withQueryString()->links() }}
-            </div>
+            @if ($graduations->count() > 0)
+                <div class="d-flex justify-content-between align-items-center mt-3 px-3 flex-column flex-sm-row gap-2">
+                    @if ($showPaginationInfo)
+                        <div class="text-muted small">
+                            Hiển thị từ {{ $graduations->firstItem() }} đến {{ $graduations->lastItem() }} trong tổng số
+                            {{ $graduations->total() }} đợt tốt nghiệp
+                        </div>
+                    @endif
+
+                    <div class="custom-pagination">
+                        @if ($graduations->lastPage() > 1)
+                            <nav>
+                                <ul class="pagination justify-content-end mb-0">
+                                    {{-- Previous --}}
+                                    <li class="page-item {{ $graduations->onFirstPage() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                            href="{{ $graduations->previousPageUrl() }}{{ request()->getQueryString() ? '&' . request()->getQueryString() : '' }}">&laquo;</a>
+                                    </li>
+
+                                    {{-- Page numbers --}}
+                                    @for ($i = 1; $i <= $graduations->lastPage(); $i++)
+                                        <li class="page-item {{ $graduations->currentPage() == $i ? 'active' : '' }}">
+                                            <a class="page-link"
+                                                href="{{ $graduations->url($i) }}{{ request()->getQueryString() ? '&' . request()->getQueryString() : '' }}">{{ $i }}</a>
+                                        </li>
+                                    @endfor
+
+                                    {{-- Next --}}
+                                    <li class="page-item {{ !$graduations->hasMorePages() ? 'disabled' : '' }}">
+                                        <a class="page-link"
+                                            href="{{ $graduations->nextPageUrl() }}{{ request()->getQueryString() ? '&' . request()->getQueryString() : '' }}">&raquo;</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        @endif
+                    </div>
+                </div>
+            @endif
 
         </div>
     </div>

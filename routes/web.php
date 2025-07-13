@@ -5,6 +5,7 @@ use App\Http\Controllers\System\SurveyController;
 use App\Http\Controllers\System\SurveyResultController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthenticateController;
+use App\Http\Controllers\System\StudentController;
 
 use App\Http\Controllers\System\DepartmentController;
 use App\Http\Controllers\Admin\MajorController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\GraduationStudentController;
 use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Admin\ChartStatisticController;
+use App\Http\Controllers\System\StudentDetailController;
+use App\Http\Controllers\ContactSurveyController;
 
 Route::post('/logout', [AuthenticateController::class, 'logout'])->name('handleLogout');
 Route::get('/auth/redirect', [AuthenticateController::class, 'redirectToSSO'])->name('sso.redirect');
@@ -47,11 +50,17 @@ Route::middleware('auth.sso')->group(function (): void {
 
     // Route::get('/major', [MajorController::class, 'index'])->name('admin.major.index');
     Route::get('/admin/majors', [MajorController::class, 'index'])->name('admin.major.index');
+    Route::get('/admin/department', [DepartmentController::class, 'index'])->name('admin.department.index');
+    // Route::prefix('admin/class')->group(function () {
+    //     Route::get('/', [ClassController::class, 'index'])->name('admin.class.index');
+    //     Route::get('/{id}/detail', [ClassController::class, 'detail'])->name('admin.class.class-detail');
+    // });
+    // web.php
     Route::prefix('admin')->middleware(['auth'])->name('admin.')->group(function () {
         Route::get('/classes', [ClassController::class, 'index'])->name('class.index');
         Route::get('/classes/{id}', [ClassController::class, 'show'])->name('class.class-detail');
-        Route::get('/admin/class/{code}/students', [ClassController::class, 'students'])->name('admin.class.students');
-
+        // Route::get('/admin/class/{code}/students', [ClassController::class, 'students'])->name('admin.class.students');
+        Route::get('/class/student/{id}', [ClassController::class, 'showStudentDetail'])->name('class.student-detail');
         Route::get('/admin/class/{khoa}/list', [ClassController::class, 'showClassByKhoa'])->name('admin.class.by-khoa');
     });
     Route::get('/class/khoa/{khoa}', [ClassController::class, 'showByKhoa'])
@@ -84,7 +93,60 @@ Route::middleware('auth.sso')->group(function (): void {
             Route::get('/khao-sat/{id}/ket-qua', [SurveyResultController::class, 'index'])->name('result');
             Route::get('/khao-sat/{id}/ket-qua-chi-tiet', [SurveyResultController::class, 'show'])->name('result_detail');
         });
+        });
     });
+
+    // Thu thập thông tin cựu sinh viên
+    Route::prefix('admin')->name('admin.')->group(function () {
+        // Thu thập thông tin cựu sinh viên
+        Route::prefix('contact-survey')->name('contact-survey.')->group(function () {
+            Route::get('/', [ContactSurveyController::class, 'index'])->name('index'); // admin.contact-survey.index
+            Route::get('/create', [ContactSurveyController::class, 'create'])->name('create'); // admin.contact-survey.create
+            Route::post('/store', [ContactSurveyController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [ContactSurveyController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [ContactSurveyController::class, 'update'])->name('update');
+            Route::delete('/{id}', [ContactSurveyController::class, 'destroy'])->name('destroy');
+
+            // Kết quả khảo sát
+            Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
+
+            // Giao diện sinh viên điền form
+            Route::get('/{id}/form', [ContactSurveyController::class, 'showForm'])->name('form');
+            Route::post('/{id}/submit', [ContactSurveyController::class, 'submitForm'])->name('submit');
+        });
+    });
+    // Route::get('/student', function () {
+    //     return view('admin.pages.admin.student');
+    // })->name('admin.student.index');
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/students', [StudentController::class, 'index'])->name('student.index');
+    });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/students/{id}/detail', [StudentDetailController::class, 'show'])->name('student-info');
+    });
+    Route::get('/students/{id}/detail', [StudentDetailController::class, 'show'])->name('student-info');
+
+
+    Route::get('/student-info', function () {
+        return view('admin.pages.admin.student-info');
+    })->name('admin.student-info.index');
+
+    Route::get('/admin/student-detail/{id}', [StudentController::class, 'show'])->name('admin.student.detail');
+
+
+    Route::get('/alumni-show', function () {
+        return view('admin.pages.admin.alumni-show');
+    })->name('admin.alumni-show');
+
+    // Route::get('/class-detail;', function () {
+    //     return view('admin.pages.admin.class-detail');
+    // })->name('admin.class.class-detail');
+
+    Route::get('/form-survey;', function () {
+        return view('admin.pages.admin.form-survey');
+    })->name('admin.survey.form-survey');
 
     Route::get('/form-edit-survey;', function () {
         return view('admin.pages.admin.form-edit-survey');
@@ -109,9 +171,13 @@ Route::middleware('auth.sso')->group(function (): void {
         return view('admin.pages.admin.change-password');
     })->name('admin.infor-account.change-password');
 
-    Route::get('/report', function () {
-        return view('admin.pages.admin.report');
-    })->name('admin.report.index');
+//    Route::get('/report', function () {
+//        return view('admin.pages.admin.report');
+//    })->name('admin.report.index');
+    Route::get('/report', [ReportController::class, 'index'])->name('admin.report.index');
+    // Route::get('/report', function () {
+    //     return view('admin.pages.admin.report');
+    // })->name('admin.report.index');
 
     Route::prefix('role')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->name('admin.role.index')->middleware('permission:role.index');

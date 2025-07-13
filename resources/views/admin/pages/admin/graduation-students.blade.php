@@ -3,6 +3,18 @@
 @section('title', 'Sinh viên đợt tốt nghiệp')
 
 @section('content')
+    <style>
+        .filter-popup {
+            display: none;
+            min-width: 250px;
+            z-index: 999;
+        }
+
+        .filter-popup.active {
+            display: block !important;
+        }
+    </style>
+
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="fw-bold mb-0">Danh sách sinh viên - {{ $graduation['name'] }}</h4>
@@ -14,7 +26,7 @@
         <div class="card shadow-sm">
             <div class="table-responsive">
                 <table class="table table-bordered align-middle text-center">
-                    <thead>
+                    <thead class="table-light text-nowrap">
                         <tr>
                             <td>STT</td>
                             <td>Mã SV</td>

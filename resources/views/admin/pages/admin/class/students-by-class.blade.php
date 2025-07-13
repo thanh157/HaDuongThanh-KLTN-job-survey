@@ -3,6 +3,37 @@
 @section('title', 'Danh sách sinh viên lớp ' . $classCode)
 
 @section('content')
+
+    <style>
+        tr[data-link] {
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        tr[data-link]:hover {
+            background-color: #f0f4f8;
+        }
+
+        .view-detail-badge {
+            position: absolute;
+            top: 6px;
+            right: 12px;
+            background-color: rgba(13, 110, 253, 0.95);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            display: none;
+            z-index: 2;
+            pointer-events: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        tr[data-link]:hover .view-detail-badge {
+            display: inline-block;
+        }
+    </style>
+
     <div class="container py-4">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
             <div>
@@ -85,13 +116,18 @@
                                 </form>
                             </th>
 
-                            <th>Ngày tạo</th>
+                            <th>Ngày cập nhật</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($students as $index => $student)
-                            <tr>
-                                <td>{{ $students->firstItem() + $index }}</td>
+                            <tr data-link
+                                onclick="window.location='{{ route('admin.class.student-detail', ['id' => $student['id']]) }}';"
+                                style="position: relative;">
+                                <td>
+                                    {{ $students->firstItem() + $index }}
+                                    <div class="view-detail-badge">👁 Click để xem thông tin SV</div>
+                                </td>
                                 <td>{{ $student['code'] }}</td>
                                 <td>{{ $student['full_name'] }}</td>
                                 <td>{{ $student['email'] }}</td>
@@ -103,6 +139,7 @@
                             </tr>
                         @endforelse
                     </tbody>
+
                 </table>
             </div>
 

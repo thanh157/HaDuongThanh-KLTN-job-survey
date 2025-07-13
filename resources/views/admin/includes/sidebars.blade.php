@@ -155,7 +155,8 @@
         <!-- Khảo sát -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                <li class="nav-item-header {{ request()->routeIs('admin.survey.*') ? 'active-section' : '' }}">
+                <li
+                    class="nav-item-header {{ request()->routeIs('admin.survey.*') || request()->routeIs('admin.survey-all.*') ? 'active-section' : '' }}">
                     <span>Khảo sát</span>
                 </li>
                 <li class="nav-item">
@@ -171,6 +172,23 @@
                         <span>Câu hỏi cố định</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.alumni-contact.index') }}"
+                       class="nav-link {{ request()->routeIs('admin.alumni-contact.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <span>Thu thập thông tin cựu sinh viên</span>
+                    </a>
+                </li>
+
+
+                {{-- </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.survey-all.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.survey-all.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <span>Thu thập thông tin cựu sinh viên</span>
+                    </a>
+                </li> --}}
             </ul>
         </div>
 
@@ -193,6 +211,31 @@
                         class="nav-link {{ request()->routeIs('admin.report.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-list-check"></i>
                         <span>Báo cáo tổng hợp</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+
+        <!-- Quản lý thông tin cựu sinh viên -->
+        <div class="sidebar-section">
+            <ul class="nav nav-sidebar" data-nav-type="accordion">
+                <li
+                    class="nav-item-header {{ request()->routeIs('admin.student.*') || request()->routeIs('admin.student-info.*') ? 'active-section' : '' }}">
+                    <span>Quản lý thông tin cựu sinh viên</span>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.student.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.student.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Danh sách cựu sinh viên</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.student-info.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.student-info.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span>Thông tin chi tiết cựu sinh viên</span>
                     </a>
                 </li>
             </ul>
@@ -239,4 +282,18 @@
         </div>
     </div>
 </div>
-<!-- /main sidebar -->
+
+{{-- tự dộng cuộn trang khi chọn nội dung nào đó  --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const activeItem = document.querySelector('.nav-item-header.active-section');
+
+        if (activeItem) {
+            // Cuộn sidebar đến phần tử active
+            activeItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center' // hoặc 'start'
+            });
+        }
+    });
+</script>
