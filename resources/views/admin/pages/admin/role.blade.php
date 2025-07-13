@@ -45,7 +45,7 @@
                             <th>STT</th>
                             <th>Tên Vai trò</th>
                             <th>Mô tả</th>
-                            <th>Ngày tạo</th>
+                            <th>Ngày cập nhật</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>

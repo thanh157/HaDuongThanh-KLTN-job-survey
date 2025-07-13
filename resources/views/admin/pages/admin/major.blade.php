@@ -54,7 +54,7 @@
                             </th>
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
-                                    <span>Ngày tạo</span>
+                                    <span>Ngày cập nhật</span>
                                     <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
                                         onclick="toggleFilter('filter-ngay')"></i>
                                     <div id="filter-ngay"

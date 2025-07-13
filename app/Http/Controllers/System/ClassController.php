@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use App\Services\StudentService;
 use Illuminate\Support\Str;
+use App\Services\StudentService;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class ClassController extends Controller
 {
@@ -20,54 +18,12 @@ class ClassController extends Controller
         $this->studentService = $studentService;
     }
 
+    // Trang danh sách các khóa
     public function index(Request $request)
     {
-        $facultyId = $this->studentService->getFacultyId(); // ví dụ trả về 1
+        $facultyId = $this->studentService->getFacultyId();
         $search = $request->query('search');
 
-        // Lấy token
-        $token = cache()->remember('token_client1', 60 * 5, function () {
-            return $this->studentService->post('/oauth/token', [
-                'grant_type' => 'client_credentials',
-                'client_id' => config('auth.student.client_id'),
-                'client_secret' => config('auth.student.client_secret'),
-            ]);
-        });
-
-        // Lấy dữ liệu lớp học từ API
-        $classes = $this->studentService->get("/api/v1/external/classes/faculty/{$facultyId}", [
-            'access_token' => Arr::get($token, 'access_token'),
-        ]);
-
-        $grouped = [];
-
-        foreach ($classes['data'] ?? [] as $class) {
-            $khoa = strtoupper(substr($class['code'], 0, 3)); // K69, K68...
-            if ($search && stripos($khoa, $search) === false) continue;
-
-            if (!isset($grouped[$khoa])) {
-                $grouped[$khoa] = [
-                    'khoa' => $khoa,
-                    'nam' => '20' . substr($khoa, 1, 2), // ví dụ K69 => 2069
-                    'tong_so_lop' => 0,
-                    'nhap_hoc' => 0,
-                    'hien_tai' => 0,
-                    'id' => $khoa, // dùng tạm cho route
-                ];
-            }
-
-            $grouped[$khoa]['tong_so_lop']++;
-            $grouped[$khoa]['nhap_hoc'] += 0; // thêm nếu có dữ liệu
-            $grouped[$khoa]['hien_tai'] += 0; // thêm nếu có dữ liệu
-        }
-
-        return view('admin.pages.admin.class', [
-            'classes' => array_values($grouped),
-        ]);
-    }
-
-    public function showByKhoa(Request $request, $khoa)
-    {
         $token = cache()->remember('token_client1', 300, function () {
             return $this->studentService->post('/oauth/token', [
                 'grant_type' => 'client_credentials',
@@ -76,19 +32,56 @@ class ClassController extends Controller
             ]);
         });
 
-        $facultyId = $this->studentService->getFacultyId();
-
-        // Lấy danh sách lớp của khoa
         $classes = $this->studentService->get("/api/v1/external/classes/faculty/{$facultyId}", [
             'access_token' => Arr::get($token, 'access_token'),
         ]);
 
-        // Lọc theo khóa học (K69, K68...)
+        $grouped = [];
+
+        foreach ($classes['data'] ?? [] as $class) {
+            $khoa = strtoupper(substr($class['code'], 0, 3));
+            if ($search && stripos($khoa, $search) === false) continue;
+
+            if (!isset($grouped[$khoa])) {
+                $grouped[$khoa] = [
+                    'khoa' => $khoa,
+                    'nam' => '20' . substr($khoa, 1, 2),
+                    'tong_so_lop' => 0,
+                    'nhap_hoc' => 0,
+                    'hien_tai' => 0,
+                    'id' => $khoa,
+                ];
+            }
+
+            $grouped[$khoa]['tong_so_lop']++;
+        }
+
+        return view('admin.pages.admin.class.class', [
+            'classes' => array_values($grouped),
+        ]);
+    }
+
+    // Trang danh sách lớp theo khóa
+    public function showByKhoa(Request $request, $khoa)
+    {
+        $facultyId = $this->studentService->getFacultyId();
+
+        $token = cache()->remember('token_client1', 300, function () {
+            return $this->studentService->post('/oauth/token', [
+                'grant_type' => 'client_credentials',
+                'client_id' => config('auth.student.client_id'),
+                'client_secret' => config('auth.student.client_secret'),
+            ]);
+        });
+
+        $classes = $this->studentService->get("/api/v1/external/classes/faculty/{$facultyId}", [
+            'access_token' => Arr::get($token, 'access_token'),
+        ]);
+
         $filtered = collect($classes['data'] ?? [])->filter(function ($class) use ($khoa) {
             return Str::startsWith($class['code'], $khoa);
         })->values();
 
-        // Tìm kiếm
         $search = $request->query('search');
         if ($search) {
             $filtered = $filtered->filter(function ($class) use ($search) {
@@ -97,24 +90,19 @@ class ClassController extends Controller
             })->values();
         }
 
-        // Thêm số lượng sinh viên cho mỗi lớp
         foreach ($filtered as &$class) {
             $classCode = $class['code'];
-
-            // Gọi API sinh viên theo lớp
             $studentResponse = $this->studentService->get("/api/v1/external/students/class/{$classCode}", [
                 'access_token' => Arr::get($token, 'access_token'),
             ]);
-
-            $students = collect($studentResponse['data'] ?? []);
-            $class['student_count'] = $students->count(); // Gắn sĩ số
+            $class['student_count'] = count($studentResponse['data'] ?? []);
         }
 
-        // Phân trang
         $perPage = 6;
         $currentPage = $request->get('page', 1);
         $paged = $filtered->slice(($currentPage - 1) * $perPage, $perPage)->values();
-        $classesPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
+
+        $classesPaginated = new LengthAwarePaginator(
             $paged,
             $filtered->count(),
             $perPage,
@@ -122,14 +110,59 @@ class ClassController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
-        return view('admin.pages.admin.class-by-khoa', [
+        return view('admin.pages.admin.class.class-by-khoa', [
             'khoa' => $khoa,
             'classes' => $classesPaginated,
         ]);
     }
 
-
+    // Trang danh sách sinh viên trong lớp
     public function showStudents(Request $request, $code)
+    {
+        $facultyId = $this->studentService->getFacultyId();
+
+        $token = cache()->remember('token_client1', 300, function () {
+            return $this->studentService->post('/oauth/token', [
+                'grant_type' => 'client_credentials',
+                'client_id' => config('auth.student.client_id'),
+                'client_secret' => config('auth.student.client_secret'),
+            ]);
+        });
+
+        $response = $this->studentService->get("/api/v1/external/students/faculty/{$facultyId}?q={$code}", [
+            'access_token' => Arr::get($token, 'access_token'),
+        ]);
+
+        $filterCode = $request->query('code');
+        $filterName = $request->query('name');
+        $filterEmail = $request->query('email');
+
+        $students = collect($response['data'] ?? [])->filter(function ($student) use ($filterCode, $filterName, $filterEmail) {
+            return (!$filterCode || Str::contains($student['code'], $filterCode)) &&
+                (!$filterName || Str::contains(Str::lower($student['full_name']), Str::lower($filterName))) &&
+                (!$filterEmail || Str::contains(Str::lower($student['email']), Str::lower($filterEmail)));
+        })->values();
+
+        $perPage = 10;
+        $currentPage = $request->get('page', 1);
+        $paged = $students->slice(($currentPage - 1) * $perPage, $perPage)->values();
+
+        $studentsPaginated = new LengthAwarePaginator(
+            $paged,
+            $students->count(),
+            $perPage,
+            $currentPage,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
+        return view('admin.pages.admin.class.students-by-class', [
+            'students' => $studentsPaginated,
+            'classCode' => $code,
+        ]);
+    }
+
+    // Trang chi tiết sinh viên (từ danh sách sinh viên theo lớp)
+    public function showStudentDetail($id)
     {
         $token = cache()->remember('token_client1', 300, function () {
             return $this->studentService->post('/oauth/token', [
@@ -141,39 +174,34 @@ class ClassController extends Controller
 
         $facultyId = $this->studentService->getFacultyId();
 
-        // Gọi API để lấy toàn bộ sinh viên của lớp
-        $response = $this->studentService->get("/api/v1/external/students/faculty/{$facultyId}?q={$code}", [
+        // Lấy thông tin sinh viên theo id
+        $response = $this->studentService->get("/api/v1/external/students/faculty/{$facultyId}?q={$id}", [
             'access_token' => Arr::get($token, 'access_token'),
         ]);
 
-        // Lấy query filter
-        $filterCode = $request->query('code');
-        $filterName = $request->query('name');
-        $filterEmail = $request->query('email');
+        $student = collect($response['data'])->firstWhere('id', $id);
 
-        // Không lọc theo startsWith($student['code'], $code) nữa
-        $students = collect($response['data'] ?? [])->filter(function ($student) use ($filterCode, $filterName, $filterEmail) {
-            return (!$filterCode || Str::contains($student['code'], $filterCode))
-                && (!$filterName || Str::contains(Str::lower($student['full_name']), Str::lower($filterName)))
-                && (!$filterEmail || Str::contains(Str::lower($student['email']), Str::lower($filterEmail)));
-        })->values();
+        if (!$student) {
+            abort(404, 'Không tìm thấy sinh viên');
+        }
 
-        // Phân trang
-        $perPage = 10;
-        $currentPage = $request->get('page', 1);
-        $paged = $students->slice(($currentPage - 1) * $perPage, $perPage)->values();
+        // Lấy mã lớp từ sinh viên (VD: CNTT67B)
+        $classCode = $student['class'] ?? null;
+        $classDetail = null;
 
-        $studentsPaginated = new \Illuminate\Pagination\LengthAwarePaginator(
-            $paged,
-            $students->count(),
-            $perPage,
-            $currentPage,
-            ['path' => $request->url(), 'query' => $request->query()]
-        );
+        // Gọi API để lấy thông tin chi tiết lớp học đó
+        if ($classCode) {
+            $classListResponse = $this->studentService->get("/api/v1/external/classes/faculty/{$facultyId}?q={$classCode}", [
+                'access_token' => Arr::get($token, 'access_token'),
+            ]);
 
-        return view('admin.pages.admin.students-by-class', [
-            'students' => $studentsPaginated,
-            'classCode' => $code,
+            $classDetail = collect($classListResponse['data'] ?? [])->firstWhere('code', $classCode);
+        }
+
+        return view('admin.pages.admin.class.student-class-detail', [
+            'student' => $student,
+            'class_code' => $classCode,
+            'class_detail' => $classDetail,
         ]);
     }
 }

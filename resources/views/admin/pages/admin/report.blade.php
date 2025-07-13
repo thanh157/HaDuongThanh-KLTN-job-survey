@@ -84,9 +84,9 @@
                         <div class="border rounded p-3" style="max-height: 800px; overflow-y: auto;">
                             <div class="text-center mb-4">
                                 <h6 class="text-uppercase mb-1">HỌC VIỆN NÔNG NGHIỆP VIỆT NAM</h6>
-                                <h6 class="mb-1">TÊN ĐƠN VỊ ………………….</h6>
+                                <h6 class="mb-1">BAN QUẢN LÝ ĐÀO TẠO.</h6>
                                 <h5 class="fw-bold text-decoration-underline mb-0">
-                                    MẪU SỐ 01: BÁO CÁO TÌNH HÌNH VIỆC LÀM CỦA SINH VIÊN TỐT NGHIỆP NĂM 2021
+                                    BÁO CÁO TÌNH HÌNH VIỆC LÀM CỦA SINH VIÊN TỐT NGHIỆP NĂM 2021
                                 </h5>
                             </div>
 
@@ -181,7 +181,7 @@
                                 <h6 class="text-uppercase mb-1">HỌC VIỆN NÔNG NGHIỆP VIỆT NAM</h6>
                                 <h6 class="mb-3">BAN QUẢN LÝ ĐÀO TẠO</h6>
                                 <h5 class="fw-bold text-decoration-underline mb-0">
-                                    MẪU SỐ 02: DANH SÁCH SINH VIÊN TỐT NGHIỆP NĂM 2021
+                                    DANH SÁCH SINH VIÊN TỐT NGHIỆP NĂM 2021
                                 </h5>
                             </div>
 
@@ -335,7 +335,7 @@
                         <div class="border rounded p-3" style="max-height: 800px; overflow: auto;">
                             <div class="text-center mb-4">
                                 <h6 class="text-uppercase mb-1">HỌC VIỆN NÔNG NGHIỆP VIỆT NAM</h6>
-                                <h6 class="mb-3">TÊN ĐƠN VỊ</h6>
+                                <h6 class="mb-3">BAN QUẢN LÝ ĐÀO TẠO</h6>
                                 <h5 class="fw-bold text-decoration-underline mb-0">
                                     DANH SÁCH SINH VIÊN TỐT NGHIỆP NĂM 2021 PHẢN HỒI VỀ TÌNH HÌNH VIỆC LÀM
                                 </h5>

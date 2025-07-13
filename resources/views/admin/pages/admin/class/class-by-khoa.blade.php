@@ -127,7 +127,7 @@
                                     <i class="bi bi-book me-1"></i> {{ $class['description'] }}
                                 </p>
                                 <p class="text-muted mb-0">
-                                    <i class="bi bi-calendar3 me-1"></i> Ngày tạo:
+                                    <i class="bi bi-calendar3 me-1"></i> Ngày cập nhật:
                                     {{ \Carbon\Carbon::parse($class['created_at'])->format('d/m/Y') }}
                                 </p>
                                 <p class="text-muted mb-0 mt-1">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\StudentService;
 use Illuminate\Support\Arr;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ReportController extends Controller
 {
@@ -13,10 +14,8 @@ class ReportController extends Controller
 
     public function index(Request $request)
     {
-        // 1. Lấy faculty_id của người dùng hiện tại
         $facultyId = $this->studentService->getFacultyId();
 
-        // 2. Lấy access token từ cache hoặc gọi mới
         $token = cache()->remember('token_client1', 300, fn() => $this->studentService->post('/oauth/token', [
             'grant_type' => 'client_credentials',
             'client_id' => config('auth.student.client_id'),
@@ -25,12 +24,10 @@ class ReportController extends Controller
 
         $accessToken = Arr::get($token, 'access_token');
 
-        // 3. Lấy danh sách đợt tốt nghiệp từ API
         $graduationList = cache()->remember(
             "graduation_list_faculty_$facultyId",
             300,
-            fn() =>
-            $this->studentService->get("/api/v1/external/graduation-ceremonies/faculty/$facultyId", [
+            fn() => $this->studentService->get("/api/v1/external/graduation-ceremonies/faculty/$facultyId", [
                 'access_token' => $accessToken
             ])
         );
@@ -38,16 +35,13 @@ class ReportController extends Controller
         $graduations = collect($graduationList['data'] ?? []);
         $selectedGraduationId = $request->input('graduation_id') ?? optional($graduations->first())['id'];
 
-        // 4. Lấy ngành đào tạo từ API
         $industryList = $this->studentService->get("/api/v1/external/training-industries/faculty/$facultyId", [
             'access_token' => $accessToken
         ]);
         $industries = collect($industryList['data'] ?? [])->map(fn($i) => (object)$i);
 
-        // 5. Lấy toàn bộ phản hồi sinh viên từ DB
         $surveyResponses = DB::table('employment_survey_responses')->get();
 
-        // 6. Xử lý dữ liệu báo cáo theo từng ngành
         $report1 = $industries->map(function ($industry) use ($surveyResponses) {
             $responses = $surveyResponses->filter(fn($r) => ($r->training_industry_id ?? null) == $industry->id);
 
@@ -57,14 +51,14 @@ class ReportController extends Controller
             $stillStudy = $responses->filter(fn($r) => $r->employment_status == 2)->count();
             $noJob = $responses->filter(fn($r) => $r->employment_status == 3)->count();
 
-            $viecDungNganh = $responses->filter(fn($r) => $r->employment_status == 3)->count();
-            $viecLienQuan = $responses->filter(fn($r) => $r->employment_status == 4)->count();
-            $viecKhongLienQuan = $responses->filter(fn($r) => $r->employment_status == 5)->count();
+            $viecDungNganh = $responses->filter(fn($r) => ($r->employment_status ?? null) == 1)->count();
+            $viecLienQuan = $responses->filter(fn($r) => ($r->employment_status ?? null) == 2)->count();
+            $viecKhongLienQuan = $responses->filter(fn($r) => ($r->employment_status ?? null) == 3)->count();
 
-            $lamNN = $responses->filter(fn($r) => $r->work_area == 1)->count();       // Nhà nước
-            $lamTuNhan = $responses->filter(fn($r) => $r->work_area == 2)->count();   // Tư nhân
-            $tuTaoViecLam = $responses->filter(fn($r) => $r->work_area == 3)->count(); // Tự tạo việc làm
-            $lamViecNNg = $responses->filter(fn($r) => $r->work_area == 4)->count();  // Nước ngoài
+            $lamNN = $responses->filter(fn($r) => $r->work_area == 1)->count();
+            $lamTuNhan = $responses->filter(fn($r) => $r->work_area == 2)->count();
+            $tuTaoViecLam = $responses->filter(fn($r) => $r->work_area == 3)->count();
+            $lamViecNNg = $responses->filter(fn($r) => $r->work_area == 4)->count();
 
             $noiLamViec = $responses->pluck('work_location')->unique()->implode(', ');
 
@@ -91,8 +85,151 @@ class ReportController extends Controller
             ];
         });
 
+        $surveyMethods = ['Online', 'Điện thoại', 'Email'];
+        $page = request('page', 1);
+        $perPage = 10;
+
+        $studentsAll = $surveyResponses->map(function ($r, $index) use ($industries, $surveyMethods) {
+            $industry = $industries->firstWhere('id', $r->training_industry_id);
+
+            return (object)[
+                'stt' => $index + 1,
+                'student_code' => $r->code_student ?? '',
+                'full_name' => $r->full_name ?? '',
+                'is_female' => strtolower($r->gender ?? '') === 'female',
+                'id_number' => $r->identification_card_number ?? '',
+                'major_code' => $industry->code ?? '',
+                'major_name' => $industry->name ?? '',
+                'graduation_decision_number' => '122/QĐ-HV',
+                'graduation_decision_date' => '08/01/2021',
+                'phone' => $r->phone_number ?? '',
+                'email' => $r->email ?? '',
+                'survey_method' => $surveyMethods[array_rand($surveyMethods)],
+                'has_response' => 1,
+                'faculty_name' => 'Công nghệ Thông tin',
+            ];
+        });
+
+        $report2 = new LengthAwarePaginator(
+            $studentsAll->slice(($page - 1) * $perPage, $perPage)->values(),
+            $studentsAll->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+        $students = $report2;
+
+        $report3 = new LengthAwarePaginator(
+            collect([]),
+            0,
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+        $studentsReport3 = $surveyResponses->map(function ($r, $index) use ($industries) {
+            $industry = $industries->firstWhere('id', $r->training_industry_id);
+
+            return (object)[
+                'student_code' => $r->code_student ?? '',
+                'full_name' => $r->full_name ?? '',
+                'birth_date' => $r->dob ? \Carbon\Carbon::parse($r->dob)->format('d/m/Y') : '',
+                'gender' => strtolower($r->gender ?? '') === 'female' ? 'Nữ' : 'Nam',
+                'id_number' => $r->identification_card_number ?? '',
+                'major_code' => $industry->code ?? '',
+                'phone' => $r->phone_number ?? '',
+                'email' => $r->email ?? '',
+
+                'job_status_correct' => 1,
+                'job_status_related' => 0,
+                'job_status_unrelated' => 0,
+                'continued_study' => 0,
+                'no_job' => 0,
+
+                'gov_sector' => 1,
+                'private_sector' => 0,
+                'foreign_involved' => 0,
+                'self_employed' => 0,
+
+                'workplace_province_code' => str_pad($r->city_work_id ?? 0, 2, '0', STR_PAD_LEFT),
+
+                'time_under_3m' => 1,
+                'time_3_to_6m' => 0,
+                'time_6_to_12m' => 0,
+                'time_over_12m' => 0,
+
+                'income_under_5m' => 1,
+                'income_5_to_10m' => 0,
+                'income_10_to_15m' => 0,
+                'income_over_15m' => 0,
+
+                'skill_learned' => 1,
+                'skill_partial' => 0,
+                'skill_none' => 0,
+
+                'job_by_school' => 1,
+                'job_by_friends' => 0,
+                'job_by_self' => 0,
+                'job_self_created' => 0,
+                'job_by_other' => 0,
+
+                'apply_very_high' => 1,
+                'apply_high' => 0,
+                'apply_low' => 0,
+                'apply_very_low' => 0,
+                'apply_none' => 0,
+
+                'skill_apply_very_high' => 1,
+                'skill_apply_high' => 0,
+                'skill_apply_low' => 0,
+                'skill_apply_very_low' => 0,
+                'skill_apply_none' => 0,
+
+                'soft_comm' => 1,
+                'soft_lead' => 0,
+                'soft_present' => 1,
+                'soft_english' => 0,
+                'soft_team' => 1,
+                'soft_it' => 1,
+                'soft_report' => 1,
+                'soft_other' => 0,
+
+                'course_prof' => 1,
+                'course_skill' => 1,
+                'course_it' => 0,
+                'course_eng' => 1,
+                'course_manage' => 0,
+                'course_continue' => 1,
+                'course_other' => 0,
+
+                'solution_alumni' => 1,
+                'solution_employer' => 1,
+                'solution_train_join' => 0,
+                'solution_curriculum' => 1,
+                'solution_practice' => 1,
+                'solution_other' => 0,
+            ];
+        });
+        // $report3 = new LengthAwarePaginator(
+        //     $studentsReport3->slice(($page - 1) * $perPage, $perPage)->values(),
+        //     $studentsReport3->count(),
+        //     $perPage,
+        //     $page,
+        //     ['path' => request()->url(), 'query' => request()->query()]
+        // );
+        $report3 = new LengthAwarePaginator(
+            $studentsReport3->slice(($page - 1) * $perPage, $perPage)->values(),
+            $studentsReport3->count(),
+            $perPage,
+            $page,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
+
         return view('admin.pages.admin.report', [
             'report1' => $report1,
+            'students' => $students,
+            'report3' => $report3,
             'graduationList' => $graduations,
             'selectedGraduationId' => $selectedGraduationId,
         ]);
