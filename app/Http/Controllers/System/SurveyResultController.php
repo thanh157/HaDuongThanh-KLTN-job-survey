@@ -5,7 +5,9 @@ namespace App\Http\Controllers\System;
 use App\Http\Controllers\Controller;
 use App\Models\DotTotnghiep;
 use App\Models\DotTotNghiepStudent;
+use App\Models\EmploymentSurveyResponse;
 use App\Models\GraduationStudent;
+use App\Models\Major;
 use App\Models\Student;
 use App\Models\Survey;
 use App\Models\SurveyResponse;
@@ -24,19 +26,31 @@ class SurveyResultController extends Controller
 {
     public function index($surveyId)
     {
-        $survey = Survey::query()->with('questions')->findOrFail($surveyId);
-        $responses = SurveyResponse::with(['answers', 'survey'])
-            ->where('survey_id', $surveyId)
-            ->latest()
-            ->get();
+       $data = EmploymentSurveyResponse::query()->with(['student'])->where('survey_period_id', $surveyId)->orderBy('id', 'desc')->paginate(15);
+       $viewData = [
+           'data' => $data
+       ];
+       return view('admin.pages.admin.survey.result', $viewData);
+    }
 
-        $survey->questions->transform(function ($q) {
-            $q->options = is_string($q->options) ? json_decode($q->options, true) : $q->options;
-            return $q;
-        });
+    public function show($id)
+    {
+        $response = EmploymentSurveyResponse::query()
+            ->with(['student', 'survey'])
+            ->where('id', $id)->first();
+        if (empty($response)) {
+            abort(404);
+        }
 
-        $questions = $survey->questions; // Nếu có quan hệ ->questions
+        $major = Major::query()->pluck('name', 'id')->toArray();
 
-        return view('admin.pages.admin.survey.result', compact('survey', 'responses', 'questions'));
+        $viewData = [
+            'response' => $response,
+            'student' => $response->student,
+            'survey' => $response->survey,
+            'major' => $major,
+        ];
+//        dd(json_decode($response->job_search_method, true));
+        return view('admin.pages.admin.survey.result_detail', $viewData);
     }
 }

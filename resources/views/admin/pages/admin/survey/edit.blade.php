@@ -2,6 +2,30 @@
 
 @section('title', 'Chỉnh sửa đợt khảo sát việc làm')
 
+@push('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container .select2-selection--multiple {
+            min-height: 38px;
+            max-height: 80px; /* hoặc 100px tùy độ dài */
+            overflow-y: auto;
+            padding-bottom: 4px;
+            width: 100% !important;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            white-space: normal;
+            overflow-x: hidden;
+            flex-wrap: wrap;
+            max-height: 100px;
+        }
+    </style>
+@endpush
+
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('assets/admin/js/survey/index.js') }}"></script>
+@endpush
+
 @section('content')
     <div class="container py-4">
         <!-- Breadcrumb và tiêu đề -->
@@ -42,22 +66,22 @@
                         <h6 class="mb-3">Thông tin chung</h6>
                         <div class="mb-3">
                             <label class="form-label">Tiêu đề</label>
-                            <input type="text" class="form-control" name="title" required value="{{ $survey->title }}">
+                            <input type="text" class="form-control" name="title" required value="{{ $survey->title }}" {{ $survey->isInActive() ? "readonly" : "" }}>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mô tả</label>
-                            <textarea name="description" class="form-control" rows="3">{{ $survey->description }}</textarea>
+                            <textarea name="description" class="form-control" rows="3" {{ $survey->isInActive() ? "readonly" : "" }}>{{ $survey->description }}</textarea>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Bắt đầu khảo sát</label>
-                                <input type="date" class="form-control" name="start_time" required
-                                       value="{{ \Carbon\Carbon::parse($survey->start_time)->format('Y-m-d') }}">
+                                <label class="form-label">Bắt đầu</label>
+                                <input type="datetime-local" class="form-control" name="start_time" required {{ $survey->isInActive() ? "readonly" : "" }}
+                                        value="{{ old('start_time', \Carbon\Carbon::parse($survey->start_time)->format('Y-m-d\TH:i')) }}">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Kết thúc khảo sát</label>
-                                <input type="date" class="form-control" name="end_time" required
-                                       value="{{ \Carbon\Carbon::parse($survey->end_time)->format('Y-m-d') }}">
+                                <label class="form-label">Kết thúc</label>
+                                <input type="datetime-local" class="form-control" name="end_time" required {{ $survey->isInActive() ? "readonly" : "" }}
+                                       value="{{ old('end_time', \Carbon\Carbon::parse($survey->end_time)->format('Y-m-d\TH:i')) }}">
                             </div>
                         </div>
                     </div>
@@ -67,80 +91,50 @@
                 <div class="col-12 col-md-4">
                     <div class="card p-4 shadow-sm h-100">
                         <h6 class="mb-3">Thông tin tốt nghiệp</h6>
+
                         <div class="mb-3">
-                            <label class="form-label">Đợt tốt nghiệp</label>
-                            <select class="form-select" name="graduation_id" required>
-                                <option disabled value="">-- Chọn đợt --</option>
-                                @foreach($dotTotNghiep as $dot)
-                                    <option value="{{ $dot->id }}" {{ $survey->graduation_id == $dot->id ? 'selected' : '' }}>
+                            <label class="form-label">Đợt tốt nghiệp <span class="text-danger">*</span></label>
+                            <select class="form-select" name="graduation_id[]" required multiple id="graduation_id" {{ $survey->isInActive() ? "readonly" : "" }} readonly="true">
+                                @php
+                                    $selectedDots = old('graduation_id', $survey->graduations->pluck('id')->toArray());
+                                @endphp
+
+                                @foreach($allDotTotNghiep as $dot)
+                                    <option value="{{ $dot->id }}"
+                                        {{ in_array($dot->id, $selectedDots) ? 'selected' : '' }}>
                                         {{ $dot->name }}
                                     </option>
                                 @endforeach
+                            </select>
+                        </div>
+
+                        <script>
+                            $( document ).ready(function() {
+                                $('#graduation_id').select2();
+
+                                // Ngăn mở dropdown
+                                $('#graduation_id').on('select2:opening', function (e) {
+                                    e.preventDefault();
+                                });
+                            });
+
+                        </script>
+
+                        <h6 class="mb-3">Trạng thái</h6>
+                        <div class="mb-3">
+                            <select class="form-select" name="status">
+                                <option value="{{ \App\Models\Survey::STATUS_ACTIVE }}" {{ $survey->status == \App\Models\Survey::STATUS_ACTIVE ? 'selected' : '' }}>Hoạt động </option>
+                                <option value="{{ \App\Models\Survey::STATUS_INACTIVE }}" {{ $survey->status == \App\Models\Survey::STATUS_INACTIVE ? 'selected' : '' }}>Ẩn</option>
                             </select>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card p-4 shadow-sm mt-4">
-                <h6 class="mb-3">Câu hỏi khảo sát</h6>
-                <div id="question-list">
-                    @foreach($survey->questions as $qIndex => $question)
-                        <div class="border p-3 mb-3 position-relative question-block">
-                            <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="this.closest('.question-block').remove()">
-                                <i class="bi bi-x"></i>
-                            </button>
-
-                            <div class="mb-2">
-                                <label class="form-label">Nội dung câu hỏi</label>
-                                <input type="text" name="questions[{{ $qIndex }}][question_text]" class="form-control" required
-                                       value="{{ $question->question_text }}">
-                            </div>
-
-                            <div class="mb-2">
-                                <label class="form-label">Loại câu hỏi</label>
-                                <select name="questions[{{ $qIndex }}][type]" class="form-select" required>
-                                    <option value="single" {{ $question->type == 'single' ? 'selected' : '' }}>Chọn 1</option>
-                                    <option value="multiple" {{ $question->type == 'multiple' ? 'selected' : '' }}>Chọn nhiều</option>
-                                </select>
-                            </div>
-
-                            <div class="option-area" id="options-{{ $qIndex }}">
-                                <label class="form-label">Danh sách lựa chọn</label>
-                                <div class="option-group">
-                                    @foreach($question->options as $optIndex => $opt)
-                                        <div class="d-flex align-items-center mb-2 option-item">
-                                            <input type="text" name="questions[{{ $qIndex }}][options][]" class="form-control me-2"
-                                                   value="{{ $opt['text'] }}" required>
-                                            <div class="form-check me-2">
-                                                <input class="form-check-input" type="checkbox"
-                                                       name="questions[{{ $qIndex }}][is_other][{{ $optIndex }}]" value="1"
-                                                    {{ isset($opt['is_other']) && $opt['is_other'] ? 'checked' : '' }}>
-                                                <label class="form-check-label">Khác</label>
-                                            </div>
-                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentNode.remove()">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    @endforeach
-                                </div>
-                                <button type="button" class="btn btn-sm btn-outline-secondary mt-2"
-                                        onclick="addOption({{ $qIndex }})">+ Thêm lựa chọn</button>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-                <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="add-question-btn">
-                    <i class="bi bi-plus-circle me-1"></i> Thêm câu hỏi
-                </button>
-            </div>
-
-
             <!-- Nút lưu -->
             <div class="mt-4 d-flex justify-content-end">
                 <button type="submit" class="btn btn-success">
-                    <i class="bi bi-check-circle me-1"></i> Cập nhật
+                    <i class="bi bi-check-circle me-1"></i>Cập nhật
                 </button>
             </div>
         </form>
@@ -148,60 +142,4 @@
 @endsection
 
 
-@push('script')
-    <script>
-        let questionIndex = {{ $survey->questions->count() }};
 
-        function renderQuestionBlock(index) {
-            return `
-                <div class="border p-3 mb-3 position-relative question-block">
-                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="this.closest('.question-block').remove()">
-                        <i class="bi bi-x"></i>
-                    </button>
-
-                    <div class="mb-2">
-                        <label class="form-label">Nội dung câu hỏi</label>
-                        <input type="text" name="questions[${index}][question_text]" class="form-control" required>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Loại câu hỏi</label>
-                        <select name="questions[${index}][type]" class="form-select" onchange="toggleOptionBlock(this, ${index})" required>
-                            <option value="single">Chọn 1</option>
-                            <option value="multiple">Chọn nhiều</option>
-                        </select>
-                    </div>
-
-                    <div class="option-area" id="options-${index}">
-                        <label class="form-label">Danh sách lựa chọn</label>
-                        <div class="option-group"></div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="addOption(${index})">+ Thêm lựa chọn</button>
-                    </div>
-                </div>`;
-        }
-
-        function addOption(qIndex) {
-            const optionHTML = `
-                <div class="d-flex align-items-center mb-2 option-item">
-                    <input type="text" name="questions[${qIndex}][options][]" class="form-control me-2" placeholder="Nội dung lựa chọn" required>
-                    <div class="form-check me-2">
-                        <input class="form-check-input" type="checkbox" name="questions[${qIndex}][is_other][]" value="1">
-                        <label class="form-check-label">Khác</label>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentNode.remove()"><i class="bi bi-trash"></i></button>
-                </div>
-            `;
-            $(`#options-${qIndex} .option-group`).append(optionHTML);
-        }
-
-        function toggleOptionBlock(select, index) {
-            $(`#options-${index}`).toggle(select.value === 'single' || select.value === 'multiple');
-        }
-
-        $('#add-question-btn').on('click', function () {
-            $('#question-list').append(renderQuestionBlock(questionIndex));
-            addOption(questionIndex); // Thêm 1 option mặc định
-            questionIndex++;
-        });
-    </script>
-@endpush

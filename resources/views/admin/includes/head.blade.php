@@ -9,4 +9,5 @@
     <link rel="shortcut icon" href="{{ asset('assets/admin/images/logo_vnua.png') }}" type="image/x-icon">
     @include('admin.includes.script')
     @include('admin.includes.style')
+    @stack('css')
 </head>

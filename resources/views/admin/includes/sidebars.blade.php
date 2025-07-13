@@ -84,7 +84,7 @@
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
                 <li
-                    class="nav-item-header 
+                    class="nav-item-header
             {{ request()->routeIs('admin.dashboard*') ||
             request()->routeIs('admin.department.*') ||
             request()->routeIs('admin.major.*') ||
@@ -160,9 +160,15 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.survey.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.survey.*') ? 'active' : '' }}">
+                        class="nav-link {{ request()->routeIs('admin.survey.index') ? 'active' : '' }}">
                         <i class="fa-solid fa-clipboard-question"></i>
                         <span>Khảo sát việc làm</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.survey.form-survey') }}" class="nav-link {{ request()->routeIs('admin.survey.form-survey') ? 'active' : '' }}">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                        <span>Câu hỏi cố định</span>
                     </a>
                 </li>
             </ul>

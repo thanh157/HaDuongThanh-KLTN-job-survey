@@ -74,6 +74,10 @@ class GraduationController extends Controller
                         'first_name' => data_get($item2, 'first_name'),
                         'full_name' => data_get($item2, 'full_name'),
                         'training_industry_id' => data_get($item2, 'training_industry_id'),
+                        'dob' => data_get($item2, 'dob'),
+                        'citizen_identification' => data_get($item2, 'citizen_identification'),
+                        'phone' => data_get($item2, 'phone'),
+                        'gender' => data_get($item2, 'gender'),
                         'created_at' => Carbon::parse(data_get($item2, 'created_at')),
                         'updated_at' => Carbon::parse(data_get($item2, 'updated_at')),
                     ]

@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Graduation;
-use App\Models\GraduationStudent;
+use App\Models\EmploymentSurveyResponse;
+use App\Models\Major;
 use App\Models\Student;
 use App\Models\Survey;
-use App\Models\SurveyAnswer;
-use App\Models\SurveyAnswers;
-use App\Models\SurveyResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -18,14 +15,21 @@ class KhaoSatController extends Controller
     public function showForm($id)
     {
         $survey = Survey::with('questions')->findOrFail($id);
-        // Ép cast lại từng câu hỏi nếu cần
-        $survey->questions->transform(function ($q) {
-            $q->options = is_string($q->options) ? json_decode($q->options, true) : $q->options;
-            return $q;
-        });
+        if ($survey->isInActive()) {
+            abort(404);
+        }
+        $student = Student::where('code', 596606)->first();
+        $major = Major::query()->get();
 
+        $end_time = $survey->end_time;
+        $current_time = date('Y-m-d H:i:s');
+
+        $outDate = strtotime($current_time) > strtotime($end_time);
         $viewData = [
-            'survey' => $survey
+            'survey' => $survey,
+            'student' => $student,
+            'major' => $major,
+            'outDate' => $outDate,
         ];
         return view('admin.pages.admin.my_form', $viewData);
     }
@@ -33,24 +37,81 @@ class KhaoSatController extends Controller
     public function verify(Request $request)
     {
         try {
-            $code = request('mssv');
-            $graduationId = request('graduation_id');
+            $surveyId = $request->input('survey_id');
+            $code = $request->input('mssv');
+            $email = $request->input('email');
+            $phone = $request->input('phone');
+            $dob = $request->input('dob');
+            $cccd = $request->input('citizen_identification');
+            $industry_id = $request->input('training_industry_id');
 
-            $student = Student::where('code', $code)
-                ->whereHas('graduations', function ($q) use ($graduationId) {
-                    $q->where('graduation_id', $graduationId);
-                })
-                ->first();
+            // Kiểm tra mã sinh viên có nhập không
+            if (empty($code)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vui lòng nhập mã sinh viên (MSSV)',
+                ]);
+            }
+
+            // Kiểm tra survey có tồn tại không
+            $survey = Survey::find($surveyId);
+            if (empty($survey)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Khảo sát không tồn tại',
+                ]);
+            }
+
+            $graduationIds = $survey->graduations()->pluck('id')->toArray();
+
+            // Xây dựng truy vấn sinh viên có mã đúng và thuộc đợt khảo sát
+            $query = Student::query()
+                ->where('code', $code)
+                ->whereHas('graduations', function ($q) use ($graduationIds) {
+                    $q->whereIn('graduation_id', $graduationIds);
+                });
+
+            // Gắn thêm các điều kiện nếu có ít nhất 1 field phụ
+            $conditions = 0;
+
+            if (!empty($email)) {
+                $query->where('email', $email);
+                $conditions++;
+            }
+
+            if (!empty($dob)) {
+                $query->where('dob', $dob);
+                $conditions++;
+            }
+
+            if (!empty($phone)) {
+                $query->where('phone', $phone);
+                $conditions++;
+            }
+
+            if (!empty($cccd)) {
+                $query->where('citizen_identification', $cccd);
+                $conditions++;
+            }
+
+            if (!empty($industry_id)) {
+                $query->where('training_industry_id', $industry_id);
+                $conditions++;
+            }
+
+            if ($conditions < 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Vui lòng nhập thêm ít nhất 1 thông tin để xác thực sinh viên',
+                ]);
+            }
+
+            $student = $query->first();
 
             if ($student) {
                 return response()->json([
                     'success' => true,
-                    'student' => [
-                        'id' => $student->id,
-                        'ho_ten' => $student->full_name,
-                        'ma_sv' => $student->code,
-                        'email' => $student->email,
-                    ],
+                    'student' => $student,
                 ]);
             }
         } catch (\Exception $e) {
@@ -67,66 +128,67 @@ class KhaoSatController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'survey_id' => 'required|exists:survey,id',
-                'answers' => 'required|array',
             ], [], [
-                'answers' => 'Nội dung khảo sát'
             ]);
 
             if ($validator->fails()) {
                 return back()->withErrors($validator)->withInput();
             }
 
-            // Bước 1: lưu lượt nộp khảo sát
-            $response = SurveyResponse::create([
-                'survey_id' => $request->survey_id,
-                'student_id' => $request->student_id,
-                'ma_sv'      => $request->ma_sv,
-                'ho_ten'     => $request->ho_ten,
-                'email'      => $request->email,
-                'phone'      => $request->phone,
-                'student_info' => json_encode($request->only([
-                    'gender','birthday','cccd','ngay_cap','noi_cap','khoa_hoc',
-                    'major','vieclam_hientai','coquan','dia_chi_co_quan','thanhpho','chucvu'
-                ])),
-                'submitted_at' => now(),
+            $recruitmentValue = json_encode(['value' => $request->input('recruitment_type', []), 'content_other' => request('recruitment_type_other')]);
+            $soft_skills_required = json_encode(['value' => $request->input('soft_skills_required', []), 'content_other' => request('soft_skills_required_other')]);
+            $must_attended_courses = json_encode(['value' => $request->input('must_attended_courses', []), 'content_other' => request('must_attended_courses_other')]);
+            $solutions_get_job = json_encode(['value' => $request->input('solutions_get_job', []), 'content_other' => request('solutions_get_job_other')]);
+            $job_search_method = json_encode(['value' => $request->input('job_search_method', []), 'content_other' => request('job_search_method_other')]);
+
+            EmploymentSurveyResponse::updateOrCreate([
+                'survey_period_id' => request('survey_id'),
+                'student_id' => request('student_id'),
+                'code_student' => request('code_student'),
+            ], [
+                'full_name' => request('full_name'),
+                'email' => request('email'),
+                'gender' => request('gender'),
+                'dob' => request('dob'),
+                'identification_card_number' => request('identification_card_number'),
+                'identification_issuance_place' => request('identification_issuance_place'),
+                'identification_issuance_date' => request('identification_issuance_date'),
+                'training_industry_id' => request('training_industry_id'),
+                'phone_number' => request('phone_number'),
+                'course' => request('course'),
+                'employment_status' => request('employment_status'),
+                'recruit_partner_name' => request('recruit_partner_name'),
+                'recruit_partner_address' => request('recruit_partner_address'),
+                'recruit_partner_date' => request('recruit_partner_date'),
+                'recruit_partner_position' => request('recruit_partner_position'),
+                'work_area' => request('work_area'),
+                'employed_since' => request('employed_since'),
+                'trained_field' => request('trained_field'),
+                'professional_qualification_field' => request('professional_qualification_field'),
+                'level_knowledge_acquired' => request('level_knowledge_acquired'),
+                'starting_salary' => request('starting_salary'),
+                'average_income' => request('average_income'),
+                'recruitment_type' => $recruitmentValue,
+                'soft_skills_required' => $soft_skills_required,
+                'must_attended_courses' => $must_attended_courses,
+                'solutions_get_job' => $solutions_get_job,
+                'job_search_method' => $job_search_method,
             ]);
-
-// Bước 2: lưu các câu trả lời
-            foreach ($request->answers as $questionId => $answers) {
-                $values = is_array($answers) ? $answers : [$answers];
-
-                foreach ($values as $val) {
-                    if (strtolower($val) === 'khác' && $request->filled("answers_other.$questionId")) {
-                        continue;
-                    }
-
-                    SurveyAnswer::create([
-                        'survey_response_id' => $response->id,
-                        'question_id' => $questionId,
-                        'answer_text' => $val,
-                    ]);
-                }
-
-                // Nếu có phần "Khác"
-                if ($request->has("answers_other.$questionId")) {
-                    $others = (array) $request->input("answers_other.$questionId");
-
-                    foreach ($others as $otherVal) {
-                        if (trim($otherVal)) {
-                            SurveyAnswer::create([
-                                'survey_response_id' => $response->id,
-                                'question_id' => $questionId,
-                                'answer_text' => $otherVal,
-                            ]);
-                        }
-                    }
-                }
-            }
 
             return redirect()->route('survey.thankyou')->with('success', 'Ghi nhận khảo sát thành công!');
         } catch (\Exception $e) {
             Log::error($e);
             return redirect()->back()->with('error', 'System error');
+        }
+    }
+
+    public function sendMail($id)
+    {
+        try {
+            // @todo get all student by survey
+            // send mail to all
+        } catch (\Exception $e) {
+            Log::error($e);
         }
     }
 }

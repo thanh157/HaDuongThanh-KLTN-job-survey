@@ -18,7 +18,11 @@ return new class extends Migration
             $table->string('full_name')->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('code')->unique()->nullable();
-            $table->unsignedBigInteger('training_industry_id')->nullable();
+            $table->unsignedBigInteger('training_industry_id')->nullable()->comment('Nganh dao tao');
+            $table->date('dob')->nullable();
+            $table->string('citizen_identification')->nullable()->comment('So cccd');
+            $table->string('phone')->nullable();
+            $table->string('gender')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

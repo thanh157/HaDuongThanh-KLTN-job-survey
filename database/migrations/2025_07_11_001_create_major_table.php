@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('survey', function (Blueprint $table) {
+        Schema::create('major', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->integer('status')->comment('1: active, 0: inactive');
+            $table->string('code')->unique()->comment(' // Mã ngành (7480201, 7480202)');
+            $table->string('name');
             $table->text('description')->nullable();
-            $table->datetime('start_time')->nullable();
-            $table->datetime('end_time')->nullable();
+            $table->integer('status')->comment('1: active, 2: inactive')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('survey');
+        Schema::dropIfExists('major');
     }
 };

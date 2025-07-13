@@ -2,6 +2,30 @@
 
 @section('title', 'Tạo mới đợt khảo sát việc làm')
 
+@push('css')
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .select2-container .select2-selection--multiple {
+            min-height: 38px;
+            max-height: 80px; /* hoặc 100px tùy độ dài */
+            overflow-y: auto;
+            padding-bottom: 4px;
+            width: 100% !important;
+        }
+        .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            white-space: normal;
+            overflow-x: hidden;
+            flex-wrap: wrap;
+            max-height: 100px;
+        }
+    </style>
+@endpush
+
+@push('script')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('assets/admin/js/survey/index.js') }}"></script>
+@endpush
+
 @section('content')
 
     <div class="container py-4">
@@ -54,18 +78,18 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Thời gian bắt đầu khảo sát <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" name="start_time" required
-                                       value="{{ old('start_time') }}">
+                                <label class="form-label">Bắt đầu<span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control" name="start_time" required value="{{ old('start_time') }}">
+
 
                                 @error('start_time')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Thời gian kết thúc khảo sát <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" name="end_time" required
-                                       value="{{ old('end_time') }}">
+                                <label class="form-label">Kết thúc<span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control" name="end_time" required value="{{ old('end_time') }}">
+
                                 @error('end_time')
                                 <div class="text-danger small">{{ $message }}</div>
                                 @enderror
@@ -78,27 +102,26 @@
                 <div class="col-12 col-md-4">
                     <div class="card p-4 shadow-sm h-100">
                         <h6 class="mb-3">Thông tin tốt nghiệp</h6>
+
                         <div class="mb-3">
-                            <label class="form-label">Đợt tốt nghiệp <span class="text-danger">*</span></label>
-                            <select class="form-select" name="graduation_id" required>
-                                <option selected disabled value="">-- Chọn đợt --</option>
-                                @foreach($dotTotNghiep as $dot)
-                                    <option
-                                        {{ old('graduation_id') == $dot->id ? "selected" : "" }} value="{{ $dot->id }}">{{ $dot->name }}</option>
+                            <label class="form-label">Năm tốt nghiệp <span class="text-danger">*</span></label>
+                            <select class="form-select" name="school_year" required id="school_year">
+                                <option selected disabled value="">-- Chọn năm --</option>
+                                @foreach($namTotNghiep as $nam)
+                                    <option {{ old('school_year') == $nam ? "selected" : "" }} value="{{ $nam }}">{{ $nam }}</option>
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Đợt tốt nghiệp <span class="text-danger">*</span></label>
+                            <select class="form-select" name="graduation_id[]" required multiple id="graduation_id">
+                            </select>
+                        </div>
+                        <small class="text-danger"><i>Vui lòng chọn cẩn thận vì bạn không thể sửa 'thông tin tốt nghiệp' này</i></small>
                     </div>
+
                 </div>
-            </div>
-
-            <div class="card p-4 shadow-sm mt-4">
-                <h6 class="mb-3">Câu hỏi khảo sát</h6>
-                <div id="question-list"></div>
-
-                <button type="button" class="btn btn-sm btn-outline-primary mt-2" id="add-question-btn">
-                    <i class="bi bi-plus-circle me-1"></i> Thêm câu hỏi
-                </button>
             </div>
 
             <!-- Nút -->
@@ -110,62 +133,3 @@
         </form>
     </div>
 @endsection
-
-
-@push('script')
-    <script>
-        let questionIndex = 0;
-
-        function renderQuestionBlock(index) {
-            return `
-                <div class="border p-3 mb-3 position-relative question-block">
-                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" onclick="this.closest('.question-block').remove()">
-                        <i class="bi bi-x"></i>
-                    </button>
-
-                    <div class="mb-2">
-                        <label class="form-label">Nội dung câu hỏi</label>
-                        <input type="text" name="questions[${index}][question_text]" class="form-control" required>
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label">Loại câu hỏi</label>
-                        <select name="questions[${index}][type]" class="form-select" onchange="toggleOptionBlock(this, ${index})" required>
-                            <option value="single">Chọn 1</option>
-                            <option value="multiple">Chọn nhiều</option>
-                        </select>
-                    </div>
-
-                    <div class="option-area" id="options-${index}">
-                        <label class="form-label">Danh sách lựa chọn</label>
-                        <div class="option-group"></div>
-                        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="addOption(${index})">+ Thêm lựa chọn</button>
-                    </div>
-                </div>`;
-        }
-
-        function addOption(qIndex) {
-            const optionHTML = `
-                <div class="d-flex align-items-center mb-2 option-item">
-                    <input type="text" name="questions[${qIndex}][options][]" class="form-control me-2" placeholder="Nội dung lựa chọn" required>
-                    <div class="form-check me-2">
-                        <input class="form-check-input" type="checkbox" name="questions[${qIndex}][is_other][]" value="1">
-                        <label class="form-check-label">Khác</label>
-                    </div>
-                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.parentNode.remove()"><i class="bi bi-trash"></i></button>
-                </div>
-            `;
-            $(`#options-${qIndex} .option-group`).append(optionHTML);
-        }
-
-        function toggleOptionBlock(select, index) {
-            $(`#options-${index}`).toggle(select.value === 'single' || select.value === 'multiple');
-        }
-
-        $('#add-question-btn').on('click', function () {
-            $('#question-list').append(renderQuestionBlock(questionIndex));
-            addOption(questionIndex); // Thêm 1 option mặc định
-            questionIndex++;
-        });
-    </script>
-@endpush

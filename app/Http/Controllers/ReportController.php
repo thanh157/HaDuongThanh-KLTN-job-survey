@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\StudentService;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class ReportController extends Controller
 {
@@ -15,6 +16,7 @@ class ReportController extends Controller
     {
         // 1. Lấy faculty_id của người dùng hiện tại
         $facultyId = $this->studentService->getFacultyId();
+
 
         // 2. Lấy access token từ cache hoặc gọi mới
         $token = cache()->remember('token_client1', 300, fn() => $this->studentService->post('/oauth/token', [
@@ -42,6 +44,7 @@ class ReportController extends Controller
         $industryList = $this->studentService->get("/api/v1/external/training-industries/faculty/$facultyId", [
             'access_token' => $accessToken
         ]);
+
         $industries = collect($industryList['data'] ?? [])->map(fn($i) => (object)$i);
 
         // 5. Lấy toàn bộ phản hồi sinh viên từ DB

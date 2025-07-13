@@ -3,55 +3,72 @@
 @section('title', 'Kết quả khảo sát')
 
 @section('content')
-    <h3 class="mb-4">📊 Kết quả khảo sát: {{ $survey->title }}</h3>
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold mb-1">Khảo sát - Khảo sát việc làm</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ route('admin.survey.index') }}">Khảo sát việc làm</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Kết quả khảo sát</li>
+                </ol>
+            </nav>
 
-    @foreach ($responses as $res)
-        <div class="border rounded shadow-sm p-4 mb-5 bg-light">
-            <h5 class="mb-2 text-primary">👤 {{ $res->ho_ten }} (MSSV: {{ $res->ma_sv }})</h5>
-            <div class="text-muted small mb-3">
-                Email: {{ $res->email }} | SĐT: {{ $res->phone }} <br>
-                🕒 Gửi lúc: {{ $res->submitted_at?->format('H:i d/m/Y') ?? $res->created_at->format('H:i d/m/Y') }}
+            <div>
+                - Nam khao sat: 2022 <br>
+                - dot khao sat: dot 1, dot 2, dot 3 <br>
+                - Khi click dot 1 sang chi tiet: http://127.0.0.1:8000/graduation/72/students <br>
+                - thống kê: 1/100 <br>
             </div>
-
-            @foreach ($questions as $question)
-                @php
-                    $answers = $res->answers->where('question_id', $question->id)->pluck('answer_text')->toArray();
-                @endphp
-
-                <div class="mb-4">
-                    <label class="fw-semibold d-block mb-2">
-                        {{ $loop->iteration }}. {{ $question->question_text }}
-                    </label>
-
-                    @foreach ($question->options as $optIndex => $option)
-                        <div class="form-check mb-1">
-                            <input class="form-check-input"
-                                   type="{{ $question->type === 'multiple' ? 'checkbox' : 'radio' }}"
-                                   disabled
-                                {{ in_array($option['text'], $answers) ? 'checked' : '' }}>
-                            <label class="form-check-label">
-                                {{ $option['text'] }}
-                            </label>
-                        </div>
-
-                        @if($option['is_other'] && in_array($option['text'], $answers))
-                            @php
-                                $otherVals = $res->answers
-                                    ->where('question_id', $question->id)
-                                    ->filter(fn($a) => $a->answer_text !== $option['text'])
-                                    ->pluck('answer_text');
-                            @endphp
-                            @foreach($otherVals as $otherText)
-                                <input type="text"
-                                       class="form-control mt-2 mb-2"
-                                       value="{{ $otherText }}"
-                                       readonly>
-                            @endforeach
-                        @endif
-                    @endforeach
-                </div>
-            @endforeach
         </div>
-    @endforeach
+        <div class="mt-2 mt-sm-0">
+            <a href="{{ route('admin.survey.create') }}" class="btn btn-primary mt-2 mt-sm-0">
+                <i class="bi bi-plus-lg me-1"></i> Tạo mới
+            </a>
+        </div>
+    </div>
+
+    @include('admin.layouts.noti')
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0 table-bordered">
+                <thead>
+                <tr>
+                    <td><strong>STT</strong></td>
+                    <td><strong>Mã sv</strong></td>
+                    <td><strong>Email</strong></td>
+                    <td><strong>Name</strong></td>
+                    <td>Ngày phản hồi</td>
+                    <td><strong>Hành động</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($data as $item)
+                    <tr>
+                        <td>{{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}</td>
+                        <td>{{ $item->code_student  }}</td>
+                        <td>{{ $item->email  }}</td>
+                        <td>{{ $item->full_name  }}</td>
+                        <td>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i') : "" }}</td>
+                        <td class="d-flex justify-content-center align-items-center">
+                            <a href="{{ route('admin.survey.result_detail', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" title="Chi tiết"
+                               style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 4px">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="#">Xuất pdf</a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            @if ($data->count())
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $data->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
 
 @endsection

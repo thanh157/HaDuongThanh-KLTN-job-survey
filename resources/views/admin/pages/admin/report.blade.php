@@ -54,12 +54,12 @@
                     <select name="graduation_id" id="graduation_id" class="form-select custom-select"
                         onchange="this.form.submit()">
                         <option value="">-- Chọn đợt --</option>
-                        @foreach ($graduationList as $graduation)
-                            <option value="{{ $graduation['id'] }}"
-                                {{ $selectedGraduationId == $graduation['id'] ? 'selected' : '' }}>
-                                {{ $graduation['name'] }}
-                            </option>
-                        @endforeach
+{{--                        @foreach ($graduationList as $graduation)--}}
+{{--                            <option value="{{ $graduation['id'] }}"--}}
+{{--                                {{ $selectedGraduationId == $graduation['id'] ? 'selected' : '' }}>--}}
+{{--                                {{ $graduation['name'] }}--}}
+{{--                            </option>--}}
+{{--                        @endforeach--}}
                     </select>
                 </div>
             </form>
@@ -127,34 +127,34 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($report1 as $key => $row)
-                                            <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{ $row->training_industry_id }}</td>
-                                                <td>{{ $row->ten_nganh }}</td>
-                                                <td>{{ $row->sv_tot_nghiep ?? '-' }}</td>
-                                                <td>{{ $row->sv_nu_tot_nghiep ?? '-' }}</td>
-                                                <td>{{ $row->tong_phan_hoi ?? '-' }}</td>
-                                                <td>{{ $row->nu_phan_hoi ?? '-' }}</td>
-                                                <td>{{ $row->co_viec_lam ?? '-' }}</td>
-                                                <td>{{ $row->viec_lam_dung_nganh ?? '-' }}</td>
-                                                <td>{{ $row->viec_lam_lien_quan ?? '-' }}</td>
-                                                <td>{{ $row->viec_lam_khong_lien_quan ?? '-' }}</td>
-                                                <td>{{ $row->tiep_tuc_hoc ?? '-' }}</td>
-                                                <td>{{ $row->chua_co_viec ?? '-' }}</td>
-                                                <td>{{ $row->ty_le_co_viec_phan_hoi ?? '-' }}%</td>
-                                                <td>{{ $row->ty_le_co_viec_tot_nghiep ?? '-' }}%</td>
-                                                <td>{{ $row->lam_viec_nha_nuoc ?? '-' }}</td>
-                                                <td>{{ $row->lam_viec_tu_nhan ?? '-' }}</td>
-                                                <td>{{ $row->tu_tao_viec_lam ?? '-' }}</td>
-                                                <td>{{ $row->yeu_to_nuoc_ngoai ?? '-' }}</td>
-                                                <td>{{ $row->noi_lam_viec ?? '-' }}</td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="20" class="text-center text-muted">Không có dữ liệu</td>
-                                            </tr>
-                                        @endforelse
+{{--                                        @forelse ($report1 as $key => $row)--}}
+{{--                                            <tr>--}}
+{{--                                                <td>{{ $key + 1 }}</td>--}}
+{{--                                                <td>{{ $row->training_industry_id }}</td>--}}
+{{--                                                <td>{{ $row->ten_nganh }}</td>--}}
+{{--                                                <td>{{ $row->sv_tot_nghiep ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->sv_nu_tot_nghiep ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->tong_phan_hoi ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->nu_phan_hoi ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->co_viec_lam ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->viec_lam_dung_nganh ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->viec_lam_lien_quan ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->viec_lam_khong_lien_quan ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->tiep_tuc_hoc ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->chua_co_viec ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->ty_le_co_viec_phan_hoi ?? '-' }}%</td>--}}
+{{--                                                <td>{{ $row->ty_le_co_viec_tot_nghiep ?? '-' }}%</td>--}}
+{{--                                                <td>{{ $row->lam_viec_nha_nuoc ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->lam_viec_tu_nhan ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->tu_tao_viec_lam ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->yeu_to_nuoc_ngoai ?? '-' }}</td>--}}
+{{--                                                <td>{{ $row->noi_lam_viec ?? '-' }}</td>--}}
+{{--                                            </tr>--}}
+{{--                                        @empty--}}
+{{--                                            <tr>--}}
+{{--                                                <td colspan="20" class="text-center text-muted">Không có dữ liệu</td>--}}
+{{--                                            </tr>--}}
+{{--                                        @endforelse--}}
                                     </tbody>
                                 </table>
                             </div>

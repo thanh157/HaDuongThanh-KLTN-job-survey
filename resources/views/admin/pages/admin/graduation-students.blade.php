@@ -20,6 +20,7 @@
                             <td>Mã SV</td>
                             <td>Họ tên</td>
                             <td>Email</td>
+                            <td>Ngày sinh</td>
                             <td>Ngày tạo</td>
                         </tr>
                     </thead>
@@ -31,6 +32,7 @@
                                 <td>{{ $student['code'] ?? '—' }}</td>
                                 <td>{{ $student['full_name'] ?? '—' }}</td>
                                 <td>{{ $student['email'] ?? '—' }}</td>
+                                <td>{{ $student['dob'] ? date('d-m-Y', strtotime($student['dob'])) : '—' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($student['created_at'])->format('d/m/Y H:i') }}</td>
                             </tr>
                         @empty

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Major;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
 use Illuminate\Support\Arr;
@@ -56,6 +57,19 @@ class MajorController extends Controller
             $majors = $majors->sortByDesc('created_at');
         } elseif ($sapXep === 'cu_nhat') {
             $majors = $majors->sortBy('created_at');
+        }
+
+        foreach ($majors->values() as $item) {
+            Major::query()->updateOrCreate(
+                [
+                    'code' => $item['code']
+                ],
+                [
+                    'name' => $item['name'],
+                    'description' => $item['description'],
+                    'status' => $item['status'] == 'active' ? Major::STATUS_ACTIVE : Major::STATUS_INACTIVE
+                ]
+            );
         }
 
         return view('admin.pages.admin.major', [

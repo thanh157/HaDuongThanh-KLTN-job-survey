@@ -23,6 +23,10 @@ class Student extends Model
         'email',
         'code',
         'training_industry_id',
+        'citizen_identification',
+        'phone',
+        'dob',
+        'gender',
         'created_at',
         'updated_at',
     ];

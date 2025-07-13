@@ -11,22 +11,20 @@ class Survey extends Model
 
     use SoftDeletes;
 
+    const STATUS_ACTIVE = 1;
+    const STATUS_INACTIVE = 0;
+
     protected $fillable = [
         'id',
         'title',
         'description',
+        'status',
         'start_time',
         'end_time',
         'school_year',
-        'graduation_id',
         'created_at',
         'updated_at',
     ];
-
-    public function graduation()
-    {
-        return $this->belongsTo(Graduation::class, 'graduation_id', 'id');
-    }
 
     public function questions()
     {
@@ -36,5 +34,25 @@ class Survey extends Model
     public function surveyResponses()
     {
         return $this->hasMany(SurveyResponse::class);
+    }
+
+    public function employmentSurveyResponse()
+    {
+        return $this->hasMany(EmploymentSurveyResponse::class, 'survey_period_id');
+    }
+
+    public function graduations()
+    {
+        return $this->belongsToMany(Graduation::class, 'graduation_survey');
+    }
+
+    public function isActive()
+    {
+        return $this->status == self::STATUS_ACTIVE;
+    }
+
+    public function isInActive()
+    {
+        return $this->status == self::STATUS_INACTIVE;
     }
 }

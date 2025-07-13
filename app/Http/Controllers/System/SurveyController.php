@@ -3,27 +3,18 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
-use App\Models\DotTotnghiep;
-use App\Models\DotTotNghiepStudent;
-use App\Models\GraduationStudent;
-use App\Models\Student;
 use App\Models\Survey;
 use Illuminate\Http\Request;
-use App\Services\StudentService;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Carbon;
 use App\Models\Graduation;
 
 class SurveyController extends Controller
 {
     public function index()
     {
-        $data = Survey::with('graduation')->get();
+        $data = Survey::with(['graduations', 'employmentSurveyResponse'])->paginate(10);
         $viewData = [
             'data' => $data
         ];
@@ -48,13 +39,13 @@ class SurveyController extends Controller
         DB::beginTransaction();
         try {
             $validator = Validator::make($request->all(), [
+                'graduation_id' => 'required|array|min:1',
                 'start_time' => 'required|date',
-                'end_time' => 'required|date|after_or_equal:start_time',
-                'questions.*.question_text' => 'required|string',
-                'questions.*.type' => 'required|in:single,multiple',
-                'questions.*.options' => 'required|array|min:1',
+                'end_time' => 'bail|required|date|after_or_equal:start_time|after:now',
             ], [
-                'end_time.after_or_equal' => 'Ngày kết thúc không được trước ngày bắt đầu.',
+                'end_time.after_or_equal' => 'Thời gian kết thúc không được trước thời gian bắt đầu.',
+                'end_time.after' => 'Thời gian kết thúc phải lớn hơn hiện tại.',
+                'graduation_id.required' => 'Vui lòng chọn ít nhất một đợt tốt nghiệp.',
             ]);
 
             if ($validator->fails()) {
@@ -65,28 +56,11 @@ class SurveyController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'start_time' => $request->start_time,
-                'end_time' => $request->end_time,
-                'graduation_id' => $request->graduation_id,
+                'end_time' => $request->end_time
             ]);
 
-            if ($request->filled('questions')) {
-                foreach ($request->questions as $qIndex => $q) {
-                    $options = [];
+            $survey->graduations()->attach($request->graduation_id);
 
-                    foreach ($q['options'] as $optIndex => $text) {
-                        $options[] = [
-                            'text' => $text,
-                            'is_other' => isset($q['is_other'][$optIndex]) ? true : false,
-                        ];
-                    }
-
-                    $survey->questions()->create([
-                        'question_text' => $q['question_text'],
-                        'type' => $q['type'],
-                        'options' => json_encode($options),
-                    ]);
-                }
-            }
             DB::commit();
             return redirect()->route('admin.survey.index')->with('success', 'Tạo khảo sát thành công!');
         } catch (\Exception $e) {
@@ -98,7 +72,7 @@ class SurveyController extends Controller
 
     public function edit($id)
     {
-        $survey = Survey::with('questions')->findOrFail($id);
+        $survey = Survey::with('graduations')->findOrFail($id);
         // Ép cast lại từng câu hỏi nếu cần
         $survey->questions->transform(function ($q) {
             $q->options = is_string($q->options) ? json_decode($q->options, true) : $q->options;
@@ -106,10 +80,12 @@ class SurveyController extends Controller
         });
         $namTotNghiep = Graduation::select('school_year')->groupBy('school_year')->pluck('school_year')->toArray();
         $dotTotNghiep = Graduation::get();
+        $allDotTotNghiep = $survey->graduations()->get();
         $viewData = [
             'survey' => $survey,
             'namTotNghiep' => $namTotNghiep,
             'dotTotNghiep' => $dotTotNghiep,
+            'allDotTotNghiep' => $allDotTotNghiep,
         ];
         return view('admin.pages.admin.survey.edit', $viewData);
     }
@@ -119,13 +95,13 @@ class SurveyController extends Controller
         DB::beginTransaction();
         try {
             $validator = Validator::make($request->all(), [
+                'graduation_id' => 'required|array|min:1',
                 'start_time' => 'required|date',
-                'end_time' => 'required|date|after_or_equal:start_time',
-                'questions.*.question_text' => 'required|string',
-                'questions.*.type' => 'required|in:single,multiple',
-                'questions.*.options' => 'required|array|min:1',
+                'end_time' => 'bail|required|date|after_or_equal:start_time',
             ], [
-                'end_time.after_or_equal' => 'Ngày kết thúc không được trước ngày bắt đầu.',
+                'end_time.after_or_equal' => 'Thời gian kết thúc không được trước thời gian bắt đầu.',
+                'end_time.after' => 'Thời gian kết thúc phải lớn hơn hiện tại.',
+                'graduation_id.required' => 'Vui lòng chọn ít nhất một đợt tốt nghiệp.',
             ]);
 
             if ($validator->fails()) {
@@ -139,33 +115,15 @@ class SurveyController extends Controller
                 'description' => $request->description,
                 'start_time' => $request->start_time,
                 'end_time' => $request->end_time,
-                'graduation_id' => $request->graduation_id,
+                'status' => $request->status,
             ]);
 
-            // Xoá câu hỏi cũ để ghi đè
-            if ($request->questions) {
-                $survey->questions()->delete();
-                foreach ($request->questions as $qIndex => $q) {
-                    $options = [];
-                    foreach ($q['options'] as $optIndex => $text) {
-                        $options[] = [
-                            'text' => $text,
-                            'is_other' => isset($q['is_other'][$optIndex]) ? true : false,
-                        ];
-                    }
-
-                    $survey->questions()->create([
-                        'question_text' => $q['question_text'],
-                        'type' => $q['type'],
-                        'options' => json_encode($options),
-                    ]);
-                }
-            }
+            // Đồng bộ các đợt tốt nghiệp vào pivot
+            $survey->graduations()->sync($request->graduation_id);
 
             DB::commit();
             return redirect()->route('admin.survey.index')->with('success', 'Cập nhật khảo sát thành công!');
         } catch (\Exception $e) {
-            dd($e);
             Log::error($e);
             DB::rollBack();
             return redirect()->route('admin.survey.index')->with('error', 'Lỗi');
@@ -176,6 +134,11 @@ class SurveyController extends Controller
     {
         try {
             $survey = Survey::query()->findOrFail($id);
+
+            // Xóa liên kết đợt tốt nghiệp trong pivot
+            $survey->graduations()->detach();
+
+            // Xóa khảo sát chính
             $survey->delete();
 
             return redirect()->route('admin.survey.index')->with('success', 'Đã xoá khảo sát thành công!');
@@ -198,5 +161,12 @@ class SurveyController extends Controller
             'survey' => $survey
         ];
         return view('admin.pages.admin.survey.form', $viewData);
+    }
+
+    public function getDotTotNghiep()
+    {
+        $nam = request('school_year');
+        $data = Graduation::query()->where('school_year', $nam)->get();
+        return response()->json($data);
     }
 }
