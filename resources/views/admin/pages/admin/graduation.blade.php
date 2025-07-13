@@ -102,7 +102,7 @@
                         @forelse ($graduations as $graduation)
                             <tr class="text-center">
                                 <td>
-                                    <a href="{{ route('admin.graduation.student', $graduation['id']) }}">
+                                    <a href="{{ route('admin.graduation-student.show', $graduation['id']) }}">
                                         {{ $graduation['name'] }}
                                     </a>
 

@@ -56,7 +56,8 @@ class SurveyController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'start_time' => $request->start_time,
-                'end_time' => $request->end_time
+                'end_time' => $request->end_time,
+                'status' => Survey::STATUS_ACTIVE
             ]);
 
             $survey->graduations()->attach($request->graduation_id);

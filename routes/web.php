@@ -35,11 +35,11 @@ Route::middleware('auth.sso')->group(function () {
 //    Route::get('/department', [DepartmentController::class, 'index'])->name('admin.department.index')->middleware('permission:department.index');
     // Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
     // Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
-    Route::get('/graduation/create', [GraduationController::class, 'create'])->name('admin.graduation.create');
-    Route::post('/graduation', [GraduationController::class, 'store'])->name('admin.graduation.store');
-    Route::get('/graduation/{id}/edit', [GraduationController::class, 'edit'])->name('admin.graduation.edit');
-    Route::put('/graduation/{id}', [GraduationController::class, 'update'])->name('admin.graduation.update');
-    Route::delete('/graduation/{id}', [GraduationController::class, 'destroy'])->name('admin.graduation.destroy');
+//    Route::get('/graduation/create', [GraduationController::class, 'create'])->name('admin.graduation.create');
+//    Route::post('/graduation', [GraduationController::class, 'store'])->name('admin.graduation.store');
+//    Route::get('/graduation/{id}/edit', [GraduationController::class, 'edit'])->name('admin.graduation.edit');
+//    Route::put('/graduation/{id}', [GraduationController::class, 'update'])->name('admin.graduation.update');
+//    Route::delete('/graduation/{id}', [GraduationController::class, 'destroy'])->name('admin.graduation.destroy');
 //    Route::get('/graduation/{graduationId}/students/create', [GraduationStudentController::class, 'create'])->name('admin.graduation-student.create');
     // Xử lý lưu
 //    Route::post('/graduation/{graduationId}/students', [GraduationStudentController::class, 'store'])->name('admin.graduation-student.store');
