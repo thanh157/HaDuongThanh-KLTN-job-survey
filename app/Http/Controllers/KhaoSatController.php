@@ -64,56 +64,54 @@ class KhaoSatController extends Controller
 
             $graduationIds = $survey->graduations()->pluck('id')->toArray();
 
-            // Xây dựng truy vấn sinh viên có mã đúng và thuộc đợt khảo sát
-            $query = Student::query()
+            $student = Student::query()
                 ->where('code', $code)
                 ->whereHas('graduations', function ($q) use ($graduationIds) {
                     $q->whereIn('graduation_id', $graduationIds);
-                });
+                })
+                ->first();
 
-            // Gắn thêm các điều kiện nếu có ít nhất 1 field phụ
-            $conditions = 0;
-
-            if (!empty($email)) {
-                $query->where('email', $email);
-                $conditions++;
-            }
-
-            if (!empty($dob)) {
-                $query->where('dob', $dob);
-                $conditions++;
-            }
-
-            if (!empty($phone)) {
-                $query->where('phone', $phone);
-                $conditions++;
-            }
-
-            if (!empty($cccd)) {
-                $query->where('citizen_identification', $cccd);
-                $conditions++;
-            }
-
-            if (!empty($industry_id)) {
-                $query->where('training_industry_id', $industry_id);
-                $conditions++;
-            }
-
-            if ($conditions < 1) {
+            if (!$student) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Vui lòng nhập thêm ít nhất 1 thông tin để xác thực sinh viên',
+                    'message' => 'Không tìm thấy sinh viên có mã này trong khảo sát',
                 ]);
             }
 
-            $student = $query->first();
+            $invalidFields = [];
 
-            if ($student) {
+            if (!empty($email) && $student->email !== $email) {
+                $invalidFields[] = 'email';
+            }
+
+            if (!empty($dob) && $student->dob !== $dob) {
+                $invalidFields[] = 'dob';
+            }
+
+            if (!empty($phone) && $student->phone_number !== $phone) {
+                $invalidFields[] = 'phone';
+            }
+
+            if (!empty($cccd) && $student->identification_card_number !== $cccd) {
+                $invalidFields[] = 'citizen_identification';
+            }
+
+            if (!empty($industry_id) && $student->training_industry_id != $industry_id) {
+                $invalidFields[] = 'training_industry_id';
+            }
+
+            if (count($invalidFields) > 0) {
                 return response()->json([
-                    'success' => true,
-                    'student' => $student,
+                    'success' => false,
+                    'invalid_fields' => $invalidFields,
+                    'message' => 'Thông tin xác thực không khớp: ' . implode(',', $invalidFields),
                 ]);
             }
+
+            return response()->json([
+                'success' => true,
+                'student' => $student,
+            ]);
         } catch (\Exception $e) {
             Log::error($e);
             return response()->json([

@@ -96,8 +96,8 @@
 
                     <div class="mb-3">
                         <label for="ma_sv">1. Mã sinh viên</label>
-                        <input type="text" class="form-control" id="code_student" name="code_student" value="" readonly
-                               placeholder="Nhập mã sinh viên" required>
+                        <input type="text" class="form-control" id="code_student" name="code_student" value="622222" readonly required
+                               placeholder="Nhập mã sinh viên" >
                     </div>
 
                     <div class="mb-3">
@@ -113,7 +113,7 @@
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">4. Ngày sinh</label>
-                            <input type="date" class="form-control" name="dob" required>
+                            <input type="date" class="form-control" name="dob" >
                         </div>
                     </div>
 
@@ -159,7 +159,7 @@
                         @php $tinh_trang = config('config.tinh_trang'); @endphp
                         @foreach ($tinh_trang as $index => $value)
                             <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="employment_status"
+                                <input class="form-check-input" type="radio" name="employment_status" required
                                        id="tt_{{ $index }}" value="{{ $index }}">
                                 <label class="form-check-label fw-normal"
                                        for="tt_{{ $index }}">{{ $value }}</label>
@@ -199,7 +199,7 @@
                     @foreach (config('config.work_area') as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="work_area" required
-                                   id="kv_{{ $key }}" value="{{ $item }}">
+                                   id="kv_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
                                    for="kv_{{ $key }}">{{ $item }}</label>
                         </div>
@@ -211,7 +211,7 @@
                     <label class="form-label fw-bold">16. Sau khi tốt nghiệp, Anh/Chị có việc làm từ khi nào?</label>
                     @foreach (config('config.employed_since') as $key => $item)
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="employed_since"
+                            <input class="form-check-input" type="radio" name="employed_since" required
                                    id="tg_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
                                    for="tg_{{ $key }}">{{ $item }}</label>
@@ -225,7 +225,7 @@
                         không?</label>
                     @foreach (config('config.trained_field') as $key => $item)
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="trained_field"
+                            <input class="form-check-input" type="radio" name="trained_field" required
                                    id="nganh_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
                                    for="nganh_{{ $key }}">{{ $item }}</label>
@@ -235,11 +235,10 @@
 
                 <!-- 18. Công việc có phù hợp với trình độ chuyên môn -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">18. Công việc Anh/Chị đang đảm nhận có phù hợp với trình độ chuyên
-                        môn không?</label>
+                    <label class="form-label fw-bold">18. Công việc Anh/Chị đang đảm nhận có phù hợp với trình độ chuyên môn không?</label>
                     @foreach (config('config.professional_qualification_field') as $key => $item)
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="professional_qualification_field"
+                            <input class="form-check-input" type="radio" name="professional_qualification_field" required
                                    id="trinhdo_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
                                    for="trinhdo_{{ $key }}">{{ $item }}</label>
@@ -249,11 +248,10 @@
 
                 <!-- 19. Kiến thức kỹ năng từ trường có phù hợp công việc -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">19. Anh/Chị có học được kiến thức/kỹ năng cần thiết từ trường cho
-                        công việc không?</label>
+                    <label class="form-label fw-bold">19. Anh/Chị có học được kiến thức/kỹ năng cần thiết từ trường cho công việc không?</label>
                     @foreach (config('config.level_knowledge_acquired') as $key => $item)
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="level_knowledge_acquired"
+                            <input class="form-check-input" type="radio" name="level_knowledge_acquired" required
                                    id="kt_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
                                    for="kt_{{ $key }}">{{ $item }}</label>
@@ -272,7 +270,7 @@
                     <label class="form-label fw-bold">21. Mức thu nhập bình quân/tháng hiện nay (triệu đồng)</label>
                     @foreach (config('config.average_income') as $key => $item)
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="average_income"
+                            <input class="form-check-input" type="radio" name="average_income" required
                                    id="tn_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
                                    for="tn_{{ $key }}">{{ $item }}</label>
@@ -289,7 +287,7 @@
                         @if ($value == 'Khác')
                             <div class="form-check mb-2">
                                 <input class="form-check-input recruitment_type_other" type="checkbox" name="recruitment_type[]"
-                                       id="ht_{{ $index }}" value="{{ $index }}" required>
+                                       id="ht_{{ $index }}" value="{{ $index }}" >
                                 <label class="form-check-label fw-normal" for="ht_{{ $index }}" >Khác</label>
                             </div>
                         @else
@@ -306,6 +304,8 @@
                         <input type="text" name="recruitment_type_other" id="recruitment_type_other"
                                class="form-control" placeholder="Nhập ghi chú cụ thể...">
                     </div>
+
+                    <div id="recruitment_type_error" class="text-danger small d-none"></div>
                 </div>
 
                 <!-- 23. Hình thức tuyển -->
@@ -332,6 +332,7 @@
                         <input type="text" name="job_search_method_other" id="job_search_method_other"
                                class="form-control" placeholder="">
                     </div>
+                    <div id="job_search_method_error" class="text-danger small d-none"></div>
                 </div>
 
                 <!-- 24. Kỹ năng mềm -->
@@ -360,6 +361,7 @@
                         <input type="text" name="soft_skills_required_other" id="soft_skills_required_other"
                                class="form-control" placeholder="Nhập ghi chú cụ thể...">
                     </div>
+                    <div id="soft_skills_required_error" class="text-danger small d-none"></div>
                 </div>
 
                 <!-- 25. Khóa học nâng cao -->
@@ -388,6 +390,7 @@
                         <input type="text" name="must_attended_courses_other" id="must_attended_courses_other"
                                class="form-control" placeholder="Nhập ghi chú cụ thể...">
                     </div>
+                    <div id="must_attended_courses_error" class="text-danger small d-none"></div>
                 </div>
 
                 <!-- 26. Giải pháp nâng tỷ lệ có việc làm -->
@@ -408,7 +411,7 @@
                                 <input class="form-check-input" type="checkbox" name="solutions_get_job[]"
                                        id="ht26_{{ $index }}" value="{{ $index }}">
                                 <label class="form-check-label fw-normal"
-                                       for="ht_{{ $index }}">{{ $value }}</label>
+                                       for="ht26_{{ $index }}">{{ $value }}</label>
                             </div>
                         @endif
                     @endforeach
@@ -416,6 +419,7 @@
                         <input type="text" name="solutions_get_job_other" id="solutions_get_job_other"
                                class="form-control" placeholder="Nhập giải pháp khác của bạn tại đây...">
                     </div>
+                    <div id="solutions_get_job_error" class="text-danger small d-none"></div>
                 </div>
 
                 <div>
@@ -626,7 +630,6 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function (res) {
-                        console.log(res, '//resres')
                         if (res.success) {
                             const modal = bootstrap.Modal.getInstance(document.getElementById('mssvModal'));
                             modal.hide();
@@ -723,6 +726,87 @@
                 } else {
                     wrapper.hide();
                     input.val(''); // 👈 Reset nội dung đã nhập
+                }
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            const otherGroups = [
+                {
+                    checkboxClass: '.recruitment_type_other',
+                    wrapperId: '#recruitment_type_other_wrapper',
+                    inputId: '#recruitment_type_other',
+                    groupName: 'recruitment_type[]',
+                    errorId: '#recruitment_type_error'
+                },
+                {
+                    checkboxClass: '.job_search_method_other',
+                    wrapperId: '#job_search_method_other_wrapper',
+                    inputId: '#job_search_method_other',
+                    groupName: 'job_search_method[]',
+                    errorId: '#job_search_method_error'
+                },
+                {
+                    checkboxClass: '.soft_skills_required_other',
+                    wrapperId: '#soft_skills_required_other_wrapper',
+                    inputId: '#soft_skills_required_other',
+                    groupName: 'soft_skills_required[]',
+                    errorId: '#soft_skills_required_error'
+                },
+                {
+                    checkboxClass: '.must_attended_courses_other',
+                    wrapperId: '#must_attended_courses_other_wrapper',
+                    inputId: '#must_attended_courses_other',
+                    groupName: 'must_attended_courses[]',
+                    errorId: '#must_attended_courses_error'
+                },
+                {
+                    checkboxClass: '.solutions_get_job_other',
+                    wrapperId: '#solutions_get_job_other_wrapper',
+                    inputId: '#solutions_get_job_other',
+                    groupName: 'solutions_get_job[]',
+                    errorId: '#solutions_get_job_error'
+                }
+            ];
+
+            // Toggle input "Khác"
+            otherGroups.forEach(group => {
+                $(group.checkboxClass).on('change', function () {
+                    if ($(this).is(':checked')) {
+                        $(group.wrapperId).show();
+                    } else {
+                        $(group.wrapperId).hide();
+                        $(group.inputId).val('');
+                    }
+                });
+            });
+
+            // Validate khi submit
+            $('#form-wrapper').on('submit', function (e) {
+                let hasError = false;
+
+                otherGroups.forEach(group => {
+                    const checkedCount = $(`input[name="${group.groupName}"]:checked`).length;
+                    const isOtherChecked = $(group.checkboxClass).is(':checked');
+                    const otherText = $(group.inputId).val().trim();
+
+                    $(group.errorId).addClass('d-none').text('');
+
+                    if (checkedCount < 1) {
+                        $(group.errorId).removeClass('d-none').text('Vui lòng chọn ít nhất một lựa chọn.');
+                        hasError = true;
+                    }
+
+                    if (isOtherChecked && otherText === '') {
+                        $(group.errorId).removeClass('d-none').text('Vui lòng nhập ghi chú nếu chọn "Khác".');
+                        hasError = true;
+                    }
+                });
+
+                if (hasError) {
+                    e.preventDefault();
                 }
             });
         });
