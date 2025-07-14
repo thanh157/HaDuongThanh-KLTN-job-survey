@@ -66,6 +66,8 @@ class ChartStatisticController extends Controller
                 'attribute' => $attribute,
             ];
 
+//            dd($charts);
+
         } else {
             foreach ($survey as $item) {
                 $results = EmploymentSurveyResponse::where('survey_period_id', $item->id)->pluck($attribute);

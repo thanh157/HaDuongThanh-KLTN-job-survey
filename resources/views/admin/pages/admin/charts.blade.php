@@ -32,6 +32,10 @@
                 <option value="level_knowledge_acquired" {{ request('select') == 'level_knowledge_acquired' ? "selected" : "" }}>Có học được kĩ năng</option>
                 <option value="average_income" {{ request('select') == 'average_income' ? "selected" : "" }}>Thu nhập (triệu đồng)</option>
                 <option value="recruitment_type" {{ request('select') == 'recruitment_type' ? "selected" : "" }}>Hình thức tìm việc</option>
+                <option value="job_search_method" {{ request('select') == 'job_search_method' ? "selected" : "" }}>được tuyển theo hình thức nào</option>
+                <option value="soft_skills_required" {{ request('select') == 'soft_skills_required' ? "selected" : "" }}>Kỹ năng mềm</option>
+                <option value="must_attended_courses" {{ request('select') == 'must_attended_courses' ? "selected" : "" }}>Tham gia khóa học nâng cao nào</option>
+                <option value="solutions_get_job" {{ request('select') == 'solutions_get_job' ? "selected" : "" }}>Giải pháp tăng tỉ lệ đúng ngành</option>
             </select>
         </div>
         <div>
@@ -40,8 +44,8 @@
     </form>
     <div class="row">
     @foreach ($charts as $index => $chart)
-            <div class="col-md-4">
-                <canvas id="chart{{ $index }}" width="300" height="180"></canvas>
+            <div class="col-md-6">
+                <canvas id="chart{{ $index }}"></canvas>
             </div>
     @endforeach
     </div>
@@ -59,7 +63,12 @@
 <script>
     const chartsData = @json($charts);
 
+
+
     chartsData.forEach((chart, index) => {
+
+        console.log(chart.name, chart.data);
+
         const ctx = document.getElementById('chart' + index).getContext('2d');
         new Chart(ctx, {
             type: 'bar',
