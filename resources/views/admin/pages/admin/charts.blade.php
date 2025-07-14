@@ -62,11 +62,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const chartsData = @json($charts);
-
-
-
     chartsData.forEach((chart, index) => {
-
         console.log(chart.name, chart.data);
 
         const ctx = document.getElementById('chart' + index).getContext('2d');

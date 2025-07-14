@@ -22,6 +22,14 @@ class ChartStatisticController extends Controller
         $rawSurveys = [];
         $config = config('config.' . $attribute);
 
+        if (empty($attribute)) {
+            $viewData = [
+                'charts' => [],
+                'attribute' => '',
+            ];
+            return view('admin.pages.admin.charts', $viewData);
+        }
+
         $charts = [];
         if (in_array($attribute, ['recruitment_type', 'job_search_method', 'soft_skills_required', 'must_attended_courses', 'solutions_get_job'])) {
             $statCounts = [];

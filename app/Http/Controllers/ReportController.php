@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmploymentSurveyResponse;
+use App\Models\Survey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Services\StudentService;
@@ -229,6 +231,15 @@ class ReportController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]
         );
 
+        if (request('survey_id')) {
+            $survey = Survey::where('id', request('survey_id'))->first();
+            if (empty($survey)) {
+                abort(404);
+            }
+            $allDotTotNghiep = $survey->graduations()->get();
+            $schoolYear = !empty($allDotTotNghiep[0]->school_year) ? $allDotTotNghiep[0]->school_year : '';
+            $r2 = EmploymentSurveyResponse::query()->where('survey_period_id', request('survey_id'))->get();
+        }
 
         return view('admin.pages.admin.report', [
             'report1' => $report1,
@@ -236,6 +247,9 @@ class ReportController extends Controller
             'report3' => $report3,
             'graduationList' => $graduations,
             'selectedGraduationId' => $selectedGraduationId,
+            'survey' => !empty($survey) ? $survey : null,
+            'schoolYear' => !empty($schoolYear) ? $schoolYear : null,
+            'r2' => !empty($r2) ? $r2 : [],
         ]);
     }
 }
