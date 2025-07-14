@@ -28,7 +28,8 @@ class ChartStatisticController extends Controller
             foreach ($survey as $item) {
                 $results = EmploymentSurveyResponse::where('survey_period_id', $item->id)->pluck($attribute);
 
-                $statCounts = [];
+//                $statCounts = [];
+
                 // Khởi tạo tất cả lựa chọn với giá trị = 0
                 foreach ($config as $id => $label) {
                     $statCounts[$label] = 0;
@@ -39,29 +40,32 @@ class ChartStatisticController extends Controller
 
                     if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
                         $values = $data['value'] ?? [];
-                        foreach ($values as $idStr) {
-                            $id = (int) $idStr;
 
-                            if (isset($config[$id])) {
-                                $label = $config[$id];
-                                $statCounts[$label]++;
+                        if (is_array($values)) {
+                            foreach ($values as $idStr) {
+                                $id = (int) $idStr;
+
+                                if (isset($config[$id])) {
+                                    $label = $config[$id];
+                                    $statCounts[$label]++;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            $fullStats = [];
-            foreach ($config as $id => $label) {
-                $fullStats[$label] = $statCounts[$label] ?? 0;
+                // Thêm vào mảng charts cho từng kỳ khảo sát
+                $charts[] = [
+                    'name' => $item->title ?? 'Không rõ',
+                    'data' => $statCounts
+                ];
             }
-
-            dd($fullStats);
 
             $viewData = [
                 'charts' => $charts,
-                'attribute' => $fullStats,
+                'attribute' => $attribute,
             ];
+
         } else {
             foreach ($survey as $item) {
                 $results = EmploymentSurveyResponse::where('survey_period_id', $item->id)->pluck($attribute);
