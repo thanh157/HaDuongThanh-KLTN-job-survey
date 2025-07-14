@@ -7,6 +7,12 @@ return [
         3 => 'Chưa có việc làm',
         4 => 'Chưa đi làm'
     ],
+    'employment_status' => [
+        1 => 'Đã có việc làm',
+        2 => 'Đang học tiếp/học văn bằng 2',
+        3 => 'Chưa có việc làm',
+        4 => 'Chưa đi làm'
+    ],
     'work_area' => [
         1 => 'Nhà nước',
         2 => 'Tư nhân',

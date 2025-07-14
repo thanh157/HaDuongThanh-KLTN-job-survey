@@ -16,42 +16,35 @@
         </div>
     </div>
 
-    <form id="filterForm" class="row g-3 mb-4">
+    <form id="filterForm" class="row g-3 mb-4" action="{{ route('admin.charts.index') }}" method="GET">
+{{--        @csrf--}}
+        @method('GET')
+
         <div class="col-md-3">
-            <label for="survey_period" class="form-label">Đợt khảo sát <span class="text-danger">*</span></label>
-            <select id="survey_period" class="form-select" required>
-                <option value="">-- Chọn đợt khảo sát --</option>
-                @foreach ($graduations as $grad)
-                    <option value="{{ $grad['id'] }}">{{ $grad['name'] }} - {{ $grad['school_year'] }}</option>
-                @endforeach
+            <label for="survey_period" class="form-label">Chọn thuộc tính <span class="text-danger">*</span></label>
+            <select name="select" class="form-select" required>
+                <option value="">-- Chọn --</option>
+                <option value="employment_status" {{ request('select') == 'employment_status' ? "selected" : "" }}>tình trạng việc làm hiện tại</option>
+                <option value="work_area" {{ request('select') == 'work_area' ? "selected" : "" }}>Đơn vị Anh/Chị đang làm việc thuộc khu vực nào</option>
+                <option value="employed_since" {{ request('select') == 'employed_since' ? "selected" : "" }}>Sau khi tốt nghiệp, Có việc làm từ khi nào</option>
+                <option value="trained_field" {{ request('select') == 'trained_field' ? "selected" : "" }}>Có phù hợp với ngành đào tạo không</option>
+                <option value="professional_qualification_field" {{ request('select') == 'professional_qualification_field' ? "selected" : "" }}>CV phù hợp chuyên môn</option>
+                <option value="level_knowledge_acquired" {{ request('select') == 'level_knowledge_acquired' ? "selected" : "" }}>Có học được kĩ năng</option>
+                <option value="average_income" {{ request('select') == 'average_income' ? "selected" : "" }}>Thu nhập (triệu đồng)</option>
+                <option value="recruitment_type" {{ request('select') == 'recruitment_type' ? "selected" : "" }}>Hình thức tìm việc</option>
             </select>
         </div>
-
-        @php
-            $filters = [
-                ['label' => 'Sinh viên khảo sát', 'chart' => 'chart_surveyed', 'placeholder' => '-- Tất cả --'],
-                ['label' => 'Tình trạng việc làm', 'chart' => 'chart_employment_status', 'placeholder' => '-- Tất cả --'],
-                ['label' => 'Thời gian có việc', 'chart' => 'chart_employment_time', 'placeholder' => '-- Tất cả --'],
-                ['label' => 'Tên cơ quan công tác', 'chart' => 'chart_company_name', 'placeholder' => '-- Chọn cơ quan --'],
-                ['label' => 'Khu vực đơn vị làm việc', 'chart' => 'chart_work_sector', 'placeholder' => '-- Tất cả --'],
-                ['label' => 'Chức danh công việc', 'chart' => 'chart_job_position', 'placeholder' => '-- Tất cả --'],
-                ['label' => 'Liên quan ngành đào tạo', 'chart' => 'chart_job_relevance', 'placeholder' => '-- Tất cả --'],
-                ['label' => 'Thu nhập hiện tại', 'chart' => 'chart_income', 'placeholder' => '-- Tất cả --'],
-            ];
-        @endphp
-
-        @foreach ($filters as $filter)
-            <div class="col-md-3">
-                <label class="form-label">{{ $filter['label'] }}</label>
-                <div class="form-control filter-click" data-chart="{{ $filter['chart'] }}"
-                    style="height: 38px; display: flex; align-items: center; cursor: pointer;">
-                    {{ $filter['placeholder'] }}
-                </div>
-            </div>
-        @endforeach
+        <div>
+            <button type="submit" class="btn btn-primary" style="width: 100px">Send</button>
+        </div>
     </form>
-
-    <div id="reportSection" class="row g-4"></div>
+    <div class="row">
+    @foreach ($charts as $index => $chart)
+            <div class="col-md-4">
+                <canvas id="chart{{ $index }}" width="300" height="180"></canvas>
+            </div>
+    @endforeach
+    </div>
 </div>
 
 <style>
@@ -63,106 +56,51 @@
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-    const surveyPeriodSelect = document.getElementById('survey_period');
-    const reportSection = document.getElementById('reportSection');
+    const chartsData = @json($charts);
 
-    async function fetchChartData(chartId, surveyPeriodId) {
-        const response = await fetch(`/admin/chart-statistics/data?survey_period_id=${surveyPeriodId}&chart=${chartId}`);
-        if (!response.ok) {
-            alert('Không thể tải dữ liệu biểu đồ!');
-            return null;
-        }
-        return await response.json();
-    }
-
-    async function renderChart(canvas, chartId, surveyPeriodId) {
-        const ctx = canvas.getContext('2d');
-        const dataset = await fetchChartData(chartId, surveyPeriodId);
-        if (!dataset) return;
-
-        const chartType = dataset.horizontal ? 'bar' : dataset.type;
-
+    chartsData.forEach((chart, index) => {
+        const ctx = document.getElementById('chart' + index).getContext('2d');
         new Chart(ctx, {
-            type: chartType,
+            type: 'bar',
             data: {
-                labels: dataset.labels,
+                labels: Object.keys(chart.data),
                 datasets: [{
-                    label: 'Số lượng',
-                    data: dataset.data,
-                    backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6610f2', '#20c997', '#fd7e14'],
-                    borderWidth: 1
+                    label: 'Số lượng sinh viên',
+                    data: Object.values(chart.data),
+                    borderRadius: 6
                 }]
             },
             options: {
                 responsive: true,
-                animation: false,
-                indexAxis: dataset.horizontal ? 'y' : 'x',
                 plugins: {
-                    legend: {
-                        position: dataset.type === 'bar' ? 'top' : 'bottom'
-                    },
-                    tooltip: {
-                        enabled: true
-                    },
                     title: {
-                        display: false
-                    }
-                },
-                scales: (dataset.type === 'bar' || dataset.horizontal) ? {
-                    x: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
+                        display: true,
+                        text: chart.name,
+                        font: {
+                            size: 14 // 👈 Tiêu đề nhỏ hơn
                         }
                     },
+                    legend: { display: false }
+                },
+                scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0,
+                            font: { size: 12 } // 👈 Trục y nhỏ
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: { size: 12 } // 👈 Trục x nhỏ
+                        },
+                        categoryPercentage: 0.5, // 👈 Thu hẹp mỗi cột
+                        barPercentage: 0.7 // 👈 Giảm độ rộng của cột
                     }
-                } : {}
-            }
-        });
-    }
-
-    function removeChart(chartId) {
-        const chartEl = document.getElementById(chartId);
-        if (chartEl) chartEl.remove();
-        const filterDiv = document.querySelector(`[data-chart="${chartId}"]`);
-        if (filterDiv) filterDiv.classList.remove('active-filter');
-    }
-
-    document.querySelectorAll('.filter-click').forEach(div => {
-        div.addEventListener('click', function () {
-            const chartId = this.dataset.chart;
-            const surveyPeriodId = surveyPeriodSelect.value;
-
-            if (!surveyPeriodId) {
-                alert('Vui lòng chọn đợt khảo sát trước khi lọc dữ liệu.');
-                return;
+                }
             }
 
-            const existingChart = document.getElementById(chartId);
-            if (!existingChart) {
-                const wrapper = document.createElement('div');
-                wrapper.classList.add('col-md-6');
-                wrapper.id = chartId;
-
-                const canvasId = `${chartId}_canvas`;
-                wrapper.innerHTML = `
-                    <div class="card shadow">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <span>Biểu đồ: ${this.innerText}</span>
-                            <button type="button" class="btn-close" onclick="removeChart('${chartId}')"></button>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="${canvasId}" width="400" height="400"></canvas>
-                        </div>
-                    </div>`;
-                reportSection.appendChild(wrapper);
-                renderChart(document.getElementById(canvasId), chartId, surveyPeriodId);
-                this.classList.add('active-filter');
-            }
         });
     });
 </script>
