@@ -9,12 +9,14 @@
         body {
             background-color: #f1f3f4;
         }
+
         html, body {
             height: auto;
             overflow-y: auto;
             background-color: #f1f3f4;
             font-family: 'Inter', sans-serif;
         }
+
         .google-form-style {
             max-width: 800px;
             margin: auto;
@@ -115,6 +117,7 @@
             border-color: #1a73e8;
             outline: none;
         }
+
         .form-check {
             display: inline-block;
             margin-bottom: 10px;
@@ -187,6 +190,7 @@
             width: 100%;
             display: block;
         }
+
         .form-check {
             display: flex;
             align-items: center;
@@ -203,6 +207,7 @@
             margin: 0;
             font-weight: normal;
         }
+
         body {
             font-family: 'DejaVu Sans', sans-serif;
             font-size: 13px;
@@ -257,7 +262,6 @@
             margin-bottom: 1rem;
         }
 
-
         body {
             font-family: 'DejaVu Sans', sans-serif;
             font-size: 14px;
@@ -265,6 +269,7 @@
             line-height: 1.6;
             margin: 25px;
         }
+
         body, input, textarea, select, button {
             font-family: 'DejaVu Sans', sans-serif;
         }
@@ -274,10 +279,6 @@
             font-weight: bold;
             margin-bottom: 10px;
             color: #222;
-        }
-
-        .section {
-            margin-bottom: 25px;
         }
 
         table {
@@ -297,12 +298,22 @@
         th {
             background-color: #f2f2f2;
         }
-        .radio-inline {
-            display: inline-block;
-            margin-right: 18px;
+
+        input[type="text"],
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;       /* Có thể giảm xuống tùy nội dung */
+            padding: 3px 4px;
             font-size: 13px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            box-shadow: none;
         }
 
+        input:focus {
+            outline: none;
+            border-color: #0d6efd;
+        }
     </style>
 
 </head>
@@ -313,11 +324,43 @@
 <div class="container py-4">
     <div class="google-form-style">
         <!-- Header -->
+        <div class="text-center mb-4">
+
+            @php
+                $imagePath = public_path('assets/logo.jpg');
+                $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
+                $imageData = base64_encode(file_get_contents($imagePath));
+                $src = 'data:image/' . $imageType . ';base64,' . $imageData;
+            @endphp
+
+
+            <div style="text-align: center; margin-bottom: 15px;">
+                <img src="{{ $src }}" width="90" style="display: inline-block;">
+            </div>
+
+
+{{--            <img style="text-align: center;margin: 0 auto;display: block; margin-bottom: 15px;" src="{{ $src }}" width="90">--}}
+
+
+            <div style="font-size: 16px;text-transform: uppercase;border-left: none;color: #1f2937;text-align: center; font-weight: 700; margin-bottom: 6px">
+                Bộ Nông Nghiệp và Phát Triển Nông Thôn
+            </div>
+            <div style="text-align: center; font-size: 14px; text-transform: uppercase; color: #1f2937; font-weight: 600; margin-bottom: 6px">
+                Học Viện Nông Nghiệp Việt Nam
+            </div>
+            <small style="display: block;text-align: center; font-size: 12px; color: #6b7280;">Thị trấn Trâu Quỳ, huyện Gia Lâm, TP Hà Nội | ĐT: 024.62617586 – Fax:
+                024.62617586</small>
+        </div>
+
         <!-- Title -->
         <div class="form-section">
-            <h5 class="fw-bold text-center">Tên khảo sát: {{ $survey->title }}</h5>
-            <p class="text-end mt-2">
-                <small class="text-muted fst-italic">Thời gian khảo sát: {{ $survey->start_time }} – {{ $survey->end_time }}</small>
+            <h5 style="text-align: center; font-size: 16px">Tên khảo sát: {{ $survey->title }}</h5>
+            <p class="text-justify">
+                {{ $survey->description }}
+            </p>
+            <p class="text-end mt-2" style="text-align: right">
+                <small style="color: #6b7280;"><i>Thời gian khảo sát: {{ $survey->start_time }}
+                        – {{ $survey->end_time }}</i></small>
             </p>
         </div>
 
@@ -568,7 +611,8 @@
                 @if (!empty($job_search_method_value['content_other']))
                     <div id="job_search_method_other_wrapper" class="mt-2">
                         <input type="text" name="job_search_method_other" id="job_search_method_other" readonly
-                               class="form-control" placeholder="" value="{{ $job_search_method_value['content_other'] }}">
+                               class="form-control" placeholder=""
+                               value="{{ $job_search_method_value['content_other'] }}">
                     </div>
                 @endif
             </div>
@@ -619,7 +663,8 @@
                 @if (!empty($must_attended_courses['content_other']))
                     <div id="job_search_method_other_wrapper" class="mt-2">
                         <input type="text" name="job_search_method_other" id="job_search_method_other" readonly
-                               class="form-control" placeholder="" value="{{ $must_attended_courses['content_other'] }}">
+                               class="form-control" placeholder=""
+                               value="{{ $must_attended_courses['content_other'] }}">
                     </div>
                 @endif
             </div>

@@ -59,7 +59,6 @@ class SurveyResultController extends Controller
             'survey' => $response->survey,
             'major' => $major,
         ];
-//        dd(json_decode($response->job_search_method, true));
         return view('admin.pages.admin.survey.result_detail', $viewData);
     }
 
