@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Survey;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
 use Illuminate\Support\Arr;
 use App\Models\EmploymentSurveyResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ChartStatisticController extends Controller
 {
@@ -15,21 +17,107 @@ class ChartStatisticController extends Controller
 
     public function index()
     {
-        $facultyId = $this->studentService->getFacultyId();
+        $attribute = request('select');
+        $survey = Survey::get();
+        $rawSurveys = [];
+        $config = config('config.' . $attribute);
 
-        $token = cache()->remember('token_client1', 60 * 5, fn() => $this->studentService->post('/oauth/token', [
-            'grant_type' => 'client_credentials',
-            'client_id' => config('auth.student.client_id'),
-            'client_secret' => config('auth.student.client_secret'),
-        ]));
+        if (empty($attribute)) {
+            $viewData = [
+                'charts' => [],
+                'attribute' => '',
+            ];
+            return view('admin.pages.admin.charts', $viewData);
+        }
 
-        $response = $this->studentService->get('/api/v1/external/graduation-ceremonies/faculty/' . $facultyId, [
-            'access_token' => Arr::get($token, 'access_token')
-        ]);
+        $charts = [];
+        if (in_array($attribute, ['recruitment_type', 'job_search_method', 'soft_skills_required', 'must_attended_courses', 'solutions_get_job'])) {
+            $statCounts = [];
+            foreach ($survey as $item) {
+                $results = EmploymentSurveyResponse::where('survey_period_id', $item->id)->pluck($attribute);
 
-        $graduations = collect($response['data'] ?? []);
+//                $statCounts = [];
 
-        return view('admin.pages.admin.charts', compact('graduations'));
+                // Khởi tạo tất cả lựa chọn với giá trị = 0
+                foreach ($config as $id => $label) {
+                    $statCounts[$label] = 0;
+                }
+
+                foreach ($results as $json) {
+                    $data = json_decode($json, true);
+
+                    if (json_last_error() === JSON_ERROR_NONE && is_array($data)) {
+                        $values = $data['value'] ?? [];
+
+                        if (is_array($values)) {
+                            foreach ($values as $idStr) {
+                                $id = (int) $idStr;
+
+                                if (isset($config[$id])) {
+                                    $label = $config[$id];
+                                    $statCounts[$label]++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Thêm vào mảng charts cho từng kỳ khảo sát
+                $charts[] = [
+                    'name' => $item->title ?? 'Không rõ',
+                    'data' => $statCounts
+                ];
+            }
+
+            $viewData = [
+                'charts' => $charts,
+                'attribute' => $attribute,
+            ];
+
+//            dd($charts);
+
+        } else {
+            foreach ($survey as $item) {
+                $results = EmploymentSurveyResponse::where('survey_period_id', $item->id)->pluck($attribute);
+                $stats = [];
+                foreach ($config as $k => $v) {
+                    $stats[$k] = 0;
+                }
+
+                foreach ($results as $status) {
+                    foreach ($stats as $k => $v) {
+                        if ($status == $k) {
+                            $stats[$k] += 1;
+                        }
+                    }
+                }
+
+                $rawSurveys[] = [
+                    'survey_title' => $item->title,
+                    'data' => $stats,
+                ];
+            }
+
+            foreach ($rawSurveys as $survey) {
+                $mappedData = [];
+
+                foreach ($survey['data'] as $key => $count) {
+                    $label = $config[$key] ?? "Không xác định";
+                    $mappedData[$label] = $count;
+                }
+
+                $charts[] = [
+                    'name' => $survey['survey_title'],
+                    'data' => $mappedData,
+                ];
+            }
+            $viewData = [
+                'charts' => $charts,
+                'attribute' => $attribute,
+            ];
+        }
+
+        return view('admin.pages.admin.charts', $viewData);
     }
 
     public function getChartData(Request $request)
@@ -138,7 +226,7 @@ class ChartStatisticController extends Controller
 
             case 'chart_income':
                 $result = $query->select(DB::raw("
-                    CASE 
+                    CASE
                         WHEN average_income < 5 THEN '<5 triệu'
                         WHEN average_income BETWEEN 5 AND 10 THEN '5-10 triệu'
                         WHEN average_income BETWEEN 11 AND 15 THEN '10-15 triệu'

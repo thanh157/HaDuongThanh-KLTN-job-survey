@@ -369,7 +369,21 @@
                 </div>
             </form>
 
-            <div><a href="#">Xuất pdf</a></div>
+            <div>
+                <button class="btn btn-primary" onclick="downloadPdf()">Xuất PDF</button>
+            </div>
+
         </div>
     </div>
+
+    <script>
+        function downloadPdf() {
+            const link = document.createElement('a');
+            link.href = '{{ route('export_pdf_v2', ['resultId' => $response->id]) }}';
+            link.download = '';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 @endsection

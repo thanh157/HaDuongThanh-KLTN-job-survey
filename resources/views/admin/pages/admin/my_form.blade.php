@@ -447,7 +447,7 @@
 
 
     <!-- 🛡️ Modal nhập MSSV -->
-        <div class="modal fade" id="mssvModal" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="mssvModal1" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content p-3">
                     <h5 class="modal-title">Xác thực Sinh viên <small style="font-size: 12px"><i>(điền ít nhất 2 input)</i></small></h5>

@@ -70,10 +70,13 @@
                                style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 4px">
                                 <i class="bi bi-info"></i>
                             </a>
-                            <a href="#" class="btn btn-sm btn-outline-primary" title="Export Pdf"
-                               style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 4px">
+                            <!-- Nút Export PDF -->
+                            <button class="btn btn-sm btn-outline-primary"
+                                    title="Xuất PDF"
+                                    onclick="downloadPdf({{ $item->id }})"
+                                    style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; margin-right: 4px">
                                 <i class="bi bi-file-earmark-pdf-fill"></i>
-                            </a>
+                            </button>
                         </td>
                     </tr>
                 @endforeach
@@ -87,5 +90,17 @@
         </div>
     </div>
 </div>
+<script>
+    function downloadPdf(resultId) {
+        const link = document.createElement('a');
+        link.href = "{{ route('export_pdf_v2', ['resultId' => '__ID__']) }}".replace('__ID__', resultId);
 
+        console.log(link.href, '//link.href')
+
+        link.setAttribute('download', '');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
 @endsection

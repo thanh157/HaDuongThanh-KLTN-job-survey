@@ -50,16 +50,16 @@
             </li>
             <form method="GET" action="{{ route('admin.report.index') }}" class="ms-auto">
                 <div class="d-flex align-items-center gap-2">
-                    <label for="graduation_id" class="col-form-label fw-semibold mb-0">Đợt tốt nghiệp:</label>
-                    <select name="graduation_id" id="graduation_id" class="form-select custom-select"
+                    <label for="survey_id" class="col-form-label fw-semibold mb-0">Khảo sát:</label>
+                    <select name="survey_id" id="survey_id" class="form-select custom-select"
                         onchange="this.form.submit()">
-                        <option value="">-- Chọn đợt --</option>
-{{--                        @foreach ($graduationList as $graduation)--}}
-{{--                            <option value="{{ $graduation['id'] }}"--}}
-{{--                                {{ $selectedGraduationId == $graduation['id'] ? 'selected' : '' }}>--}}
-{{--                                {{ $graduation['name'] }}--}}
-{{--                            </option>--}}
-{{--                        @endforeach--}}
+                        <option value="">-- Chọn khảo sát --</option>
+                        @php $surveyX = \App\Models\Survey::get(); @endphp
+                        @foreach ($surveyX as $item)
+                            <option value="{{ $item->id }}" {{ request('survey_id') == $item->id ? "selected" : "" }}>
+                                {{ $item->title }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
             </form>
@@ -73,7 +73,7 @@
                 <div class="card shadow-sm border mb-4">
                     <div class="card-body">
                         <div class="d-flex justify-content-end mb-3">
-                            <a href="#" class="btn btn-primary me-2">
+                            <a href="{{ route('admin.charts.index') }}" class="btn btn-primary me-2">
                                 <i class="bi bi-eye"></i> Xem trước
                             </a>
                             <a href="#" class="btn btn-success">
@@ -86,7 +86,7 @@
                                 <h6 class="text-uppercase mb-1">HỌC VIỆN NÔNG NGHIỆP VIỆT NAM</h6>
                                 <h6 class="mb-1">BAN QUẢN LÝ ĐÀO TẠO.</h6>
                                 <h5 class="fw-bold text-decoration-underline mb-0">
-                                    BÁO CÁO TÌNH HÌNH VIỆC LÀM CỦA SINH VIÊN TỐT NGHIỆP NĂM 2021
+                                    BÁO CÁO TÌNH HÌNH VIỆC LÀM CỦA SINH VIÊN TỐT NGHIỆP NĂM {{ $schoolYear }}
                                 </h5>
                             </div>
 
@@ -127,6 +127,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{ $r1['total_student'] }}</td>
+                                        <td>{{ $r1['total_nu'] }}</td>
+                                        <td>{{ $r1['total_res'] }}</td>
+                                        <td>{{ $r1['total_res_nu'] }}</td>
+                                        <td>{{ !empty($r1_trained_field) ? $r1_trained_field->dung_nganh : '' }}</td>
+                                        <td>{{ !empty($r1_trained_field) ? $r1_trained_field->lien_quan : '' }}</td>
+                                        <td>{{ !empty($r1_trained_field) ? $r1_trained_field->khong_lien_quan : '' }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>100%</td>
+                                        <td>{{ round(($r1['total_res'] / $r1['total_student']) * 100, 2) . '%' }}</td>
+                                        <td>{{ !empty($r1_work_area) ? $r1_work_area->nha_nuoc : '' }}</td>
+                                        <td>{{ !empty($r1_work_area) ? $r1_work_area->tu_nhan : '' }}</td>
+                                        <td>{{ !empty($r1_work_area) ? $r1_work_area->tu_tao : '' }}</td>
+                                        <td>{{ !empty($r1_work_area) ? $r1_work_area->nuoc_ngoai : '' }}</td>
+                                    </tr>
 {{--                                        @forelse ($report1 as $key => $row)--}}
 {{--                                            <tr>--}}
 {{--                                                <td>{{ $key + 1 }}</td>--}}
@@ -163,7 +183,7 @@
                 </div>
             </div>
 
-            {{-- Mẫu báo cáo 2 --}}
+            {{-- Mẫu báo cáo 2 tab2 --}}
             <div class="tab-pane fade" id="tab2">
                 <div class="card shadow-sm border mb-4">
                     <div class="card-body">
@@ -181,7 +201,7 @@
                                 <h6 class="text-uppercase mb-1">HỌC VIỆN NÔNG NGHIỆP VIỆT NAM</h6>
                                 <h6 class="mb-3">BAN QUẢN LÝ ĐÀO TẠO</h6>
                                 <h5 class="fw-bold text-decoration-underline mb-0">
-                                    DANH SÁCH SINH VIÊN TỐT NGHIỆP NĂM 2021
+                                    DANH SÁCH SINH VIÊN TỐT NGHIỆP NĂM {{ $schoolYear }}
                                 </h5>
                             </div>
 
@@ -190,7 +210,6 @@
                                     style="font-size: 13px; min-width: 1500px;">
                                     <thead class="align-middle">
                                         <tr>
-                                            <th rowspan="2">TT</th>
                                             <th rowspan="2">Mã sinh viên</th>
                                             <th rowspan="2">Họ và tên</th>
                                             <th rowspan="2">Nữ</th>
@@ -205,7 +224,7 @@
                                             <th rowspan="2">Hình thức khảo sát<br>(Online, điện thoại, email …)</th>
                                             <th rowspan="2">Có phản hồi</th>
                                             <th rowspan="2">Ngành</th>
-                                            <th rowspan="2">Khoa</th>
+                                            <th rowspan="2">Khóa học</th>
                                         </tr>
                                         <tr>
                                             <th>Số Quyết định</th>
@@ -215,102 +234,74 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @foreach($studentTab2 as $item)
+                                        @php $res = \App\Models\EmploymentSurveyResponse::where('student_id', $item->id)
+                                                    ->where('survey_period_id', $survey->id)->first(); @endphp
                                         <tr>
-                                            <td>41</td>
-                                            <td>581576</td>
-                                            <td>Lê Thị Vân Anh</td>
-                                            <td>1</td>
-                                            <td>174733120</td>
-                                            <td>7480201</td>
-                                            <td>122/QĐ-HV</td>
-                                            <td>08/01/2021</td>
+                                            <td>{{ $item->code }}</td>
+                                            <td>{{ $item->full_name }}</td>
+                                            <td>{{ $item->gender == 'male' ? 'Nam' : 'Nữ'  }}</td>
+                                            <td>{{ $item->citizen_identification  }}</td>
+                                            <td>
+{{--                                                @php--}}
+{{--                                                    $major = \App\Models\Major::query()->where('id', $item->training_industry_id)->first();--}}
+{{--                                                @endphp--}}
+{{--                                                {{ $major->code  }}--}}
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $graduation = Illuminate\Support\Facades\DB::table('graduation_student')
+                                                    ->join('graduation', 'graduation_student.graduation_id', '=', 'graduation.id')
+                                                    ->where('graduation_student.student_id', $item->id)
+                                                    ->select('graduation.*')
+                                                    ->first();
+                                                @endphp
+                                                {{ !empty($graduation) ? $graduation->certification : "" }}
+                                            </td>
+                                            <td>{{ !empty($graduation) ? date('d-m-Y', strtotime($graduation->certification_date)) : "" }}</td>
+                                            <td>{{ $item->phone }}</td>
+                                            <td>{{ $item->email }}</td>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Công nghệ thông tin</td>
-                                            <td>Công nghệ Thông tin</td>
+                                            <td>{{ !empty($res) ? 1 : 0 }}</td>
+                                            <td>
+{{--                                                {{ $major->name }}--}}
+                                            </td>
+                                            <td>
+{{--                                                {{ $item->course }}--}}
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td>42</td>
-                                            <td>581577</td>
-                                            <td>Nguyễn Hồng Hạnh</td>
-                                            <td>1</td>
-                                            <td>174733121</td>
-                                            <td>7480201</td>
-                                            <td>122/QĐ-HV</td>
-                                            <td>08/01/2021</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Công nghệ thông tin</td>
-                                            <td>Công nghệ Thông tin</td>
-                                        </tr>
-                                        <tr>
-                                            <td>43</td>
-                                            <td>581578</td>
-                                            <td>Ngô Thị Ngọc Hoa</td>
-                                            <td>1</td>
-                                            <td>174733122</td>
-                                            <td>7480201</td>
-                                            <td>122/QĐ-HV</td>
-                                            <td>08/01/2021</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Công nghệ thông tin</td>
-                                            <td>Công nghệ Thông tin</td>
-                                        </tr>
-                                        <tr>
-                                            <td>44</td>
-                                            <td>581579</td>
-                                            <td>Ngô Trọng Huy</td>
-                                            <td></td>
-                                            <td>174733123</td>
-                                            <td>7480201</td>
-                                            <td>122/QĐ-HV</td>
-                                            <td>08/01/2021</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Công nghệ thông tin</td>
-                                            <td>Công nghệ Thông tin</td>
-                                        </tr>
-                                        <tr>
-                                            <td>45</td>
-                                            <td>596652</td>
-                                            <td>Trần Quốc Khánh</td>
-                                            <td></td>
-                                            <td>174733124</td>
-                                            <td>7480201</td>
-                                            <td>122/QĐ-HV</td>
-                                            <td>08/01/2021</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Công nghệ thông tin</td>
-                                            <td>Công nghệ Thông tin</td>
-                                        </tr>
-                                        <tr>
-                                            <td>46</td>
-                                            <td>596653</td>
-                                            <td>Nguyễn Mạnh Kiên</td>
-                                            <td></td>
-                                            <td>174733125</td>
-                                            <td>7480201</td>
-                                            <td>122/QĐ-HV</td>
-                                            <td>08/01/2021</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Công nghệ thông tin</td>
-                                            <td>Công nghệ Thông tin</td>
-                                        </tr>
+                                    @endforeach
+                                    @foreach($r2 as $item)
+                                            <tr>
+                                                <td>{{ $item->code_student }}</td>
+                                                <td>{{ $item->full_name }}</td>
+                                                <td>{{ $item->gender == 'male' ? 'Nam' : 'Nữ'  }}</td>
+                                                <td>{{ $item->identification_card_number  }}</td>
+                                                <td>
+                                                    @php
+                                                    $major = \App\Models\Major::query()->where('id', $item->training_industry_id)->first();
+                                                    @endphp
+                                                    {{ $major->code  }}
+                                                </td>
+                                                <td>
+                                                    @php
+                                                        $graduation = Illuminate\Support\Facades\DB::table('graduation_student')
+                                                        ->join('graduation', 'graduation_student.graduation_id', '=', 'graduation.id')
+                                                        ->where('graduation_student.student_id', $item->student_id)
+                                                        ->select('graduation.*')
+                                                        ->first();
+                                                    @endphp
+                                                    {{ !empty($graduation) ? $graduation->certification : "" }}
+                                                </td>
+                                                <td>{{ !empty($graduation) ? date('d-m-Y', strtotime($graduation->certification_date)) : "" }}</td>
+                                                <td>{{ $item->phone_number }}</td>
+                                                <td>{{ $item->email }}</td>
+                                                <td></td>
+                                                <td>1</td>
+                                                <td>{{ $major->name }}</td>
+                                                <td>{{ $item->course }}</td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -319,7 +310,7 @@
                 </div>
             </div>
 
-            {{-- Mẫu báo cáo 3 --}}
+            {{-- Mẫu báo cáo 3 tab3 --}}
             <div class="tab-pane fade" id="tab3">
                 <div class="card shadow-sm border mb-4">
                     <div class="card-body">
@@ -337,7 +328,7 @@
                                 <h6 class="text-uppercase mb-1">HỌC VIỆN NÔNG NGHIỆP VIỆT NAM</h6>
                                 <h6 class="mb-3">BAN QUẢN LÝ ĐÀO TẠO</h6>
                                 <h5 class="fw-bold text-decoration-underline mb-0">
-                                    DANH SÁCH SINH VIÊN TỐT NGHIỆP NĂM 2021 PHẢN HỒI VỀ TÌNH HÌNH VIỆC LÀM
+                                    DANH SÁCH SINH VIÊN TỐT NGHIỆP NĂM {{ $schoolYear }} PHẢN HỒI VỀ TÌNH HÌNH VIỆC LÀM
                                 </h5>
                             </div>
 
@@ -346,7 +337,6 @@
                                     style="font-size: 13px; min-width: 3400px;">
                                     <thead class="align-middle">
                                         <tr>
-                                            <th rowspan="3">TT</th>
                                             <th rowspan="3">Mã sinh viên</th>
                                             <th rowspan="3">Họ và tên</th>
                                             <th rowspan="3">Ngày sinh</th>
@@ -363,11 +353,9 @@
                                             <th colspan="4">Thu nhập bình quân/1 tháng</th>
                                             <th colspan="3">Kiến thức, kỹ năng từ nhà trường</th>
                                             <th colspan="5">Hình thức tìm việc làm</th>
-                                            <th colspan="5">Mức độ áp dụng kiến thức</th>
-                                            <th colspan="5">Mức độ áp dụng kỹ năng</th>
                                             <th colspan="8">Kỹ năng mềm cần thiết cho công việc</th>
                                             <th colspan="7">Khóa học đã tham gia sau khi tốt nghiệp</th>
-                                            <th colspan="6">Giải pháp nâng cao tỷ lệ việc làm đúng ngành đào tạo</th>
+                                            <th colspan="7">Giải pháp nâng cao tỷ lệ việc làm đúng ngành đào tạo</th>
                                         </tr>
                                         <tr>
                                             <th colspan="3">Có việc làm</th>
@@ -393,16 +381,16 @@
                                             <th>Tự tìm việc làm</th>
                                             <th>Tự tạo việc làm</th>
                                             <th>Hình thức khác</th>
-                                            <th>Áp dụng rất nhiều</th>
-                                            <th>Áp dụng tương đối nhiều</th>
-                                            <th>Áp dụng ít</th>
-                                            <th>Áp dụng rất ít</th>
-                                            <th>Không áp dụng</th>
-                                            <th>Áp dụng rất nhiều</th>
-                                            <th>Áp dụng tương đối nhiều</th>
-                                            <th>Áp dụng ít</th>
-                                            <th>Áp dụng rất ít</th>
-                                            <th>Không áp dụng</th>
+{{--                                            <th>Áp dụng rất nhiều</th>--}}
+{{--                                            <th>Áp dụng tương đối nhiều</th>--}}
+{{--                                            <th>Áp dụng ít</th>--}}
+{{--                                            <th>Áp dụng rất ít</th>--}}
+{{--                                            <th>Không áp dụng</th>--}}
+{{--                                            <th>Áp dụng rất nhiều</th>--}}
+{{--                                            <th>Áp dụng tương đối nhiều</th>--}}
+{{--                                            <th>Áp dụng ít</th>--}}
+{{--                                            <th>Áp dụng rất ít</th>--}}
+{{--                                            <th>Không áp dụng</th>--}}
                                             <th>Kỹ năng giao tiếp</th>
                                             <th>Kỹ năng lãnh đạo</th>
                                             <th>Kỹ năng thuyết trình</th>
@@ -418,6 +406,7 @@
                                             <th>Phát triển kỹ năng quản lý</th>
                                             <th>Tiếp tục học lên cao</th>
                                             <th>Khác</th>
+                                            <th>Học viện tổ chức các buổi trao đổi</th>
                                             <th>Học viện tổ chức chương trình chia sẻ từ cựu sinh viên</th>
                                             <th>Học viện tổ chức trao đổi với nhà tuyển dụng</th>
                                             <th>Đơn vị tuyển dụng tham gia đào tạo</th>
@@ -432,73 +421,57 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @foreach($r2 as $item)
                                         <tr>
-                                            <td>1</td>
-                                            <td>581001</td>
-                                            <td>Nguyễn Văn A</td>
-                                            <td>01/01/1999</td>
-                                            <td>Nam</td>
-                                            <td>123456789</td>
-                                            <td>7620103</td>
-                                            <td>0912345678</td>
-                                            <td>vana@example.com</td>
-                                            <td>1</td>
+                                            <td>{{ $item->code_student }}</td>
+                                            <td>{{ $item->full_name }}</td>
+                                            <td>{{ !empty($item->dob) ? date('d-m-Y', strtotime($item->dob)) : '' }}</td>
+                                            <td>{{ $item->gender == 'male' ? 'Nam' : 'Nữ'  }}</td>
+                                            <td>{{ $item->identification_card_number  }}</td>
+                                            <td>
+                                                @php
+                                                    $major = \App\Models\Major::query()->where('id', $item->training_industry_id)->first();
+                                                @endphp
+                                                {{ $major->code  }}
+                                            </td>
+                                            <td>{{ $item->phone_number }}</td>
+                                            <td>{{ $item->email }}</td>
+                                            @foreach(config('config.trained_field') as $k => $trained_field)
+                                                <td>{{ $k == $item->trained_field ? 1: 0 }}</td>
+                                            @endforeach
                                             <td>0</td>
                                             <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>01</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>0</td>
-                                            <td>0</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
-                                            <td>1</td>
+                                            @foreach(config('config.work_area') as $k => $v)
+                                                <td>{{ $k == $item->work_area ? 1: 0 }}</td>
+                                            @endforeach
+                                            <td>N/A</td>
+                                            @foreach(config('config.employed_since') as $k => $v)
+                                                <td>{{ $k == $item->employed_since ? 1: 0 }}</td>
+                                            @endforeach
+                                            @foreach(config('config.average_income') as $k => $v)
+                                                <td>{{ $k == $item->average_income ? 1: 0 }}</td>
+                                            @endforeach
+                                            @foreach(config('config.level_knowledge_acquired') as $k => $v)
+                                                <td>{{ $k == $item->level_knowledge_acquired ? 1: 0 }}</td>
+                                            @endforeach
+                                            @foreach(config('config.recruitment_type') as $k => $v)
+                                                @php $data = json_decode($item->recruitment_type, true); @endphp
+                                                <td>{{ in_array($k, data_get($data, 'value')) ? 1: 0 }}</td>
+                                            @endforeach
+                                            @foreach(config('config.soft_skills_required') as $k => $v)
+                                                @php $data = json_decode($item->soft_skills_required, true); @endphp
+                                                <td>{{ in_array($k, data_get($data, 'value')) ? 1: 0 }}</td>
+                                            @endforeach
+                                            @foreach(config('config.must_attended_courses') as $k => $v)
+                                                @php $data = json_decode($item->must_attended_courses, true); @endphp
+                                                <td>{{ in_array($k, data_get($data, 'value')) ? 1: 0 }}</td>
+                                            @endforeach
+                                            @foreach(config('config.solutions_get_job') as $k => $v)
+                                                @php $data = json_decode($item->solutions_get_job, true); @endphp
+                                                <td>{{ in_array($k, data_get($data, 'value')) ? 1: 0 }}</td>
+                                            @endforeach
                                         </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -510,4 +483,30 @@
 
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Khi click vào tab → lưu ID tab
+            const tabLinks = document.querySelectorAll('.nav-link[data-bs-toggle="tab"]');
+            tabLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    const targetId = this.getAttribute('href');
+                    localStorage.setItem('activeTab', targetId);
+                });
+            });
+
+            // Khi load lại → lấy tab đã lưu
+            const lastTab = localStorage.getItem('activeTab');
+            if (lastTab) {
+                const triggerEl = document.querySelector(`.nav-link[href="${lastTab}"]`);
+                if (triggerEl) {
+                    const tab = new bootstrap.Tab(triggerEl);
+                    tab.show();
+                }
+            }
+        });
+    </script>
+
 @endsection
+
+

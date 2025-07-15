@@ -75,7 +75,7 @@ Route::middleware('auth.sso')->group(function () {
 
 
     Route::get('/report', [ReportController::class, 'index'])->name('admin.report.index');
-    Route::get('/charts', [ChartStatisticController::class, 'index'])->name('admin.charts.index');
+    Route::any('/charts', [ChartStatisticController::class, 'index'])->name('admin.charts.index');
     Route::get('/charts/data', [ChartStatisticController::class, 'getChartData;'])->name('admin.charts.data');
 
     Route::name('admin.')->group(function () {
@@ -92,6 +92,7 @@ Route::middleware('auth.sso')->group(function () {
             Route::get('/{id}/form', [SurveyController::class, 'showForm'])->name('form');
             Route::get('/khao-sat/{id}/ket-qua', [SurveyResultController::class, 'index'])->name('result');
             Route::get('/khao-sat/{id}/ket-qua-chi-tiet', [SurveyResultController::class, 'show'])->name('result_detail');
+            Route::get('exportPdf/{resultId}', [SurveyResultController::class, 'exportPdf'])->name('export_pdf');
         });
     });
 });
@@ -208,3 +209,9 @@ Route::get('/khao-sat/hoan-thanh', function () {
 
 Route::post('/api/get-dot-tot-nghiep', [SurveyController::class, 'getDotTotNghiep']);
 // ========== END API ==========
+
+
+
+
+Route::get('ket-qua/{id}', [SurveyResultController::class, 'show'])->name('result_detail_v2');
+Route::any('exportPdf_v2/{resultId}', [SurveyResultController::class, 'exportPdf'])->name('export_pdf_v2');

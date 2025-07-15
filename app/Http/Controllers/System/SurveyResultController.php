@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use App\Models\Graduation;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SurveyResultController extends Controller
 {
@@ -58,7 +59,36 @@ class SurveyResultController extends Controller
             'survey' => $response->survey,
             'major' => $major,
         ];
-//        dd(json_decode($response->job_search_method, true));
         return view('admin.pages.admin.survey.result_detail', $viewData);
+    }
+
+    public function exportPdf($survey_id)
+    {
+        $response = EmploymentSurveyResponse::query()
+            ->with(['student', 'survey'])
+            ->where('id', $survey_id)->first();
+        if (empty($response)) {
+            abort(404);
+        }
+
+        $major = Major::query()->pluck('name', 'id')->toArray();
+
+        $viewData = [
+            'response' => $response,
+            'student' => $response->student,
+            'survey' => $response->survey,
+            'major' => $major,
+        ];
+
+        $pdf = Pdf::loadView('admin.pages.admin.survey.result_detail_2', $viewData)
+            ->setOptions([
+                'defaultFont' => 'DejaVu Sans',
+                'isHtml5ParserEnabled' => true,
+                'isPhpEnabled' => true,
+                'isRemoteEnabled' => true,
+            ]);
+
+
+        return $pdf->download('khao_sat_' . $survey_id . '.pdf');
     }
 }
