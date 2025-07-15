@@ -3,18 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Bootstrap & Icons -->
-{{--    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">--}}
-
-{{--    <!-- Fonts & Icons -->--}}
-{{--    <link href="{{ asset('assets/admin/icons/phosphor/styles.min.css') }}" rel="stylesheet">--}}
-{{--    <link href="{{ asset('assets/admin/icons/fontawesome/styles.min.css') }}" rel="stylesheet">--}}
-
-{{--    <!-- Theme & Custom CSS -->--}}
-{{--    <link href="{{ asset('assets/admin/css/all.min.css') }}" rel="stylesheet">--}}
-
-    <!-- NProgress -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <style>
         body {
@@ -55,14 +44,283 @@
             border-color: #1a73e8;
             box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
         }
+
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+        }
+
     </style>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'DejaVu Sans', sans-serif;
+            background-color: #f7f8fa;
+            color: #333;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .google-form-style {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h6 {
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #1a237e;
+            border-left: 4px solid #1a73e8;
+            padding-left: 10px;
+        }
+
+        .form-section {
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            border-color: #1a73e8;
+            outline: none;
+        }
+        .form-check {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .form-check-input {
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        .form-check-label {
+            display: inline;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .col-12 {
+            flex: 1 1 100%;
+        }
+
+        .col-md-6 {
+            flex: 1 1 calc(50% - 10px);
+        }
+
+        @media (max-width: 768px) {
+            .col-md-6 {
+                flex: 1 1 100%;
+            }
+
+            .google-form-style {
+                padding: 20px;
+            }
+        }
+
+        input[readonly] {
+            background-color: #f0f2f5;
+            color: #555;
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .fw-normal {
+            font-weight: normal;
+        }
+
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .mb-4 {
+            margin-bottom: 2rem;
+        }
+
+        .mt-2 {
+            margin-top: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            display: block;
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+
+        .form-check-input {
+            margin-top: 0;
+            margin-right: 0.5rem;
+            position: static;
+        }
+
+        .form-check-label {
+            margin: 0;
+            font-weight: normal;
+        }
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-size: 13px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        h1, h2 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .radio-item input[type="radio"] {
+            margin-right: 8px;
+            width: 14px;
+            height: 14px;
+        }
+
+        .radio-item label {
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .form-label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .fw-bold {
+            font-weight: bold;
+        }
+
+        .fw-normal {
+            font-weight: normal;
+        }
+
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+
+
+        body {
+            font-family: 'DejaVu Sans', sans-serif;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+            margin: 25px;
+        }
+        body, input, textarea, select, button {
+            font-family: 'DejaVu Sans', sans-serif;
+        }
+
+
+        h1, h2, h3 {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 12px;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        .radio-inline {
+            display: inline-block;
+            margin-right: 18px;
+            font-size: 13px;
+        }
+
+    </style>
+
 </head>
 
 
 <body>
 
 <div class="container py-4">
-    <div class="google-form-style ">
+    <div class="google-form-style">
+        <!-- Header -->
+        <!-- Title -->
+        <div class="form-section">
+            <h5 class="fw-bold text-center">Tên khảo sát: {{ $survey->title }}</h5>
+            <p class="text-end mt-2">
+                <small class="text-muted fst-italic">Thời gian khảo sát: {{ $survey->start_time }} – {{ $survey->end_time }}</small>
+            </p>
+        </div>
+
         <form>
             <div class="form-section">
                 <h6 class="fw-bold">Phần I. Thông tin cá nhân</h6>
@@ -394,61 +652,9 @@
         </form>
     </div>
 </div>
-{{--<div><a target="_blank" href="">Xuất pdf</a></div>--}}
-<div>
-    <a href="#" id="pdf">Xuất pdf</a>
-</div>
-
-
-
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
 </body>
 </html>
 
-<script>
-    $(document).ready(function () {
-        $('#pdf').click(function (e) {
-            e.preventDefault();
-
-            const html = document.documentElement.outerHTML;
-            console.log(html, '//html')
-
-            $.ajax({
-                url: '/exportPdf_v2/110',
-                method: 'POST',
-                data: {
-                    html: JSON.stringify({ html }),
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (res) {
-                    console.log('success')
-                },
-                error: function () {
-                    console.log('error')
-                }
-            });
-
-            // fetch('/exportPdf_v2/110', {
-            //     method: 'POST', // ✅ Đúng method để gửi nội dung
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // ✅ nếu Laravel có csrf
-            //     },
-            //     body: JSON.stringify({ html })
-            // })
-            //     .then(response => response.blob())
-            //     .then(blob => {
-            //         const link = document.createElement('a');
-            //         link.href = window.URL.createObjectURL(blob);
-            //         link.download = "khao_sat_110.pdf"; // ✅ Tên file khi download
-            //         link.click();
-            //     })
-            //     .catch(error => console.error('Export lỗi:', error));
-        });
-    });
-</script>
 
 
 

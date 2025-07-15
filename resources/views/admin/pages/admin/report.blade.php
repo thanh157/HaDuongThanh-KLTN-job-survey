@@ -54,8 +54,8 @@
                     <select name="survey_id" id="survey_id" class="form-select custom-select"
                         onchange="this.form.submit()">
                         <option value="">-- Chọn khảo sát --</option>
-                        @php $survey = \App\Models\Survey::get(); @endphp
-                        @foreach ($survey as $item)
+                        @php $surveyX = \App\Models\Survey::get(); @endphp
+                        @foreach ($surveyX as $item)
                             <option value="{{ $item->id }}" {{ request('survey_id') == $item->id ? "selected" : "" }}>
                                 {{ $item->title }}
                             </option>
@@ -127,6 +127,26 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{ $r1['total_student'] }}</td>
+                                        <td>{{ $r1['total_nu'] }}</td>
+                                        <td>{{ $r1['total_res'] }}</td>
+                                        <td>{{ $r1['total_res_nu'] }}</td>
+                                        <td>{{ !empty($r1_trained_field) ? $r1_trained_field->dung_nganh : '' }}</td>
+                                        <td>{{ !empty($r1_trained_field) ? $r1_trained_field->lien_quan : '' }}</td>
+                                        <td>{{ !empty($r1_trained_field) ? $r1_trained_field->khong_lien_quan : '' }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>100%</td>
+                                        <td>{{ round(($r1['total_res'] / $r1['total_student']) * 100, 2) . '%' }}</td>
+                                        <td>{{ !empty($r1_work_area) ? $r1_work_area->nha_nuoc : '' }}</td>
+                                        <td>{{ !empty($r1_work_area) ? $r1_work_area->tu_nhan : '' }}</td>
+                                        <td>{{ !empty($r1_work_area) ? $r1_work_area->tu_tao : '' }}</td>
+                                        <td>{{ !empty($r1_work_area) ? $r1_work_area->nuoc_ngoai : '' }}</td>
+                                    </tr>
 {{--                                        @forelse ($report1 as $key => $row)--}}
 {{--                                            <tr>--}}
 {{--                                                <td>{{ $key + 1 }}</td>--}}
@@ -214,7 +234,44 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($r2 as $item)
+                                    @foreach($studentTab2 as $item)
+                                        @php $res = \App\Models\EmploymentSurveyResponse::where('student_id', $item->id)
+                                                    ->where('survey_period_id', $survey->id)->first(); @endphp
+                                        <tr>
+                                            <td>{{ $item->code }}</td>
+                                            <td>{{ $item->full_name }}</td>
+                                            <td>{{ $item->gender == 'male' ? 'Nam' : 'Nữ'  }}</td>
+                                            <td>{{ $item->citizen_identification  }}</td>
+                                            <td>
+{{--                                                @php--}}
+{{--                                                    $major = \App\Models\Major::query()->where('id', $item->training_industry_id)->first();--}}
+{{--                                                @endphp--}}
+{{--                                                {{ $major->code  }}--}}
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $graduation = Illuminate\Support\Facades\DB::table('graduation_student')
+                                                    ->join('graduation', 'graduation_student.graduation_id', '=', 'graduation.id')
+                                                    ->where('graduation_student.student_id', $item->id)
+                                                    ->select('graduation.*')
+                                                    ->first();
+                                                @endphp
+                                                {{ !empty($graduation) ? $graduation->certification : "" }}
+                                            </td>
+                                            <td>{{ !empty($graduation) ? date('d-m-Y', strtotime($graduation->certification_date)) : "" }}</td>
+                                            <td>{{ $item->phone }}</td>
+                                            <td>{{ $item->email }}</td>
+                                            <td></td>
+                                            <td>{{ !empty($res) ? 1 : 0 }}</td>
+                                            <td>
+{{--                                                {{ $major->name }}--}}
+                                            </td>
+                                            <td>
+{{--                                                {{ $item->course }}--}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    @foreach($r2 as $item)
                                             <tr>
                                                 <td>{{ $item->code_student }}</td>
                                                 <td>{{ $item->full_name }}</td>
@@ -226,12 +283,21 @@
                                                     @endphp
                                                     {{ $major->code  }}
                                                 </td>
-                                                <td></td>
-                                                <td></td>
+                                                <td>
+                                                    @php
+                                                        $graduation = Illuminate\Support\Facades\DB::table('graduation_student')
+                                                        ->join('graduation', 'graduation_student.graduation_id', '=', 'graduation.id')
+                                                        ->where('graduation_student.student_id', $item->student_id)
+                                                        ->select('graduation.*')
+                                                        ->first();
+                                                    @endphp
+                                                    {{ !empty($graduation) ? $graduation->certification : "" }}
+                                                </td>
+                                                <td>{{ !empty($graduation) ? date('d-m-Y', strtotime($graduation->certification_date)) : "" }}</td>
                                                 <td>{{ $item->phone_number }}</td>
                                                 <td>{{ $item->email }}</td>
                                                 <td></td>
-                                                <td></td>
+                                                <td>1</td>
                                                 <td>{{ $major->name }}</td>
                                                 <td>{{ $item->course }}</td>
                                             </tr>
@@ -289,7 +355,7 @@
                                             <th colspan="5">Hình thức tìm việc làm</th>
                                             <th colspan="8">Kỹ năng mềm cần thiết cho công việc</th>
                                             <th colspan="7">Khóa học đã tham gia sau khi tốt nghiệp</th>
-                                            <th colspan="6">Giải pháp nâng cao tỷ lệ việc làm đúng ngành đào tạo</th>
+                                            <th colspan="7">Giải pháp nâng cao tỷ lệ việc làm đúng ngành đào tạo</th>
                                         </tr>
                                         <tr>
                                             <th colspan="3">Có việc làm</th>
@@ -340,6 +406,7 @@
                                             <th>Phát triển kỹ năng quản lý</th>
                                             <th>Tiếp tục học lên cao</th>
                                             <th>Khác</th>
+                                            <th>Học viện tổ chức các buổi trao đổi</th>
                                             <th>Học viện tổ chức chương trình chia sẻ từ cựu sinh viên</th>
                                             <th>Học viện tổ chức trao đổi với nhà tuyển dụng</th>
                                             <th>Đơn vị tuyển dụng tham gia đào tạo</th>
@@ -377,7 +444,7 @@
                                             @foreach(config('config.work_area') as $k => $v)
                                                 <td>{{ $k == $item->work_area ? 1: 0 }}</td>
                                             @endforeach
-                                            <td>0</td>
+                                            <td>N/A</td>
                                             @foreach(config('config.employed_since') as $k => $v)
                                                 <td>{{ $k == $item->employed_since ? 1: 0 }}</td>
                                             @endforeach

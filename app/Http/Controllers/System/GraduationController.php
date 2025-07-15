@@ -54,6 +54,7 @@ class GraduationController extends Controller
 
 
         $graduations = collect($response['data'] ?? []);
+        dd($graduations);
 
         foreach ($graduations as $item) {
             Graduation::query()->updateOrCreate(

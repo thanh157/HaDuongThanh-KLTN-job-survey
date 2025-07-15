@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\EmploymentSurveyResponse;
+use App\Models\GraduationStudent;
+use App\Models\Student;
 use App\Models\Survey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -231,14 +233,48 @@ class ReportController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]
         );
 
+        $studentTab2 = [];
+        $r1 = [];
         if (request('survey_id')) {
             $survey = Survey::where('id', request('survey_id'))->first();
             if (empty($survey)) {
                 abort(404);
             }
             $allDotTotNghiep = $survey->graduations()->get();
+            $ids = $survey->graduations()->pluck('id')->toArray();
+            $studentIds = GraduationStudent::whereIn('graduation_id', $ids)->pluck('student_id')->toArray();
+            $studentTab2 = Student::query()->whereIn('id', $studentIds)->get();
             $schoolYear = !empty($allDotTotNghiep[0]->school_year) ? $allDotTotNghiep[0]->school_year : '';
             $r2 = EmploymentSurveyResponse::query()->where('survey_period_id', request('survey_id'))->get();
+
+
+            $r1['total_student'] = count($studentTab2);
+            $r1['total_nu'] = 0;
+            foreach ($studentTab2 as $item) {
+                if ($item->gender == 'female') {
+                    $r1['total_nu']++;
+                }
+            }
+            $r1['total_res'] = count($r2);
+            $r1['total_res_nu'] = 0;
+            foreach ($r2 as $item) {
+                if ($item->gender == 'female') {
+                    $r1['total_res_nu']++;
+                }
+            }
+            $r1_trained_field = EmploymentSurveyResponse::query()
+                ->selectRaw("SUM(CASE WHEN employment_status = 1 THEN 1 ELSE 0 END) AS dung_nganh")
+                ->selectRaw("SUM(CASE WHEN employment_status = 2 THEN 1 ELSE 0 END) AS lien_quan")
+                ->selectRaw("SUM(CASE WHEN employment_status = 3 THEN 1 ELSE 0 END) AS khong_lien_quan")
+                ->where('survey_period_id', request('survey_id'))
+                ->first();
+            $r1_work_area = EmploymentSurveyResponse::query()
+                ->selectRaw("SUM(CASE WHEN work_area = 1 THEN 1 ELSE 0 END) AS nha_nuoc")
+                ->selectRaw("SUM(CASE WHEN work_area = 2 THEN 1 ELSE 0 END) AS tu_nhan")
+                ->selectRaw("SUM(CASE WHEN work_area = 3 THEN 1 ELSE 0 END) AS tu_tao")
+                ->selectRaw("SUM(CASE WHEN work_area = 4 THEN 1 ELSE 0 END) AS nuoc_ngoai")
+                ->where('survey_period_id', request('survey_id'))
+                ->first();
         }
 
         return view('admin.pages.admin.report', [
@@ -249,7 +285,11 @@ class ReportController extends Controller
             'selectedGraduationId' => $selectedGraduationId,
             'survey' => !empty($survey) ? $survey : null,
             'schoolYear' => !empty($schoolYear) ? $schoolYear : null,
+            'r1_trained_field' => !empty($r1_trained_field) ? $r1_trained_field : null,
+            'r1_work_area' => !empty($r1_work_area) ? $r1_work_area : null,
+            'studentTab2' => $studentTab2,
             'r2' => !empty($r2) ? $r2 : [],
+            'r1' => $r1,
         ]);
     }
 }
