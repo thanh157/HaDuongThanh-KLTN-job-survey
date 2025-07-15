@@ -26,4 +26,14 @@ class Graduation extends Model
     {
         return $this->belongsToMany(Student::class, 'graduation_student', 'graduation_id', 'student_id');
     }
+
+    public function surveys()
+    {
+        return $this->belongsToMany(Survey::class, 'graduation_survey', 'graduation_id', 'survey_id');
+    }
+
+    public function contactSurveys()
+    {
+        return $this->belongsToMany(ContactSurvey::class, 'contact_survey_graduation', 'graduation_id', 'contact_survey_id');
+    }
 }

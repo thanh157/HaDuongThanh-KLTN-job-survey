@@ -8,10 +8,10 @@
         <!-- Header -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
             <div>
-                <h4 class="fw-bold mb-1">Khảo sát - Đợt khảo sát</h4>
+                <h4 class="fw-bold mb-1">Khảo sát - Khảo sát việc làm</h4>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="#">Đợt khảo sát</a></li>
+                        <li class="breadcrumb-item"><a href="#">Khảo sát việc làm</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Danh sách đợt khảo sát</li>
                     </ol>
                 </nav>

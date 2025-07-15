@@ -152,43 +152,42 @@
             </ul>
         </div>
 
-        <!-- Khảo sát -->
+        <!-- Khảo sát & Cựu sinh viên -->
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
                 <li
-                    class="nav-item-header {{ request()->routeIs('admin.survey.*') || request()->routeIs('admin.survey-all.*') ? 'active-section' : '' }}">
+                    class="nav-item-header
+            {{ request()->routeIs('admin.survey.*') ||
+            request()->routeIs('admin.survey-all.*') ||
+            request()->routeIs('admin.contact-survey.*')
+                ? 'active-section'
+                : '' }}">
                     <span>Khảo sát</span>
                 </li>
+
                 <li class="nav-item">
                     <a href="{{ route('admin.survey.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.survey.index') ? 'active' : '' }}">
+                        class="nav-link {{ request()->routeIs('admin.survey.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-clipboard-question"></i>
                         <span>Khảo sát việc làm</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a href="{{ route('admin.survey.form-survey') }}" class="nav-link {{ request()->routeIs('admin.survey.form-survey') ? 'active' : '' }}">
+                    <a href="{{ route('admin.survey.form-survey') }}"
+                        class="nav-link {{ request()->routeIs('admin.survey.form-survey.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-clipboard-question"></i>
                         <span>Câu hỏi cố định</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
-                    <a href="#"
-                       class="nav-link {{ request()->routeIs('admin.alumni-contact.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.contact-survey.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.contact-survey.*') ? 'active' : '' }}">
                         <i class="fa-solid fa-clipboard-list"></i>
                         <span>Thu thập thông tin cựu sinh viên</span>
                     </a>
                 </li>
-
-
-                {{-- </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.survey-all.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.survey-all.*') ? 'active' : '' }}">
-                        <i class="fa-solid fa-clipboard-list"></i>
-                        <span>Thu thập thông tin cựu sinh viên</span>
-                    </a>
-                </li> --}}
             </ul>
         </div>
 

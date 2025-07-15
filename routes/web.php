@@ -32,17 +32,17 @@ Route::middleware('auth.sso')->group(function () {
         return view('admin.pages.admin.dashboard');
     })->name('admin.dashboard');
 
-//    Route::get('/department', [DepartmentController::class, 'index'])->name('admin.department.index')->middleware('permission:department.index');
+    //    Route::get('/department', [DepartmentController::class, 'index'])->name('admin.department.index')->middleware('permission:department.index');
     // Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
     // Route::get('/graduation', [GraduationController::class, 'index'])->name('admin.graduation.index');
-//    Route::get('/graduation/create', [GraduationController::class, 'create'])->name('admin.graduation.create');
-//    Route::post('/graduation', [GraduationController::class, 'store'])->name('admin.graduation.store');
-//    Route::get('/graduation/{id}/edit', [GraduationController::class, 'edit'])->name('admin.graduation.edit');
-//    Route::put('/graduation/{id}', [GraduationController::class, 'update'])->name('admin.graduation.update');
-//    Route::delete('/graduation/{id}', [GraduationController::class, 'destroy'])->name('admin.graduation.destroy');
-//    Route::get('/graduation/{graduationId}/students/create', [GraduationStudentController::class, 'create'])->name('admin.graduation-student.create');
+    //    Route::get('/graduation/create', [GraduationController::class, 'create'])->name('admin.graduation.create');
+    //    Route::post('/graduation', [GraduationController::class, 'store'])->name('admin.graduation.store');
+    //    Route::get('/graduation/{id}/edit', [GraduationController::class, 'edit'])->name('admin.graduation.edit');
+    //    Route::put('/graduation/{id}', [GraduationController::class, 'update'])->name('admin.graduation.update');
+    //    Route::delete('/graduation/{id}', [GraduationController::class, 'destroy'])->name('admin.graduation.destroy');
+    //    Route::get('/graduation/{graduationId}/students/create', [GraduationStudentController::class, 'create'])->name('admin.graduation-student.create');
     // Xử lý lưu
-//    Route::post('/graduation/{graduationId}/students', [GraduationStudentController::class, 'store'])->name('admin.graduation-student.store');
+    //    Route::post('/graduation/{graduationId}/students', [GraduationStudentController::class, 'store'])->name('admin.graduation-student.store');
 
     Route::get('/create-department', function () {
         return view('admin.pages.admin.create-department');
@@ -97,24 +97,29 @@ Route::middleware('auth.sso')->group(function () {
 });
 
 // Thu thập thông tin cựu sinh viên
-Route::prefix('admin')->name('admin.')->group(function () {
-    // Thu thập thông tin cựu sinh viên
+Route::middleware('auth.sso')->prefix('admin')->name('admin.')->group(function () {
     Route::prefix('contact-survey')->name('contact-survey.')->group(function () {
-        Route::get('/', [ContactSurveyController::class, 'index'])->name('index'); // admin.contact-survey.index
-        Route::get('/create', [ContactSurveyController::class, 'create'])->name('create'); // admin.contact-survey.create
+        Route::get('/', [ContactSurveyController::class, 'index'])->name('index');
+        Route::get('/create', [ContactSurveyController::class, 'create'])->name('create');
         Route::post('/store', [ContactSurveyController::class, 'store'])->name('store');
+
         Route::get('/{id}/edit', [ContactSurveyController::class, 'edit'])->name('edit');
         Route::put('/{id}', [ContactSurveyController::class, 'update'])->name('update');
         Route::delete('/{id}', [ContactSurveyController::class, 'destroy'])->name('destroy');
 
-        // Kết quả khảo sát
-        Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
-
-        // Giao diện sinh viên điền form
+        // Route form xử lý cả GET (hiện) và POST (xác thực)
         Route::get('/{id}/form', [ContactSurveyController::class, 'showForm'])->name('form');
+        Route::post('/{id}/form', [ContactSurveyController::class, 'showForm']);
+
+        Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
         Route::post('/{id}/submit', [ContactSurveyController::class, 'submitForm'])->name('submit');
+
+        // Route API dùng cho dropdown ngành
+        Route::get('/graduation-ceremonies', [ContactSurveyController::class, 'getGraduationCeremonies'])
+            ->name('get-graduation-ceremonies');
     });
 });
+
 // Route::get('/student', function () {
 //     return view('admin.pages.admin.student');
 // })->name('admin.student.index');

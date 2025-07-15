@@ -41,9 +41,13 @@ class Survey extends Model
         return $this->hasMany(EmploymentSurveyResponse::class, 'survey_period_id');
     }
 
+    // public function graduations()
+    // {
+    //     return $this->belongsToMany(Graduation::class, 'graduation_survey');
+    // }
     public function graduations()
     {
-        return $this->belongsToMany(Graduation::class, 'graduation_survey');
+        return $this->belongsToMany(Graduation::class, 'graduation_survey', 'survey_id', 'graduation_id');
     }
 
     public function isActive()
@@ -54,5 +58,9 @@ class Survey extends Model
     public function isInActive()
     {
         return $this->status == self::STATUS_INACTIVE;
+    }
+    public function alumniContacts()
+    {
+        return $this->hasMany(AlumniContact::class, 'survey_batch_id'); // hoặc sửa nếu cột khác
     }
 }

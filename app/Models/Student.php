@@ -35,5 +35,11 @@ class Student extends Model
     {
         return $this->belongsToMany(Graduation::class, 'graduation_student', 'student_id', 'graduation_id');
     }
+
+    public function graduation()
+{
+    return $this->belongsTo(Graduation::class);
+}
+
 }
 

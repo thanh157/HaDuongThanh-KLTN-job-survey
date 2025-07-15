@@ -1,8 +1,8 @@
 <?php
 
-declare(strict_types=1);
 
-namespace App\Http\Controllers\system;
+namespace App\Http\Controllers\System; // chữ hoa đúng thư mục
+
 
 use App\Http\Controllers\Controller;
 use App\Models\Role;
