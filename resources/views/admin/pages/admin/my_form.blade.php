@@ -63,7 +63,8 @@
                     {{ $survey->description }}
                 </p>
                 <p class="text-end mt-2">
-                    <small class="text-muted fst-italic">Thời gian khảo sát: {{ $survey->start_time }} – {{ $survey->end_time }}</small>
+                    <small class="text-muted fst-italic">Thời gian khảo sát: {{ $survey->start_time }} –
+                        {{ $survey->end_time }}</small>
                 </p>
                 @if ($outDate)
                     <div class="text-danger">Đã hết hạn khảo sát</div>
@@ -72,17 +73,17 @@
 
 
 
-            @if($errors->any())
+            @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">
-                        @foreach($errors->all() as $error)
+                        @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
             @endif
 
-            <form action="{{ route("survey.submit") }}" method="POST" id="form-wrapper">
+            <form action="{{ route('survey.submit') }}" method="POST" id="form-wrapper">
                 @csrf
                 @method('POST')
                 @include('admin.layouts.noti')
@@ -96,14 +97,14 @@
 
                     <div class="mb-3">
                         <label for="ma_sv">1. Mã sinh viên</label>
-                        <input type="text" class="form-control" id="code_student" name="code_student" value="622222" readonly required
-                               placeholder="Nhập mã sinh viên" >
+                        <input type="text" class="form-control" id="code_student" name="code_student" value="622222"
+                            readonly required placeholder="Nhập mã sinh viên">
                     </div>
 
                     <div class="mb-3">
                         <label for="ho_ten">2. Họ và tên</label>
                         <input type="text" class="form-control" id="full_name" name="full_name" required
-                               placeholder="Nhập họ và tên đầy đủ">
+                            placeholder="Nhập họ và tên đầy đủ">
                     </div>
 
                     <div class="row">
@@ -113,17 +114,19 @@
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">4. Ngày sinh</label>
-                            <input type="date" class="form-control" name="dob" >
+                            <input type="date" class="form-control" name="dob">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">5. Số căn cước công dân</label>
-                        <input type="text" class="form-control mb-2" placeholder="Nhập số CCCD" name="identification_card_number" required>
+                        <input type="text" class="form-control mb-2" placeholder="Nhập số CCCD"
+                            name="identification_card_number" required>
                         <label class="form-label">Ngày cấp</label>
                         <input type="date" class="form-control mb-2" name="identification_issuance_date" required>
                         <label class="form-label">Nơi cấp</label>
-                        <input type="text" class="form-control" placeholder="Nhập nơi cấp" name="identification_issuance_place" required>
+                        <input type="text" class="form-control" placeholder="Nhập nơi cấp"
+                            name="identification_issuance_place" required>
                     </div>
 
                     <div class="row">
@@ -135,7 +138,7 @@
                             <label class="form-label">7. Tên ngành đào tạo</label>
                             <select name="training_industry_id" class="form-control" required>
                                 <option value="" readonly="readonly">-- select --</option>
-                                @foreach($major as $item)
+                                @foreach ($major as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
@@ -145,7 +148,8 @@
                     <div class="row">
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">8. Số điện thoại</label>
-                            <input type="text" class="form-control" placeholder="Nhập số điện thoại" name="phone_number" required>
+                            <input type="text" class="form-control" placeholder="Nhập số điện thoại" name="phone_number"
+                                required>
                         </div>
                         <div class="col-12 col-md-6 mb-3">
                             <label class="form-label">9. Email</label>
@@ -155,38 +159,43 @@
 
                     <!-- 10. Tình trạng việc làm hiện tại -->
                     <div class="mb-4">
-                        <label class="form-label fw-bold">10. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại</label>
+                        <label class="form-label fw-bold">10. Anh/Chị vui lòng cho biết tình trạng việc làm hiện
+                            tại</label>
                         @php $tinh_trang = config('config.tinh_trang'); @endphp
                         @foreach ($tinh_trang as $index => $value)
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="radio" name="employment_status" required
-                                       id="tt_{{ $index }}" value="{{ $index }}">
+                                    id="tt_{{ $index }}" value="{{ $index }}">
                                 <label class="form-check-label fw-normal"
-                                       for="tt_{{ $index }}">{{ $value }}</label>
+                                    for="tt_{{ $index }}">{{ $value }}</label>
                             </div>
                         @endforeach
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">11. Tên đơn vị tuyển dụng</label>
-                        <input type="text" class="form-control" placeholder="Nhập tên công ty / tổ chức" name="recruit_partner_name" required>
+                        <input type="text" class="form-control" placeholder="Nhập tên công ty / tổ chức"
+                            name="recruit_partner_name" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">12. Địa chỉ đơn vị</label>
                         <div class="form-text mb-3">vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ</div>
-                        <input type="text" class="form-control mb-1" placeholder="Nhập địa chỉ cụ thể" name="recruit_partner_address" required>
+                        <input type="text" class="form-control mb-1" placeholder="Nhập địa chỉ cụ thể"
+                            name="recruit_partner_address" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">13. Thời gian tuyển dụng</label>
-                        <input type="date" class="form-control" placeholder="Nhập năm tuyển dụng (vd: 2025)" name="recruit_partner_date" required>
+                        <input type="date" class="form-control" placeholder="Nhập năm tuyển dụng (vd: 2025)"
+                            name="recruit_partner_date" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">14. Chức vụ, vị trí việc làm</label>
                         <input type="text" class="form-control"
-                               placeholder="VD: Nhân viên kinh doanh, Trưởng phòng sale..." name="recruit_partner_position" required>
+                            placeholder="VD: Nhân viên kinh doanh, Trưởng phòng sale..." name="recruit_partner_position"
+                            required>
                     </div>
                 </div>
 
@@ -199,9 +208,9 @@
                     @foreach (config('config.work_area') as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="work_area" required
-                                   id="kv_{{ $key }}" value="{{ $key }}">
+                                id="kv_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
-                                   for="kv_{{ $key }}">{{ $item }}</label>
+                                for="kv_{{ $key }}">{{ $item }}</label>
                         </div>
                     @endforeach
                 </div>
@@ -212,9 +221,9 @@
                     @foreach (config('config.employed_since') as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="employed_since" required
-                                   id="tg_{{ $key }}" value="{{ $key }}">
+                                id="tg_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
-                                   for="tg_{{ $key }}">{{ $item }}</label>
+                                for="tg_{{ $key }}">{{ $item }}</label>
                         </div>
                     @endforeach
                 </div>
@@ -226,35 +235,37 @@
                     @foreach (config('config.trained_field') as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="trained_field" required
-                                   id="nganh_{{ $key }}" value="{{ $key }}">
+                                id="nganh_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
-                                   for="nganh_{{ $key }}">{{ $item }}</label>
+                                for="nganh_{{ $key }}">{{ $item }}</label>
                         </div>
                     @endforeach
                 </div>
 
                 <!-- 18. Công việc có phù hợp với trình độ chuyên môn -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">18. Công việc Anh/Chị đang đảm nhận có phù hợp với trình độ chuyên môn không?</label>
+                    <label class="form-label fw-bold">18. Công việc Anh/Chị đang đảm nhận có phù hợp với trình độ chuyên
+                        môn không?</label>
                     @foreach (config('config.professional_qualification_field') as $key => $item)
                         <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="professional_qualification_field" required
-                                   id="trinhdo_{{ $key }}" value="{{ $key }}">
+                            <input class="form-check-input" type="radio" name="professional_qualification_field"
+                                required id="trinhdo_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
-                                   for="trinhdo_{{ $key }}">{{ $item }}</label>
+                                for="trinhdo_{{ $key }}">{{ $item }}</label>
                         </div>
                     @endforeach
                 </div>
 
                 <!-- 19. Kiến thức kỹ năng từ trường có phù hợp công việc -->
                 <div class="mb-4">
-                    <label class="form-label fw-bold">19. Anh/Chị có học được kiến thức/kỹ năng cần thiết từ trường cho công việc không?</label>
+                    <label class="form-label fw-bold">19. Anh/Chị có học được kiến thức/kỹ năng cần thiết từ trường cho
+                        công việc không?</label>
                     @foreach (config('config.level_knowledge_acquired') as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="level_knowledge_acquired" required
-                                   id="kt_{{ $key }}" value="{{ $key }}">
+                                id="kt_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
-                                   for="kt_{{ $key }}">{{ $item }}</label>
+                                for="kt_{{ $key }}">{{ $item }}</label>
                         </div>
                     @endforeach
                 </div>
@@ -271,9 +282,9 @@
                     @foreach (config('config.average_income') as $key => $item)
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="average_income" required
-                                   id="tn_{{ $key }}" value="{{ $key }}">
+                                id="tn_{{ $key }}" value="{{ $key }}">
                             <label class="form-check-label fw-normal"
-                                   for="tn_{{ $key }}">{{ $item }}</label>
+                                for="tn_{{ $key }}">{{ $item }}</label>
                         </div>
                     @endforeach
                 </div>
@@ -286,23 +297,23 @@
                     @foreach ($tim_viec as $index => $value)
                         @if ($value == 'Khác')
                             <div class="form-check mb-2">
-                                <input class="form-check-input recruitment_type_other" type="checkbox" name="recruitment_type[]"
-                                       id="ht_{{ $index }}" value="{{ $index }}" >
-                                <label class="form-check-label fw-normal" for="ht_{{ $index }}" >Khác</label>
+                                <input class="form-check-input recruitment_type_other" type="checkbox"
+                                    name="recruitment_type[]" id="ht_{{ $index }}" value="{{ $index }}">
+                                <label class="form-check-label fw-normal" for="ht_{{ $index }}">Khác</label>
                             </div>
                         @else
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" name="recruitment_type[]"
-                                       id="ht_{{ $index }}" value="{{ $index }}">
+                                    id="ht_{{ $index }}" value="{{ $index }}">
                                 <label class="form-check-label fw-normal"
-                                       for="ht_{{ $index }}">{{ $value }}</label>
+                                    for="ht_{{ $index }}">{{ $value }}</label>
                             </div>
                         @endif
                     @endforeach
                     {{-- Input ghi chú nếu chọn "Khác" --}}
                     <div id="recruitment_type_other_wrapper" style="display: none;" class="mt-2">
                         <input type="text" name="recruitment_type_other" id="recruitment_type_other"
-                               class="form-control" placeholder="Nhập ghi chú cụ thể...">
+                            class="form-control" placeholder="Nhập ghi chú cụ thể...">
                     </div>
 
                     <div id="recruitment_type_error" class="text-danger small d-none"></div>
@@ -314,23 +325,24 @@
                     @foreach (config('config.job_search_method') as $key => $item)
                         @if ($item == 'Khác')
                             <div class="form-check mb-2">
-                                <input class="form-check-input job_search_method_other" type="checkbox" name="job_search_method[]"
-                                       id="ht23_{{ $key }}" value="{{ $key }}">
+                                <input class="form-check-input job_search_method_other" type="checkbox"
+                                    name="job_search_method[]" id="ht23_{{ $key }}"
+                                    value="{{ $key }}">
                                 <label class="form-check-label fw-normal" for="ht23_{{ $key }}">Khác</label>
                             </div>
                         @else
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" name="job_search_method[]"
-                                       id="ht23_{{ $key }}" value="{{ $key }}">
+                                    id="ht23_{{ $key }}" value="{{ $key }}">
                                 <label class="form-check-label fw-normal"
-                                       for="ht23_{{ $key }}">{{ $item }}</label>
+                                    for="ht23_{{ $key }}">{{ $item }}</label>
                             </div>
                         @endif
                     @endforeach
                     {{-- Input ghi chú nếu chọn "Khác" --}}
                     <div id="job_search_method_other_wrapper" style="display: none;" class="mt-2">
                         <input type="text" name="job_search_method_other" id="job_search_method_other"
-                               class="form-control" placeholder="">
+                            class="form-control" placeholder="">
                     </div>
                     <div id="job_search_method_error" class="text-danger small d-none"></div>
                 </div>
@@ -343,23 +355,24 @@
                     @foreach ($ky_nang as $index => $value)
                         @if ($value == 'Khác')
                             <div class="form-check mb-2">
-                                <input class="form-check-input soft_skills_required_other" type="checkbox" name="soft_skills_required[]"
-                                       id="ht_{{ $index }}" value="{{ $index }}">
+                                <input class="form-check-input soft_skills_required_other" type="checkbox"
+                                    name="soft_skills_required[]" id="ht_{{ $index }}"
+                                    value="{{ $index }}">
                                 <label class="form-check-label fw-normal" for="ht_{{ $index }}">Khác</label>
                             </div>
                         @else
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" name="soft_skills_required[]"
-                                       id="kn_{{ $index }}" value="{{ $index }}">
+                                    id="kn_{{ $index }}" value="{{ $index }}">
                                 <label class="form-check-label fw-normal"
-                                       for="kn_{{ $index }}">{{ $value }}</label>
+                                    for="kn_{{ $index }}">{{ $value }}</label>
                             </div>
                         @endif
                     @endforeach
                     {{-- Input ghi chú nếu chọn "Khác" --}}
                     <div id="soft_skills_required_other_wrapper" style="display: none;" class="mt-2">
                         <input type="text" name="soft_skills_required_other" id="soft_skills_required_other"
-                               class="form-control" placeholder="Nhập ghi chú cụ thể...">
+                            class="form-control" placeholder="Nhập ghi chú cụ thể...">
                     </div>
                     <div id="soft_skills_required_error" class="text-danger small d-none"></div>
                 </div>
@@ -373,22 +386,23 @@
                     @foreach ($nang_cao as $index => $value)
                         @if ($value == 'Khác')
                             <div class="form-check mb-2">
-                                <input class="form-check-input must_attended_courses_other" type="checkbox" name="must_attended_courses[]"
-                                       id="ht_{{ $index }}" value="{{ $index }}">
+                                <input class="form-check-input must_attended_courses_other" type="checkbox"
+                                    name="must_attended_courses[]" id="ht_{{ $index }}"
+                                    value="{{ $index }}">
                                 <label class="form-check-label fw-normal" for="ht_{{ $index }}">Khác</label>
                             </div>
                         @else
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" name="must_attended_courses[]"
-                                       id="nc_{{ $index }}" value="{{ $index }}">
+                                    id="nc_{{ $index }}" value="{{ $index }}">
                                 <label class="form-check-label fw-normal"
-                                       for="nc_{{ $index }}">{{ $value }}</label>
+                                    for="nc_{{ $index }}">{{ $value }}</label>
                             </div>
                         @endif
                     @endforeach
                     <div id="must_attended_courses_other_wrapper" style="display: none;" class="mt-2">
                         <input type="text" name="must_attended_courses_other" id="must_attended_courses_other"
-                               class="form-control" placeholder="Nhập ghi chú cụ thể...">
+                            class="form-control" placeholder="Nhập ghi chú cụ thể...">
                     </div>
                     <div id="must_attended_courses_error" class="text-danger small d-none"></div>
                 </div>
@@ -402,22 +416,23 @@
                     @foreach ($giai_phap as $index => $value)
                         @if ($value == 'Khác')
                             <div class="form-check mb-2">
-                                <input class="form-check-input solutions_get_job_other" type="checkbox" name="solutions_get_job[]"
-                                       id="ht26_{{ $index }}" value="{{ $index }}">
+                                <input class="form-check-input solutions_get_job_other" type="checkbox"
+                                    name="solutions_get_job[]" id="ht26_{{ $index }}"
+                                    value="{{ $index }}">
                                 <label class="form-check-label fw-normal" for="ht26_{{ $index }}">Khác</label>
                             </div>
                         @else
                             <div class="form-check mb-2">
                                 <input class="form-check-input" type="checkbox" name="solutions_get_job[]"
-                                       id="ht26_{{ $index }}" value="{{ $index }}">
+                                    id="ht26_{{ $index }}" value="{{ $index }}">
                                 <label class="form-check-label fw-normal"
-                                       for="ht26_{{ $index }}">{{ $value }}</label>
+                                    for="ht26_{{ $index }}">{{ $value }}</label>
                             </div>
                         @endif
                     @endforeach
                     <div id="solutions_get_job_other_wrapper" style="display: none;" class="mt-2">
                         <input type="text" name="solutions_get_job_other" id="solutions_get_job_other"
-                               class="form-control" placeholder="Nhập giải pháp khác của bạn tại đây...">
+                            class="form-control" placeholder="Nhập giải pháp khác của bạn tại đây...">
                     </div>
                     <div id="solutions_get_job_error" class="text-danger small d-none"></div>
                 </div>
@@ -447,57 +462,59 @@
 
 
     <!-- 🛡️ Modal nhập MSSV -->
-        <div class="modal fade" id="mssvModal1" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content p-3">
-                    <h5 class="modal-title">Xác thực Sinh viên <small style="font-size: 12px"><i>(điền ít nhất 2 input)</i></small></h5>
+    <div class="modal fade" id="mssvModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3">
+                <h5 class="modal-title">Xác thực Sinh viên <small style="font-size: 12px"><i>(điền ít nhất 2
+                            input)</i></small></h5>
 
-                    <div class="text-danger small d-none" id="total-error"></div>
+                <div class="text-danger small d-none" id="total-error"></div>
 
-                    <div class="modal-body">
-                        <label for="">Mã sv <span class="text-danger">*</span></label>
-                        <input type="text" id="input-mssv" class="form-control" placeholder="Nhập MSSV" name="m_mssv">
-                        <div class="text-danger small d-none" id="mssv-error"></div>
-                    </div>
-                    <div class="modal-body">
-                        <label for="">Email</label>
-                        <input type="email" id="email" name="m_email" class="form-control" placeholder="Nhập email">
-                        <div class="text-danger small d-none" id="email-error"></div>
-                    </div>
-                    <div class="modal-body">
-                        <label for="">Phone</label>
-                        <input type="text" id="phone" name="m_phone" class="form-control" placeholder="Nhập phone">
-                        <div class="text-danger small d-none" id="phone-error"></div>
-                    </div>
-                    <div class="modal-body">
-                        <label for="">CCCD</label>
-                        <input type="text" id="citizen_identification" name="m_citizen_identification" class="form-control" placeholder="Nhập CCCD">
-                        <div class="text-danger small d-none" id="cccd-error"></div>
-                    </div>
-                    <div class="modal-body">
-                        <label for="">Ngày sinh</label>
-                        <input type="date" id="dob" class="form-control" name="m_dob">
-                        <div class="text-danger small d-none" id="dob-error"></div>
-                    </div>
-                    <div class="modal-body">
-                        <label for="">Ngành đào tạo</label>
-                        @php
-                          $major = \App\Models\Major::query()->get();
-                        @endphp
-                        <select name="m_training_industry_id" id="" class="form-control">
-                            <option value="" readonly>--- Chọn ngành đào tạo ---</option>
-                            @foreach($major as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                        <div class="text-danger small d-none" id="training_industry_id-error"></div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" id="verify-mssv-btn">Xác nhận</button>
-                    </div>
+                <div class="modal-body">
+                    <label for="">Mã sv <span class="text-danger">*</span></label>
+                    <input type="text" id="input-mssv" class="form-control" placeholder="Nhập MSSV" name="m_mssv">
+                    <div class="text-danger small d-none" id="mssv-error"></div>
+                </div>
+                <div class="modal-body">
+                    <label for="">Email</label>
+                    <input type="email" id="email" name="m_email" class="form-control" placeholder="Nhập email">
+                    <div class="text-danger small d-none" id="email-error"></div>
+                </div>
+                <div class="modal-body">
+                    <label for="">Phone</label>
+                    <input type="text" id="phone" name="m_phone" class="form-control" placeholder="Nhập phone">
+                    <div class="text-danger small d-none" id="phone-error"></div>
+                </div>
+                <div class="modal-body">
+                    <label for="">CCCD</label>
+                    <input type="text" id="citizen_identification" name="m_citizen_identification"
+                        class="form-control" placeholder="Nhập CCCD">
+                    <div class="text-danger small d-none" id="cccd-error"></div>
+                </div>
+                <div class="modal-body">
+                    <label for="">Ngày sinh</label>
+                    <input type="date" id="dob" class="form-control" name="m_dob">
+                    <div class="text-danger small d-none" id="dob-error"></div>
+                </div>
+                <div class="modal-body">
+                    <label for="">Ngành đào tạo</label>
+                    @php
+                        $major = \App\Models\Major::query()->get();
+                    @endphp
+                    <select name="m_training_industry_id" id="" class="form-control">
+                        <option value="" readonly>--- Chọn ngành đào tạo ---</option>
+                        @foreach ($major as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                    <div class="text-danger small d-none" id="training_industry_id-error"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="verify-mssv-btn">Xác nhận</button>
                 </div>
             </div>
         </div>
+    </div>
 
     <script>
         function toggleOtherInput(checkbox, targetId = 'other_input_box') {
@@ -527,14 +544,14 @@
 
 @push('script')
     <script>
-        $(document).on('change', 'input[type=radio], input[type=checkbox]', function () {
+        $(document).on('change', 'input[type=radio], input[type=checkbox]', function() {
             const $input = $(this);
             const isOther = $input.data('is-other') === true || $input.data('is-other') === 'true';
 
             // Với radio: ẩn tất cả các ô "Khác" cùng nhóm trước
             if ($input.attr('type') === 'radio') {
                 const name = $input.attr('name');
-                $(`input[name="${name}"]`).each(function () {
+                $(`input[name="${name}"]`).each(function() {
                     $(this).closest('.form-check').find('.other-input').addClass('d-none');
                 });
             }
@@ -565,7 +582,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const verified = '{{ old('mssv_verified') }}';
             console.log(verified, '//verified')
             if (!verified) {
@@ -578,8 +595,8 @@
             }
         });
 
-        $(document).ready(function () {
-            $('#verify-mssv-btn').on('click', function () {
+        $(document).ready(function() {
+            $('#verify-mssv-btn').on('click', function() {
                 const survey_id = $('input[name="survey_id"]').val().trim();
                 const mssv = $('input[name="m_mssv"]').val().trim();
                 const email = $('input[name="m_email"]').val().trim();
@@ -629,9 +646,10 @@
                         training_industry_id: nganh,
                         _token: '{{ csrf_token() }}'
                     },
-                    success: function (res) {
+                    success: function(res) {
                         if (res.success) {
-                            const modal = bootstrap.Modal.getInstance(document.getElementById('mssvModal'));
+                            const modal = bootstrap.Modal.getInstance(document.getElementById(
+                                'mssvModal'));
                             modal.hide();
                             $('#form-wrapper').fadeIn();
 
@@ -654,19 +672,23 @@
                                 value: '1'
                             }).appendTo("form");
 
-                            $('#p2').find('input[type=radio], input[type=checkbox], input[type=text], textarea').prop('checked', false).val('');
+                            $('#p2').find(
+                                'input[type=radio], input[type=checkbox], input[type=text], textarea'
+                                ).prop('checked', false).val('');
                         } else {
-                            $totalError.text(res.message || 'Không hợp lệ').removeClass('d-none');
+                            $totalError.text(res.message || 'Không hợp lệ').removeClass(
+                                'd-none');
                         }
                     },
-                    error: function () {
-                        $totalError.text('Đã có lỗi xảy ra, vui lòng thử lại.').removeClass('d-none');
+                    error: function() {
+                        $totalError.text('Đã có lỗi xảy ra, vui lòng thử lại.').removeClass(
+                            'd-none');
                     }
                 });
             });
 
             // 22
-            $('.recruitment_type_other').on('change', function () {
+            $('.recruitment_type_other').on('change', function() {
                 const wrapper = $('#recruitment_type_other_wrapper');
                 const input = $('#recruitment_type_other');
 
@@ -678,7 +700,7 @@
                 }
             });
             // 23
-            $('.job_search_method_other').on('change', function () {
+            $('.job_search_method_other').on('change', function() {
                 const wrapper = $('#job_search_method_other_wrapper');
                 const input = $('#job_search_method_other');
 
@@ -691,7 +713,7 @@
             });
 
             // 24
-            $('.soft_skills_required_other').on('change', function () {
+            $('.soft_skills_required_other').on('change', function() {
                 const wrapper = $('#soft_skills_required_other_wrapper');
                 const input = $('#soft_skills_required_other');
 
@@ -704,7 +726,7 @@
             });
 
             // 25
-            $('.must_attended_courses_other').on('change', function () {
+            $('.must_attended_courses_other').on('change', function() {
                 const wrapper = $('#must_attended_courses_other_wrapper');
                 const input = $('#must_attended_courses_other');
 
@@ -717,7 +739,7 @@
             });
 
             // 26
-            $('.solutions_get_job_other').on('change', function () {
+            $('.solutions_get_job_other').on('change', function() {
                 const wrapper = $('#solutions_get_job_other_wrapper');
                 const input = $('#solutions_get_job_other');
 
@@ -732,9 +754,8 @@
     </script>
 
     <script>
-        $(document).ready(function () {
-            const otherGroups = [
-                {
+        $(document).ready(function() {
+            const otherGroups = [{
                     checkboxClass: '.recruitment_type_other',
                     wrapperId: '#recruitment_type_other_wrapper',
                     inputId: '#recruitment_type_other',
@@ -773,7 +794,7 @@
 
             // Toggle input "Khác"
             otherGroups.forEach(group => {
-                $(group.checkboxClass).on('change', function () {
+                $(group.checkboxClass).on('change', function() {
                     if ($(this).is(':checked')) {
                         $(group.wrapperId).show();
                     } else {
@@ -784,7 +805,7 @@
             });
 
             // Validate khi submit
-            $('#form-wrapper').on('submit', function (e) {
+            $('#form-wrapper').on('submit', function(e) {
                 let hasError = false;
 
                 otherGroups.forEach(group => {
@@ -795,12 +816,14 @@
                     $(group.errorId).addClass('d-none').text('');
 
                     if (checkedCount < 1) {
-                        $(group.errorId).removeClass('d-none').text('Vui lòng chọn ít nhất một lựa chọn.');
+                        $(group.errorId).removeClass('d-none').text(
+                            'Vui lòng chọn ít nhất một lựa chọn.');
                         hasError = true;
                     }
 
                     if (isOtherChecked && otherText === '') {
-                        $(group.errorId).removeClass('d-none').text('Vui lòng nhập ghi chú nếu chọn "Khác".');
+                        $(group.errorId).removeClass('d-none').text(
+                            'Vui lòng nhập ghi chú nếu chọn "Khác".');
                         hasError = true;
                     }
                 });
