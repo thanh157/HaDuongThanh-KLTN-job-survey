@@ -108,18 +108,45 @@ Route::middleware('auth.sso')->prefix('admin')->name('admin.')->group(function (
         Route::put('/{id}', [ContactSurveyController::class, 'update'])->name('update');
         Route::delete('/{id}', [ContactSurveyController::class, 'destroy'])->name('destroy');
 
-        // Route form xử lý cả GET (hiện) và POST (xác thực)
+        // Hiển thị và xác thực form khảo sát
         Route::get('/{id}/form', [ContactSurveyController::class, 'showForm'])->name('form');
-        Route::post('/{id}/form', [ContactSurveyController::class, 'showForm']);
+        Route::post('/{id}/form', [ContactSurveyController::class, 'handleVerify']);
 
-        Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
+        // Gửi kết quả khảo sát
         Route::post('/{id}/submit', [ContactSurveyController::class, 'submitForm'])->name('submit');
 
-        // Route API dùng cho dropdown ngành
+        // Xem kết quả
+        Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
+
+        // API lấy đợt tốt nghiệp theo năm
         Route::get('/graduation-ceremonies', [ContactSurveyController::class, 'getGraduationCeremonies'])
             ->name('get-graduation-ceremonies');
+        
     });
 });
+
+// Route::middleware('auth.sso')->prefix('admin')->name('admin.')->group(function () {
+//     Route::prefix('contact-survey')->name('contact-survey.')->group(function () {
+//         Route::get('/', [ContactSurveyController::class, 'index'])->name('index');
+//         Route::get('/create', [ContactSurveyController::class, 'create'])->name('create');
+//         Route::post('/store', [ContactSurveyController::class, 'store'])->name('store');
+
+//         Route::get('/{id}/edit', [ContactSurveyController::class, 'edit'])->name('edit');
+//         Route::put('/{id}', [ContactSurveyController::class, 'update'])->name('update');
+//         Route::delete('/{id}', [ContactSurveyController::class, 'destroy'])->name('destroy');
+
+//         // Route form xử lý cả GET (hiện) và POST (xác thực)
+//         Route::get('/{id}/form', [ContactSurveyController::class, 'showForm'])->name('form');
+//         Route::post('/{id}/form', [ContactSurveyController::class, 'showForm']);
+
+//         Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
+//         Route::post('/{id}/submit', [ContactSurveyController::class, 'submitForm'])->name('submit');
+
+//         // Route API dùng cho dropdown ngành
+//         Route::get('/graduation-ceremonies', [ContactSurveyController::class, 'getGraduationCeremonies'])
+//             ->name('get-graduation-ceremonies');
+//     });
+// });
 
 // Route::get('/student', function () {
 //     return view('admin.pages.admin.student');
