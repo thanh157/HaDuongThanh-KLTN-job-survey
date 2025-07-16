@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Graduation;
+
 
 class Survey extends Model
 {
@@ -59,8 +61,5 @@ class Survey extends Model
     {
         return $this->status == self::STATUS_INACTIVE;
     }
-    public function alumniContacts()
-    {
-        return $this->hasMany(AlumniContact::class, 'survey_batch_id'); // hoặc sửa nếu cột khác
-    }
+
 }

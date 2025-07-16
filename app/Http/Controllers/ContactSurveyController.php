@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\ContactSurvey; // ✅ Dùng model mới
 use App\Models\Graduation;
 use App\Models\AlumniContact;
+use Carbon\Carbon;
+use App\Models\Student;
 
 class ContactSurveyController extends Controller
 {
@@ -142,32 +144,108 @@ class ContactSurveyController extends Controller
         return view('admin.contact-survey.authenticate', compact('survey'));
     }
 
-    public function handleVerify(Request $request, $id)
-    {
-        $survey = ContactSurvey::findOrFail($id);
+    // public function handleVerify(Request $request, $id)
+    // {
+    //     $survey = ContactSurvey::findOrFail($id);
 
-        $request->validate([
-            'student_code' => 'required|string',
-            'email' => 'required|email',
-        ]);
+    //     $request->validate([
+    //         'student_code' => 'required|string',
+    //         'email' => 'required|email',
+    //     ]);
 
-        return redirect()->route('survey.form', ['id' => $survey->id])
-            ->with('verified', true)
-            ->withInput($request->only(['student_code', 'email']));
-    }
+    //     return redirect()->route('survey.form', ['id' => $survey->id])
+    //         ->with('verified', true)
+    //         ->withInput($request->only(['student_code', 'email']));
+    // }
 
     public function showForm($id)
     {
-        $survey = ContactSurvey::with('graduations.students')->findOrFail($id);
+        $survey = ContactSurvey::with([
+            'graduations.students.trainingIndustry'
+        ])->findOrFail($id);
 
         $students = $survey->graduations->flatMap(function ($graduation) {
             return $graduation->students;
         });
 
-        $studentCode = session()->getOldInput('student_code');
-        $email = session()->getOldInput('email');
+        // Nếu chưa xác thực → hiện form xác thực
+        if (!session()->get("verified_{$id}")) {
+            return view('admin.pages.admin.alumni-info-form.authenticate', compact('survey'));
+        }
+
+        $studentCode = session()->get("student_code_{$id}");
+        $email = session()->get("email_{$id}");
 
         return view('admin.pages.admin.alumni-info-form.form', compact('survey', 'students', 'studentCode', 'email'));
+    }
+
+    public function handleVerify(Request $request, $id)
+    {
+        $request->validate([
+            'student_code' => 'nullable|string',
+            'full_name' => 'nullable|string',
+            'email' => 'nullable|email',
+            'date_of_birth' => 'nullable|date',
+            'training_industry' => 'nullable|string',
+            'school_year_end' => 'nullable|string',
+        ]);
+
+        $survey = ContactSurvey::with('graduations')->findOrFail($id);
+
+        // Lấy danh sách các năm tốt nghiệp của khảo sát này
+        $validSchoolYears = $survey->graduations->pluck('school_year')->toArray();
+
+        // Lọc danh sách sinh viên theo năm tốt nghiệp
+        $students = Student::whereIn('school_year_end', $validSchoolYears)->get();
+
+        // So khớp sinh viên theo điều kiện xác thực
+        $match = $students->first(function ($student) use ($request) {
+            $matched = 0;
+
+            if ($request->student_code && $student->code == $request->student_code) {
+                $matched++;
+            }
+
+            if ($request->full_name && strcasecmp(trim($student->full_name), trim($request->full_name)) == 0) {
+                $matched++;
+            }
+
+            if ($request->email && strtolower($student->email) == strtolower($request->email)) {
+                $matched++;
+            }
+
+            if ($request->date_of_birth && $student->dob) {
+                try {
+                    if (Carbon::parse($student->dob)->toDateString() === Carbon::parse($request->date_of_birth)->toDateString()) {
+                        $matched++;
+                    }
+                } catch (\Exception $e) {
+                    // ignore parsing error
+                }
+            }
+
+            if ($request->training_industry && $student->trainingIndustry && strcasecmp($student->trainingIndustry->name, $request->training_industry) == 0) {
+                $matched++;
+            }
+
+            if ($request->school_year_end && $student->school_year_end == $request->school_year_end) {
+                $matched++;
+            }
+
+            // Chấp nhận nếu có ít nhất 2 thông tin khớp
+            return $matched >= 2;
+        });
+
+        if (!$match) {
+            return back()->withErrors(['Xác thực không thành công. Vui lòng kiểm tra lại thông tin.'])->withInput();
+        }
+
+        // ✅ Lưu vào session
+        session()->put("verified_{$id}", true);
+        session()->put("student_code_{$id}", $match->code);
+        session()->put("email_{$id}", $match->email);
+
+        return redirect()->route('admin.contact-survey.form', ['id' => $id]);
     }
 
     public function submitForm(Request $request, $id)

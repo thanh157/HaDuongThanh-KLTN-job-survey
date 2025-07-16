@@ -27,6 +27,7 @@ class Student extends Model
         'phone',
         'dob',
         'gender',
+        'school_year_end',
         'created_at',
         'updated_at',
     ];
@@ -37,9 +38,13 @@ class Student extends Model
     }
 
     public function graduation()
-{
-    return $this->belongsTo(Graduation::class);
-}
+    {
+        return $this->belongsTo(Graduation::class);
+    }
 
+    public function trainingIndustry()
+    {
+        return $this->belongsTo(Major::class, 'training_industry_id');
+    }
+    
 }
-

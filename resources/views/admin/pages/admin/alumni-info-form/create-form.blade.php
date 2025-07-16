@@ -24,58 +24,60 @@
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#school_year').select2({
-            placeholder: "-- Chọn năm tốt nghiệp --"
-        });
-
-        $('#graduation_id').select2({
-            placeholder: "-- Chọn đợt tốt nghiệp --"
-        });
-
-        let allGraduationOptions = {}; // Lưu đợt tốt nghiệp theo năm
-
-        $('#school_year').on('change', function () {
-            const selectedYears = $(this).val() || [];
-
-            // Bước 1: Xóa các đợt tốt nghiệp của năm đã bị bỏ chọn
-            const currentOptions = $('#graduation_id option');
-            currentOptions.each(function () {
-                const year = $(this).data('year');
-                if (!selectedYears.includes(year?.toString())) {
-                    $(this).remove(); // xoá option
-                }
+    <script>
+        $(document).ready(function() {
+            $('#school_year').select2({
+                placeholder: "-- Chọn năm tốt nghiệp --"
             });
 
-            // Bước 2: Gọi API để lấy đợt tốt nghiệp cho năm mới được chọn
-            $.ajax({
-                url: "{{ route('admin.contact-survey.get-graduation-ceremonies') }}",
-                method: 'POST',
-                data: {
-                    years: selectedYears,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (data) {
-                    data.forEach(function (item) {
-                        const optionExists = $(`#graduation_id option[value="${item.id}"]`).length > 0;
-                        if (!optionExists) {
-                            const newOption = new Option(`${item.name} (${item.school_year})`, item.id, false, false);
-                            $(newOption).attr('data-year', item.school_year); // Gắn năm vào option
-                            $('#graduation_id').append(newOption);
-                        }
-                    });
-                    $('#graduation_id').trigger('change');
-                },
-                error: function () {
-                    alert('Lỗi khi lấy đợt tốt nghiệp!');
-                }
+            $('#graduation_id').select2({
+                placeholder: "-- Chọn đợt tốt nghiệp --"
+            });
+
+            $('#school_year').on('change', function() {
+                const selectedYears = $(this).val() || [];
+
+                // XÓA NHỮNG ĐỢT KHÔNG CÒN THUỘC NĂM ĐÃ CHỌN
+                $('#graduation_id option').each(function() {
+                    const year = $(this).data('year');
+                    if (!selectedYears.includes(year?.toString())) {
+                        $(this).remove(); // xoá các đợt không thuộc năm đã chọn
+                    }
+                });
+
+                // GỌI API để lấy các đợt thuộc năm mới được chọn
+                $.ajax({
+                    url: "{{ route('admin.contact-survey.get-graduation-ceremonies') }}",
+                    method: 'GET',
+                    data: {
+                        years: selectedYears
+                    },
+                    success: function(data) {
+                        data.forEach(function(item) {
+                            // Nếu chưa có đợt tốt nghiệp này thì mới thêm vào
+                            const exists = $(
+                                    `#graduation_id option[value="${item.id}"]`)
+                                .length > 0;
+                            if (!exists) {
+                                const newOption = new Option(
+                                    `${item.name} (${item.school_year})`, item.id,
+                                    false, false);
+                                $(newOption).attr('data-year', item.school_year);
+                                $('#graduation_id').append(newOption);
+                            }
+                        });
+
+                        $('#graduation_id').trigger('change');
+                    },
+                    error: function() {
+                        alert('Lỗi khi lấy đợt tốt nghiệp!');
+                    }
+                });
             });
         });
-    });
-</script>
-
+    </script>
 @endpush
+
 
 @section('content')
     <div class="container py-4">
@@ -158,12 +160,11 @@
                                 multiple></select>
                         </div>
 
-                        <small class="text-danger"><i>Vui lòng kiểm tra kĩ trước khi tạo!</i></small>
+                        <small class="text-danger"><i>Vui lòng kiểm tra kỹ trước khi tạo!</i></small>
                     </div>
                 </div>
             </div>
 
-            <!-- Nút tạo -->
             <div class="mt-4 d-flex justify-content-end">
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-save me-1"></i> Tạo
