@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContactSurvey;
 use App\Models\EmploymentSurveyResponse;
 use App\Models\Major;
 use App\Models\Student;
@@ -118,6 +119,76 @@ class KhaoSatController extends Controller
                 'success' => false,
                 'message' => 'Mã sinh viên không hợp lệ hoặc không thuộc đợt tốt nghiệp này.',
             ]);
+        }
+    }
+
+    public function verifyV2(Request $request)
+    {
+        try {
+            $surveyId = $request->input('survey_id');
+
+            $code = $request->input('m_mssv');
+            $phone = $request->input('m_phone');
+            $email = $request->input('m_email');
+            $dob = $request->input('m_dob');
+            $industry_id = $request->input('training_industry');
+
+            // Kiểm tra mã sinh viên có nhập không
+            if (empty($code)) {
+                return redirect()->back()->with('error', 'Vui lòng nhập mã sinh viên (MSSV)');
+            }
+
+            // Kiểm tra survey có tồn tại không
+            $survey = ContactSurvey::find($surveyId);
+            if (empty($survey)) {
+                return redirect()->back()->with('error', 'Khảo sát không tồn tại');
+            }
+
+            $student = Student::query()
+                ->where('code', $code)
+                ->first();
+
+            if (!$student) {
+                return redirect()->back()->with('error', 'Không tìm thấy sinh viên có mã này trong khảo sát')->withInput();
+            }
+
+            $invalidFields = [];
+
+            if (!empty($email) && $student->email !== $email) {
+                $invalidFields[] = 'email';
+            }
+
+            if (!empty($dob) && $student->dob !== $dob) {
+                $invalidFields[] = 'dob';
+            }
+
+            if (!empty($phone) && $student->phone_number !== $phone) {
+                $invalidFields[] = 'phone';
+            }
+
+            if (!empty($industry_id) && $student->training_industry_id != $industry_id) {
+                $invalidFields[] = 'training_industry_id';
+            }
+
+            if (count($invalidFields) > 0) {
+                return redirect()->back()->with('error', 'Thông tin xác thực không khớp: ' . implode(',', $invalidFields))->withInput();
+            }
+
+            // ✅ Lưu vào session
+            $id = $surveyId;
+            session()->put("verified_{$id}", true);
+            session()->put("student_code_{$id}", $student->code);
+            session()->put("email_{$id}", $student->email);
+
+            return redirect()->route('admin.contact-survey.form', ['id' => $id]);
+
+            return response()->json([
+                'success' => true,
+                'student' => $student,
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return redirect()->back()->withInput()->with('error', 'Không tìm thấy sinh viên có mã này trong khảo sát');
         }
     }
 

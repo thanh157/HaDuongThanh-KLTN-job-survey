@@ -32,28 +32,38 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('admin.contact-survey.handleVerify', $survey->id) }}" class="text-start mt-4">
+                @if(session('error'))
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('verifyV2') }}" class="text-start mt-4">
                     @csrf
                     @method('POST')
 
-                    <div class="mb-3">
-                        <label class="form-label">Mã sinh viên</label>
-                        <input type="text" name="student_code" class="form-control" value="{{ old('student_code') }}">
-                    </div>
+                    <input type="hidden" name="survey_id" value="{{ $survey->id }}">
 
                     <div class="mb-3">
-                        <label class="form-label">Họ và tên</label>
-                        <input type="text" name="full_name" class="form-control" value="{{ old('full_name') }}">
+                        <label class="form-label">Mã sinh viên</label>
+                        <input type="text" name="m_mssv" class="form-control" value="{{ old('m_mssv') }}">
+                    </div>
+
+                    <div class="modal-body">
+                        <label for="">Phone</label>
+                        <input type="text" id="phone" name="m_phone" class="form-control" placeholder="Nhập phone" value="{{ old('m_phone') }}">
+                        <div class="text-danger small d-none" id="phone-error"></div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Email sinh viên</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email') }}">
+                        <input type="email" name="m_email" class="form-control" value="{{ old('m_email') }}">
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Ngày sinh</label>
-                        <input type="date" name="date_of_birth" class="form-control" value="{{ old('date_of_birth') }}">
+                        <input type="date" name="m_dob" class="form-control" value="{{ old('m_dob') }}">
                     </div>
 
                     @php
@@ -64,24 +74,10 @@
                         <select name="training_industry" class="form-select select2" id="industry-select">
                             <option value="" readonly>--- Chọn ngành đào tạo ---</option>
                             @foreach ($major as $item)
-                                <option value="{{ $item->name }}">{{ $item->name }}</option>
-
+                                <option value="{{ $item->id }}" {{ old('training_industry') == $item->id ? "selected" : "" }}>{{ $item->name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    @php
-                        $namTotNghiepX = \App\Models\Graduation::select('school_year')->groupBy('school_year')->pluck('school_year')->toArray();
-                    @endphp
-                    <div class="mb-3">
-                        <label class="form-label">Năm tốt nghiệp</label>
-                        <select name="school_year_end" class="form-select select2" id="year-select">
-                            <option value="">-- Chọn năm tốt nghiệp --</option>
-                            @foreach ($namTotNghiepX as $nam)
-                                <option value="{{ $nam }}">{{ $nam }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     <button type="submit" class="btn btn-success w-100 mt-2">🔐 Xác thực</button>
                 </form>
             </div>

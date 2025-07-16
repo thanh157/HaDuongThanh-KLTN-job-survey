@@ -121,7 +121,7 @@ Route::middleware('auth.sso')->prefix('admin')->name('admin.')->group(function (
         // API lấy đợt tốt nghiệp theo năm
         Route::get('/graduation-ceremonies', [ContactSurveyController::class, 'getGraduationCeremonies'])
             ->name('get-graduation-ceremonies');
-        
+
     });
 });
 
@@ -231,6 +231,7 @@ Route::post('send_mail/{survey_id}', [KhaoSatController::class, 'sendMail'])->na
 
 // ========== API ==========
 Route::post('/api/khao-sat/verify-student', [KhaoSatController::class, 'verify'])->name('verify');
+Route::post('/api/khao-sat/verify-student-2', [KhaoSatController::class, 'verifyV2'])->name('verifyV2');
 
 Route::post('/khao-sat/submit', [KhaoSatController::class, 'submit'])->name('survey.submit');
 
