@@ -32,8 +32,9 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('admin.contact-survey.form', $survey->id) }}" class="text-start mt-4">
+                <form method="POST" action="{{ route('admin.contact-survey.handleVerify', $survey->id) }}" class="text-start mt-4">
                     @csrf
+                    @method('POST')
 
                     <div class="mb-3">
                         <label class="form-label">Mã sinh viên</label>
