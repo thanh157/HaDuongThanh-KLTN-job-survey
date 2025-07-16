@@ -37,9 +37,9 @@ class Student extends Model
     }
 
     public function graduation()
-{
-    return $this->belongsTo(Graduation::class);
-}
+    {
+        return $this->belongsTo(Graduation::class);
+    }
 
 }
 

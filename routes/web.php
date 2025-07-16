@@ -135,16 +135,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::get('/students/{id}/detail', [StudentDetailController::class, 'show'])->name('student-info');
 
 
-Route::get('/student-info', function () {
-    return view('admin.pages.admin.student-info');
-})->name('admin.student-info.index');
+//Route::get('/student-info', function () {
+//    return view('admin.pages.admin.student-info');
+//})->name('admin.student-info.index');
+
+Route::get('student-info', [StudentController::class, 'listStudent'])->name('admin.student-info.index');
 
 Route::get('/admin/student-detail/{id}', [StudentController::class, 'show'])->name('admin.student.detail');
 
 
-Route::get('/alumni-show', function () {
-    return view('admin.pages.admin.alumni-show');
-})->name('admin.alumni-show');
+//Route::get('/alumni-show', function () {
+//    return view('admin.pages.admin.alumni-show');
+//})->name('admin.alumni-show');
+
+Route::get('alumni-show/{studentId}/{surveyId}', [StudentController::class, 'hopNhat'])->name('admin.alumni-show');
 
 // Route::get('/class-detail;', function () {
 //     return view('admin.pages.admin.class-detail');

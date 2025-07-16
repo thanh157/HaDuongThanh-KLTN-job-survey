@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('contact_survey_graduation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('contact_survey_id')->constrained()->onDelete('cascade');
-            $table->foreignId('graduation_id')->constrained()->onDelete('cascade');
+            $table->integer('contact_survey_id');
+            $table->integer('graduation_id');
         });
     }
 

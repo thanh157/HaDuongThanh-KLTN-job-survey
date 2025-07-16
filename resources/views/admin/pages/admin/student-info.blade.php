@@ -37,88 +37,65 @@
                     <thead class="table-light">
                         <tr>
                             <th>STT</th>
+                            <th>ID</th>
                             <th>Mã SV</th>
                             <th>Họ tên</th>
-                            <th>Lớp</th>
-                            <th>Ngành</th>
-                            <th>Khóa</th>
-                            <th>Trạng thái việc làm</th>
-                            <th>Khảo sát</th>
+                            <th>Survey</th>
+                            <th>Đợt tốt nghiệp</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
+                    @foreach($student as $item)
                         @php
-                            $students = collect([
-                                [
-                                    'id' => 698519,
-                                    'name' => 'Phạm Thị Huyền',
-                                    'class' => 'CNTT01',
-                                    'course' => 'K65',
-                                    'status' => 'Đã có việc làm',
-                                ],
-                                [
-                                    'id' => 698522,
-                                    'name' => 'Nguyễn Văn Minh',
-                                    'class' => 'CNTT01',
-                                    'course' => 'K65',
-                                    'status' => 'Chưa có việc làm',
-                                ],
-                                [
-                                    'id' => 698523,
-                                    'name' => 'Lê Thị Mai',
-                                    'class' => 'CNTT02',
-                                    'course' => 'K64',
-                                    'status' => 'Tiếp tục học',
-                                ],
-                                [
-                                    'id' => 698524,
-                                    'name' => 'Đặng Văn Hùng',
-                                    'class' => 'CNTT02',
-                                    'course' => 'K63',
-                                    'status' => 'Đã có việc làm',
-                                ],
-                                [
-                                    'id' => 698525,
-                                    'name' => 'Trần Thị Hoa',
-                                    'class' => 'CNTT03',
-                                    'course' => 'K65',
-                                    'status' => 'Đã có việc làm',
-                                ],
-                            ]);
-
-                            $keyword = request('keyword');
-                            if ($keyword) {
-                                $students = $students->filter(
-                                    fn($s) => str_contains($s['id'], $keyword) ||
-                                        str_contains(Str::lower($s['name']), Str::lower($keyword)),
-                                );
+                            $surveyIds =\App\Models\EmploymentSurveyResponse::where('student_id', $item->id)->pluck('survey_period_id')->toArray();
+                            $surveys = [];
+                            if (!empty($surveyIds)) {
+                                $surveys = \App\Models\Survey::whereIn('id', $surveyIds)->get();
                             }
                         @endphp
 
-                        @forelse ($students as $index => $student)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $student['id'] }}</td>
-                                <td>{{ $student['name'] }}</td>
-                                <td>{{ $student['class'] }}</td>
-                                <td>Công nghệ thông tin</td>
-                                <td>{{ $student['course'] }}</td>
-                                <td>{{ $student['status'] }}</td>
-                                <td><span class="badge bg-success">Đã khảo sát</span></td>
-                                <td>
-                                    <a href="{{ route('admin.alumni-show', $student['id']) }}" class="btn btn-sm btn-info">
-                                        <i class="bi bi-eye"></i> Xem
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="9">Không tìm thấy sinh viên phù hợp.</td>
-                            </tr>
-                        @endforelse
+                        <tr>
+                            <td>{{ ($student->currentPage() - 1) * $student->perPage() + $loop->iteration }}</td>
+                            <td>{{ $item->id }}</td>
+                            <td>{{ $item->code }}</td>
+                            <td>{{ $item->full_name }}</td>
+                            <td>
+                                @foreach($surveys as $s)
+                                    @php
+                                    $res = \App\Models\EmploymentSurveyResponse::where('student_id', $item->id)->where('survey_period_id', $s->id)->first();
+                                    @endphp
+                                    @if(!empty($res))
+                                    <div><a href="{{ route('admin.survey.result_detail', ['id' => $res->id]) }}">{{ $s->title }}</a></div>
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>
+                                @php
+                                $gIds = $surveyIds ? \App\Models\GraduationSurvey::where('survey_id', $surveyIds)->pluck('graduation_id')->toArray() : [];
+                                $g = \App\Models\Graduation::whereIn('id', $gIds)->get();
+                                @endphp
+                                @foreach($g as $itemX)
+                                    <div><a href="{{ route('admin.graduation-student.show', ['id' => $itemX->id]) }}">{{ $itemX->name }}</a></div>
+                                @endforeach
+                            </td>
+                            <td>
+                                @foreach($surveys as $s)
+                                    <div style="margin-bottom: 3px">
+                                        <a href="{{ route('admin.alumni-show', ['studentId' => $item->id, 'surveyId' => $s->id]) }}" class="btn btn-sm btn-info">
+                                            <i class="bi bi-eye"></i> Xem
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
+                {{-- Phân trang --}}
+                <div class="d-flex justify-content-center mt-3">
+                    {{ $student->links('pagination::bootstrap-5') }}
+                </div>
             </div>
         </div>
     </div>

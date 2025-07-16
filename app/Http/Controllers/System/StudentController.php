@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmploymentSurveyResponse;
+use App\Models\Major;
+use App\Models\Student;
+use App\Models\Survey;
 use Illuminate\Http\Request;
 use App\Services\StudentService;
 use Illuminate\Support\Arr;
@@ -186,5 +190,47 @@ class StudentController extends Controller
         return response()->json([
             'data' => $students->values()
         ]);
+    }
+
+    public function listStudent()
+    {
+        $keyword = request('keyword');
+        $student = Student::query()->with(['graduation']);
+        if ($keyword) {
+            $student->where('code', $keyword)->orWhere('full_name', 'like', "%$keyword%");
+        }
+        $student = $student->paginate(20);
+
+        $viewData = [
+            'student' => $student
+        ];
+
+        return view('admin.pages.admin.student-info', $viewData);
+    }
+
+    public function hopNhat($studentId, $surveyId)
+    {
+        $student = Student::where('id', $studentId)->first();
+        $survey = Survey::where('id', $surveyId)->first();
+
+        if (empty($survey) || empty($student)) {
+            return abort(404);
+        }
+
+        $res = EmploymentSurveyResponse::where('survey_period_id', $surveyId)->where('student_id', $studentId)->first();
+        if (empty($res)) {
+            return abort(404);
+        }
+
+        $major = Major::query()->pluck('name', 'id')->toArray();
+
+        $viewData = [
+            'survey' => $survey,
+            'response' => $res,
+            'student' => $student,
+            'major' => $major,
+        ];
+
+        return view('admin.pages.admin.alumni-show', $viewData);
     }
 }
