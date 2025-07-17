@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('student_code')->unique(); // Mã SV
             $table->string('full_name')->nullable();
             $table->string('gender')->nullable();
+            $table->string('course')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('place_of_birth')->nullable();
 

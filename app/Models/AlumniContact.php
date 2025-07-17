@@ -13,7 +13,7 @@ class AlumniContact extends Model
 
     protected $fillable = [
         'student_code',
-        'class_code',
+        'course',
         'full_name',
         'gender',
         'date_of_birth',

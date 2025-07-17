@@ -108,15 +108,6 @@ Route::middleware('auth.sso')->prefix('admin')->name('admin.')->group(function (
         Route::put('/{id}', [ContactSurveyController::class, 'update'])->name('update');
         Route::delete('/{id}', [ContactSurveyController::class, 'destroy'])->name('destroy');
 
-        // Hiển thị và xác thực form khảo sát
-        Route::get('/{id}/form', [ContactSurveyController::class, 'showForm'])->name('form');
-        Route::post('/{id}/form', [ContactSurveyController::class, 'handleVerify']);
-
-        // Gửi kết quả khảo sát
-        Route::post('/{id}/submit', [ContactSurveyController::class, 'submitForm'])->name('submit');
-        Route::get('/thankyou', function () {
-            return view('admin.contact-survey.thankyou');
-        })->name('thankyou');
         // Xem kết quả
         Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
 
@@ -241,6 +232,16 @@ Route::post('/khao-sat/submit', [KhaoSatController::class, 'submit'])->name('sur
 Route::get('/khao-sat/hoan-thanh', function () {
     return view('admin.pages.survey.thankyou');
 })->name('survey.thankyou');
+
+
+// ========== Hiển thị và xác thực form khảo sát cho cựu sv ==========
+Route::prefix('contact-survey')->name('contact-survey.')->group(function () {
+    Route::get('{id}/form', [ContactSurveyController::class, 'showForm'])->name('form');
+    Route::post('{id}/form', [ContactSurveyController::class, 'handleVerify']);
+    Route::post('{id}/submit', [ContactSurveyController::class, 'submitForm'])->name('submit');
+    Route::get('thankyou', [ContactSurveyController::class, 'thankyou'])->name('thankyou');
+});
+// ========== Hiển thị và xác thực form khảo sát cho cựu sv ==========
 
 Route::post('/api/get-dot-tot-nghiep', [SurveyController::class, 'getDotTotNghiep']);
 // ========== END API ==========

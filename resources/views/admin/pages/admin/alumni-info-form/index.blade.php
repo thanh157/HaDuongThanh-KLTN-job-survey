@@ -67,7 +67,7 @@
                                     </a>
                                     <!-- Nút sao chép link khảo sát -->
                                     <button class="btn btn-outline-secondary btn-sm" title="Sao chép đường dẫn khảo sát"
-                                        onclick="copySurveyLink('{{ route('admin.contact-survey.form', ['id' => $batch->id]) }}')">
+                                        onclick="copySurveyLink('{{ route('contact-survey.form', ['id' => $batch->id]) }}')">
                                         <i class="bi bi-clipboard"></i>
                                     </button>
 

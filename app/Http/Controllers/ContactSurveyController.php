@@ -174,9 +174,14 @@ class ContactSurveyController extends Controller
         }
 
         $studentCode = session()->get("student_code_{$id}");
+        $student = Student::where('code', $studentCode)->first();
+        if (empty($student)) {
+            Log::error("Not found student with code $studentCode");
+            abort(404);
+        }
         $email = session()->get("email_{$id}");
 
-        return view('admin.pages.admin.alumni-info-form.form', compact('survey', 'students', 'studentCode', 'email'));
+        return view('admin.pages.admin.alumni-info-form.form', compact('student', 'survey', 'students', 'studentCode', 'email'));
     }
 
     public function handleVerify(Request $request, $id)
@@ -250,18 +255,26 @@ class ContactSurveyController extends Controller
 
     public function submitForm(Request $request, $id)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'student_code' => 'required',
-            'class_code' => 'required',
+            'course' => 'required',
             'full_name' => 'required',
             'phone' => 'required',
             'email' => 'required|email',
             'address' => 'required',
+        ], [], [
+            'course' => 'Khóa học',
         ]);
 
-        AlumniContact::create([
-            'student_code' => $request->student_code,
-            'class_code' => $request->class_code,
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        AlumniContact::updateOrCreate([
+            'survey_batch_id' => $id,
+            'student_code' => request('student_code'),
+        ], [
+            'course' => $request->course,
             'full_name' => $request->full_name,
             'gender' => $request->gender,
             'date_of_birth' => $request->date_of_birth,
@@ -275,10 +288,11 @@ class ContactSurveyController extends Controller
             'company_address' => $request->company_address,
             'company_phone' => $request->company_phone,
             'company_email' => $request->company_email,
-            'survey_batch_id' => $id,
         ]);
 
-        return redirect()->route('admin.contact-survey.thankyou')->with('success', 'Cảm ơn bạn đã hoàn thành khảo sát!');
+        session()->forget("verified_{$id}");
+
+        return redirect()->route('contact-survey.thankyou')->with('success', 'Cảm ơn bạn đã hoàn thành khảo sát!');
     }
 
     public function getGraduationCeremonies(Request $request)
@@ -305,5 +319,10 @@ class ContactSurveyController extends Controller
     {
         // Tùy mục đích hiển thị, bạn viết tiếp xử lý tại đây
         return view('admin.contact-survey.view-results'); // ví dụ trả về 1 view nào đó
+    }
+
+    public function thankyou()
+    {
+        return view('admin.pages.admin.alumni-info-form.thankyou');
     }
 }
