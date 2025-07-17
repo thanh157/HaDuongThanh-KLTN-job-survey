@@ -25,7 +25,7 @@
         <tbody>
             @forelse ($results as $index => $result)
                 <tr>
-                    <td>{{ $index + 1 }}</td>
+                    <td>{{ ($results->currentPage() - 1) * $results->perPage() + $loop->iteration }}</td>
                     <td>
                         <div>Mã: {{ $result->student_code }}</div>
                         <div>Họ tên: {{ $result->full_name }}</div>
