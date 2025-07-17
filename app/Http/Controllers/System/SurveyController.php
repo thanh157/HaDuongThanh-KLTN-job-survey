@@ -74,37 +74,46 @@ class SurveyController extends Controller
     public function edit($id)
     {
         $survey = Survey::with('graduations')->findOrFail($id);
-        $namTotNghiep = Graduation::select('school_year')->groupBy('school_year')->pluck('school_year')->toArray();
-        $dotTotNghiep = Graduation::get();
-        $allDotTotNghiep = $survey->graduations()->get();
-        $schoolYear = !empty($allDotTotNghiep[0]->school_year) ? $allDotTotNghiep[0]->school_year : '';
-        $viewData = [
-            'survey' => $survey,
-            'namTotNghiep' => $namTotNghiep,
-            'dotTotNghiep' => $dotTotNghiep,
-            'allDotTotNghiep' => $allDotTotNghiep,
-            'schoolYear' => $schoolYear,
-        ];
-        return view('admin.pages.admin.survey.edit', $viewData);
+
+        // Lấy danh sách năm tốt nghiệp duy nhất
+        $namTotNghiep = Graduation::select('school_year')->distinct()->orderBy('school_year', 'desc')->pluck('school_year');
+
+        // Lấy tất cả đợt tốt nghiệp
+        $allDotTotNghiep = Graduation::orderBy('school_year', 'desc')->get();
+
+        // Lấy các ID đợt tốt nghiệp đã được chọn
+        $selectedGraduationIds = $survey->graduations->pluck('id')->toArray();
+
+        return view('admin.pages.admin.survey.edit', compact(
+            'survey',
+            'namTotNghiep',
+            'allDotTotNghiep',
+            'selectedGraduationIds'
+        ));
     }
+
 
     public function update($id, Request $request)
     {
         DB::beginTransaction();
         try {
-            $validator = Validator::make($request->all(), [
-                'graduation_id' => 'required|array|min:1',
+            $rules = [
+                'title' => 'required|string|max:255',
+                'description' => 'nullable|string',
                 'start_time' => 'required|date',
-                'end_time' => 'bail|required|date|after_or_equal:start_time',
-            ], [
-                'end_time.after_or_equal' => 'Thời gian kết thúc không được trước thời gian bắt đầu.',
-                'end_time.after' => 'Thời gian kết thúc phải lớn hơn hiện tại.',
-                'graduation_id.required' => 'Vui lòng chọn ít nhất một đợt tốt nghiệp.',
-            ]);
+                'end_time' => 'required|date|after_or_equal:start_time',
+                'status' => 'required|in:0,1',
+            ];
 
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
+            // Nếu đang bật khảo sát → bắt buộc phải chọn đợt tốt nghiệp
+            if ($request->status == 1) {
+                $rules['graduation_id'] = 'required|array|min:1';
             }
+
+            $validated = $request->validate($rules, [
+                'graduation_id.required' => 'Vui lòng chọn ít nhất một đợt tốt nghiệp.',
+                'end_time.after_or_equal' => 'Thời gian kết thúc không được trước thời gian bắt đầu.',
+            ]);
 
             $survey = Survey::findOrFail($id);
 
@@ -116,17 +125,20 @@ class SurveyController extends Controller
                 'status' => $request->status,
             ]);
 
-            // Đồng bộ các đợt tốt nghiệp vào pivot
-            $survey->graduations()->sync($request->graduation_id);
+            if ($request->status == 1) {
+                $graduationIds = $request->graduation_id ?? $survey->graduations->pluck('id')->toArray();
+                $survey->graduations()->sync($graduationIds);
+            }
 
             DB::commit();
             return redirect()->route('admin.survey.index')->with('success', 'Cập nhật khảo sát thành công!');
         } catch (\Exception $e) {
-            Log::error($e);
             DB::rollBack();
-            return redirect()->route('admin.survey.index')->with('error', 'Lỗi');
+            Log::error($e);
+            return redirect()->route('admin.survey.index')->with('error', 'Lỗi cập nhật khảo sát');
         }
     }
+
 
     public function destroy($id)
     {

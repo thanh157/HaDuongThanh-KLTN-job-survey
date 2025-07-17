@@ -114,7 +114,9 @@ Route::middleware('auth.sso')->prefix('admin')->name('admin.')->group(function (
 
         // Gửi kết quả khảo sát
         Route::post('/{id}/submit', [ContactSurveyController::class, 'submitForm'])->name('submit');
-
+        Route::get('/thankyou', function () {
+            return view('admin.contact-survey.thankyou');
+        })->name('thankyou');
         // Xem kết quả
         Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
 
@@ -122,6 +124,7 @@ Route::middleware('auth.sso')->prefix('admin')->name('admin.')->group(function (
         Route::get('/graduation-ceremonies', [ContactSurveyController::class, 'getGraduationCeremonies'])
             ->name('get-graduation-ceremonies');
 
+        Route::get('/api/student-info', [ContactSurveyController::class, 'getStudentInfo'])->name('api.student-info');
     });
 });
 

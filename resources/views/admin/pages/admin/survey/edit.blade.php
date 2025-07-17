@@ -7,11 +7,12 @@
     <style>
         .select2-container .select2-selection--multiple {
             min-height: 38px;
-            max-height: 80px; /* hoặc 100px tùy độ dài */
+            max-height: 80px;
             overflow-y: auto;
             padding-bottom: 4px;
             width: 100% !important;
         }
+
         .select2-container--default .select2-selection--multiple .select2-selection__rendered {
             white-space: normal;
             overflow-x: hidden;
@@ -28,7 +29,6 @@
 
 @section('content')
     <div class="container py-4">
-        <!-- Breadcrumb và tiêu đề -->
         <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 gap-2">
             <div>
                 <h4 class="fw-bold mb-1">Đợt khảo sát - Chỉnh sửa</h4>
@@ -45,17 +45,16 @@
             </a>
         </div>
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
-                    @foreach($errors->all() as $error)
+                    @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
             </div>
-    @endif
+        @endif
 
-    <!-- Form -->
         <form action="{{ route('admin.survey.update', $survey->id) }}" method="POST">
             @csrf
             @method('PUT')
@@ -66,22 +65,25 @@
                         <h6 class="mb-3">Thông tin chung</h6>
                         <div class="mb-3">
                             <label class="form-label">Tiêu đề</label>
-                            <input type="text" class="form-control" name="title" required value="{{ $survey->title }}" {{ $survey->isInActive() ? "readonly" : "" }}>
+                            <input type="text" class="form-control" name="title" required value="{{ $survey->title }}"
+                                {{ $survey->isInActive() ? 'readonly' : '' }}>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mô tả</label>
-                            <textarea name="description" class="form-control" rows="3" {{ $survey->isInActive() ? "readonly" : "" }}>{{ $survey->description }}</textarea>
+                            <textarea name="description" class="form-control" rows="3" {{ $survey->isInActive() ? 'readonly' : '' }}>{{ $survey->description }}</textarea>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Bắt đầu</label>
-                                <input type="datetime-local" class="form-control" name="start_time" required {{ $survey->isInActive() ? "readonly" : "" }}
-                                        value="{{ old('start_time', \Carbon\Carbon::parse($survey->start_time)->format('Y-m-d\TH:i')) }}">
+                                <input type="datetime-local" class="form-control" name="start_time" required
+                                    {{ $survey->isInActive() ? 'readonly' : '' }}
+                                    value="{{ old('start_time', \Carbon\Carbon::parse($survey->start_time)->format('Y-m-d\TH:i')) }}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Kết thúc</label>
-                                <input type="datetime-local" class="form-control" name="end_time" required {{ $survey->isInActive() ? "readonly" : "" }}
-                                       value="{{ old('end_time', \Carbon\Carbon::parse($survey->end_time)->format('Y-m-d\TH:i')) }}">
+                                <input type="datetime-local" class="form-control" name="end_time" required
+                                    {{ $survey->isInActive() ? 'readonly' : '' }}
+                                    value="{{ old('end_time', \Carbon\Carbon::parse($survey->end_time)->format('Y-m-d\TH:i')) }}">
                             </div>
                         </div>
                     </div>
@@ -94,42 +96,37 @@
 
                         <div class="mb-3">
                             <label class="form-label">Năm tốt nghiệp</label>
-                            <input type="text" disabled value="{{ $schoolYear }}">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Đợt tốt nghiệp</label>
-                            <select class="form-select" name="graduation_id[]" required multiple id="graduation_id" {{ $survey->isInActive() ? "readonly" : "" }} readonly="true">
-                                @php
-                                    $selectedDots = old('graduation_id', $survey->graduations->pluck('id')->toArray());
-                                @endphp
-
-                                @foreach($allDotTotNghiep as $dot)
-                                    <option value="{{ $dot->id }}"
-                                        {{ in_array($dot->id, $selectedDots) ? 'selected' : '' }}>
-                                        {{ $dot->name }}
+                            <select class="form-select" multiple id="school_years"
+                                {{ $survey->isInActive() ? 'disabled' : '' }}>
+                                @foreach ($namTotNghiep as $year)
+                                    <option value="{{ $year }}"
+                                        {{ in_array($year, $survey->graduations->pluck('school_year')->unique()->toArray()) ? 'selected' : '' }}>
+                                        {{ $year }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <script>
-                            $( document ).ready(function() {
-                                $('#graduation_id').select2();
-
-                                // Ngăn mở dropdown
-                                $('#graduation_id').on('select2:opening', function (e) {
-                                    e.preventDefault();
-                                });
-                            });
-
-                        </script>
+                        <div class="mb-3">
+                            <label class="form-label">Đợt tốt nghiệp</label>
+                            <select class="form-select" multiple name="graduation_id[]" id="graduation_id"
+                                {{ $survey->isInActive() ? 'disabled' : '' }}>
+                                @foreach ($allDotTotNghiep as $dot)
+                                    <option value="{{ $dot->id }}"
+                                        {{ in_array($dot->id, $selectedGraduationIds) ? 'selected' : '' }}>
+                                        {{ $dot->name }} ({{ $dot->school_year }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <h6 class="mb-3">Trạng thái</h6>
                         <div class="mb-3">
                             <select class="form-select" name="status">
-                                <option value="{{ \App\Models\Survey::STATUS_ACTIVE }}" {{ $survey->status == \App\Models\Survey::STATUS_ACTIVE ? 'selected' : '' }}>Hoạt động </option>
-                                <option value="{{ \App\Models\Survey::STATUS_INACTIVE }}" {{ $survey->status == \App\Models\Survey::STATUS_INACTIVE ? 'selected' : '' }}>Ẩn</option>
+                                <option value="{{ \App\Models\Survey::STATUS_ACTIVE }}"
+                                    {{ $survey->status == \App\Models\Survey::STATUS_ACTIVE ? 'selected' : '' }}>Hoạt động</option>
+                                <option value="{{ \App\Models\Survey::STATUS_INACTIVE }}"
+                                    {{ $survey->status == \App\Models\Survey::STATUS_INACTIVE ? 'selected' : '' }}>Ẩn</option>
                             </select>
                         </div>
                     </div>
@@ -144,7 +141,53 @@
             </div>
         </form>
     </div>
+
+    @push('script')
+    <script>
+        $(document).ready(function() {
+            $('#school_years').select2();
+            $('#graduation_id').select2();
+
+            $('#school_years').on('change', function() {
+                const selectedYears = $(this).val() ?? [];
+
+                if (selectedYears.length === 0) {
+                    $('#graduation_id').empty().trigger('change');
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route('admin.contact-survey.get-graduation-ceremonies') }}',
+                    type: 'GET',
+                    data: { years: selectedYears },
+                    success: function(data) {
+                        const currentSelected = $('#graduation_id').val() ?? [];
+                        $('#graduation_id').empty();
+
+                        data.forEach(item => {
+                            const isSelected = currentSelected.includes(item.id.toString());
+                            $('#graduation_id').append(
+                                `<option value="${item.id}" ${isSelected ? 'selected' : ''}>
+                                    ${item.name} (${item.school_year})
+                                 </option>`
+                            );
+                        });
+
+                        $('#graduation_id').trigger('change');
+                    },
+                    error: function() {
+                        alert('Không thể tải đợt tốt nghiệp. Vui lòng thử lại!');
+                    }
+                });
+            });
+
+            @if ($survey->isInActive())
+                $('#school_years, #graduation_id').on('select2:opening', function(e) {
+                    e.preventDefault();
+                });
+            @endif
+        });
+    </script>
+    @endpush
+
 @endsection
-
-
-

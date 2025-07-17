@@ -278,7 +278,7 @@ class ContactSurveyController extends Controller
             'survey_batch_id' => $id,
         ]);
 
-        return redirect()->route('alumni-thankyou')->with('success', 'Cảm ơn bạn đã hoàn thành khảo sát!');
+        return redirect()->route('admin.contact-survey.thankyou')->with('success', 'Cảm ơn bạn đã hoàn thành khảo sát!');
     }
 
     public function getGraduationCeremonies(Request $request)
@@ -291,5 +291,19 @@ class ContactSurveyController extends Controller
 
         $data = Graduation::whereIn('school_year', $years)->get(['id', 'name', 'school_year']);
         return response()->json($data);
+    }
+
+    public function surveyResults($id)
+    {
+        $survey = ContactSurvey::findOrFail($id);
+        $results = AlumniContact::where('survey_batch_id', $id)->get();
+
+        return view('admin.pages.admin.alumni-info-form.results', compact('survey', 'results'));
+    }
+
+    public function viewResults()
+    {
+        // Tùy mục đích hiển thị, bạn viết tiếp xử lý tại đây
+        return view('admin.contact-survey.view-results'); // ví dụ trả về 1 view nào đó
     }
 }

@@ -22,7 +22,7 @@
                     <thead class="table-light">
                         <tr class="text-nowrap">
                             <th>STT</th>
-                            <th>Mã bộ môn</th>
+                            {{-- <th>Mã bộ môn</th> --}}
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
                                     <span>Tên bộ môn</span>
@@ -80,7 +80,7 @@
                         @forelse ($departments['data'] as $index => $department)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $department['code'] ?? '---' }}</td>
+                                {{-- <td>{{ $department['code'] ?? '---' }}</td> --}}
                                 <td>{{ $department['name'] }}</td>
                                 <td>{{ $department['description'] ?? '---' }}</td>
                                 <td>

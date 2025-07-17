@@ -1,3 +1,6 @@
+@php
+    $auth = app(\App\Services\SsoService::class)->getDataUser();
+@endphp
 <!-- Main sidebar -->
 <div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg">
     <style>
@@ -275,8 +278,10 @@
                 </div>
             </div>
             <div>
-                <div class="fw-bold text-white" style="font-size: 16px;">Supper Admin CNTT</div>
-                <div class="text-white-50" style="font-size: 13px;">admincntt@vnua.edu.vn</div>
+                @if (auth()->check())
+                    <div class="fw-bold text-white" style="font-size: 16px;">{{ $auth['full_name'] }}</div>
+                    <div class="text-white-50" style="font-size: 13px;">{{ $auth['email'] }}</div>
+                @endif
             </div>
         </div>
     </div>

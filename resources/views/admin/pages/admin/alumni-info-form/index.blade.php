@@ -81,9 +81,10 @@
                                     </form>
 
                                     <a href="{{ route('admin.contact-survey.results', $batch->id) }}"
-                                        class="btn btn-outline-success btn-sm" title="Xem kết quả">
-                                        <i class="bi bi-bar-chart"></i>
+                                        class="btn btn-outline-primary btn-sm">
+                                        Xem kết quả ({{ $batch->responses_count }})
                                     </a>
+
                                 </td>
                             </tr>
                         @empty

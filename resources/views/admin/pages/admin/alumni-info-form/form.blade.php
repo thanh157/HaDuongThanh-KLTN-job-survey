@@ -75,13 +75,16 @@
 
                     <div class="mb-3">
                         <label>Mã sinh viên *</label>
-                        <input type="text" name="student_code" class="form-control" placeholder="Nhập mã sinh viên" required>
+                        <input type="text" name="student_code" id="student-code" class="form-control"
+                            placeholder="Nhập mã sinh viên" required>
+
                     </div>
 
                     <div class="mb-3">
-                        <label>Mã lớp *</label>
-                        <input type="text" name="class_code" class="form-control" placeholder="Nhập mã lớp" required>
+                        <label>Khóa học</label>
+                        <input type="text" id="student-course" class="form-control" readonly>
                     </div>
+
                 </div>
 
                 <div class="form-section">
@@ -113,17 +116,20 @@
 
                     <div class="mb-3">
                         <label>Địa chỉ *</label>
-                        <input type="text" name="address" class="form-control" placeholder="Nhập địa chỉ hiện tại" required>
+                        <input type="text" name="address" class="form-control" placeholder="Nhập địa chỉ hiện tại"
+                            required>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label>Điện thoại *</label>
-                            <input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại" required>
+                            <input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại"
+                                required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>Email *</label>
-                            <input type="email" name="email" class="form-control" placeholder="Nhập địa chỉ email" required>
+                            <input type="email" name="email" class="form-control" placeholder="Nhập địa chỉ email"
+                                required>
                         </div>
                     </div>
 
@@ -149,17 +155,20 @@
 
                     <div class="mb-3">
                         <label>Địa chỉ</label>
-                        <input type="text" name="company_address" class="form-control" placeholder="Nhập địa chỉ công ty">
+                        <input type="text" name="company_address" class="form-control"
+                            placeholder="Nhập địa chỉ công ty">
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label>Điện thoại</label>
-                            <input type="text" name="company_phone" class="form-control" placeholder="Nhập số điện thoại công ty">
+                            <input type="text" name="company_phone" class="form-control"
+                                placeholder="Nhập số điện thoại công ty">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>Email</label>
-                            <input type="email" name="company_email" class="form-control" placeholder="Nhập email công ty">
+                            <input type="email" name="company_email" class="form-control"
+                                placeholder="Nhập email công ty">
                         </div>
                     </div>
                 </div>
@@ -170,4 +179,22 @@
             </form>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const studentCodeInput = document.getElementById('student-code');
+        const studentCourseInput = document.getElementById('student-course');
+
+        studentCodeInput.addEventListener('input', function () {
+            const code = this.value.trim();
+            if (code.length >= 2 && /^\d+$/.test(code)) {
+                const course = code.substring(0, 2);
+                studentCourseInput.value = 'Khóa: ' + course;
+            } else {
+                studentCourseInput.value = '';
+            }
+        });
+    });
+    
+</script>
+
 @endsection

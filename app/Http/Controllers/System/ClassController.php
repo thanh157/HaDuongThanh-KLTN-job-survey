@@ -96,6 +96,7 @@ class ClassController extends Controller
                 'access_token' => Arr::get($token, 'access_token'),
             ]);
             $class['student_count'] = count($studentResponse['data'] ?? []);
+        
         }
 
         $perPage = 6;
