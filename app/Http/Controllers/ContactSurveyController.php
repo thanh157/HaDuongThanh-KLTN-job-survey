@@ -315,10 +315,27 @@ class ContactSurveyController extends Controller
         return view('admin.pages.admin.alumni-info-form.results', compact('survey', 'results'));
     }
 
-    public function viewResults()
+    /**
+     * @param $id: contact_surveys.id
+     * @return \Illuminate\Container\Container|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|mixed|object
+     */
+    public function viewResults($id)
     {
-        // Tùy mục đích hiển thị, bạn viết tiếp xử lý tại đây
-        return view('admin.contact-survey.view-results'); // ví dụ trả về 1 view nào đó
+        $survey = ContactSurvey::where('id', $id)->first();
+        if (empty($survey)) {
+            abort(404);
+        }
+        $results = AlumniContact::where('survey_batch_id', $id)->paginate(2);
+        $count = AlumniContact::where('survey_batch_id', $id)->count();
+        if (empty($survey)) {
+            abort(404);
+        }
+        $viewData = [
+            'survey' => $survey,
+            'results' => $results,
+            'count' => $count,
+        ];
+        return view('admin.pages.admin.alumni-info-form.results', $viewData);
     }
 
     public function thankyou()

@@ -56,7 +56,8 @@
                                 <td>{{ \Carbon\Carbon::parse($batch->start_time)->format('d/m/Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($batch->end_time)->format('d/m/Y') }}</td>
                                 <td>
-                                    <strong class="text-warning">{{ $batch->responses_count }}</strong> /
+                                    @php $res = \App\Models\AlumniContact::where('survey_batch_id', $batch->id)->count(); @endphp
+                                    <a href="{{ route('admin.contact-survey.results', ['id' => $batch->id]) }}"><strong class="text-warning">{{ $res }}</strong></a> /
                                     {{ $batch->total_students }}
                                 </td>
 
@@ -82,7 +83,7 @@
 
                                     <a href="{{ route('admin.contact-survey.results', $batch->id) }}"
                                         class="btn btn-outline-primary btn-sm">
-                                        Xem kết quả ({{ $batch->responses_count }})
+                                        Xem kết quả ({{ $res }})
                                     </a>
 
                                 </td>
