@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\System;
 
 use App\Http\Controllers\Controller;
+use App\Models\AlumniContact;
+use App\Models\ContactSurvey;
 use App\Models\EmploymentSurveyResponse;
 use App\Models\Major;
 use App\Models\Student;
@@ -211,13 +213,13 @@ class StudentController extends Controller
     public function hopNhat($studentId, $surveyId)
     {
         $student = Student::where('id', $studentId)->first();
-        $survey = Survey::where('id', $surveyId)->first();
+        $survey = ContactSurvey::where('id', $surveyId)->first();
 
         if (empty($survey) || empty($student)) {
             return abort(404);
         }
 
-        $res = EmploymentSurveyResponse::where('survey_period_id', $surveyId)->where('student_id', $studentId)->first();
+        $res = AlumniContact::where('survey_batch_id', $surveyId)->where('student_code', $student->code)->first();
         if (empty($res)) {
             return abort(404);
         }

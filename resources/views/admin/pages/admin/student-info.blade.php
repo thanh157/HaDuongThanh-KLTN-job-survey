@@ -9,11 +9,11 @@
                 <h4 class="fw-bold mb-1">Quản lý thông tin cựu sinh viên</h4>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.student-info.index') }}">Thông tin cựu sinh
-                                viên</a>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.student-info.index') }}">Thông tin cựu sinh viên</a>
                         </li>
-
                         <li class="breadcrumb-item active" aria-current="page">Thông tin sinh viên đã khảo sát</li>
+                    </ol>
                 </nav>
             </div>
 
@@ -48,10 +48,10 @@
                     <tbody>
                     @foreach($student as $item)
                         @php
-                            $surveyIds =\App\Models\EmploymentSurveyResponse::where('student_id', $item->id)->pluck('survey_period_id')->toArray();
+                            $surveyIds =\App\Models\AlumniContact::where('student_code', $item->code)->pluck('survey_batch_id')->toArray();
                             $surveys = [];
                             if (!empty($surveyIds)) {
-                                $surveys = \App\Models\Survey::whereIn('id', $surveyIds)->get();
+                                $surveys = \App\Models\ContactSurvey::whereIn('id', $surveyIds)->get();
                             }
                         @endphp
 
@@ -63,16 +63,16 @@
                             <td>
                                 @foreach($surveys as $s)
                                     @php
-                                    $res = \App\Models\EmploymentSurveyResponse::where('student_id', $item->id)->where('survey_period_id', $s->id)->first();
+                                    $res = \App\Models\AlumniContact::where('student_code', $item->code)->where('survey_batch_id', $s->id)->first();
                                     @endphp
                                     @if(!empty($res))
-                                    <div><a href="{{ route('admin.survey.result_detail', ['id' => $res->id]) }}">{{ $s->title }}</a></div>
+                                    <div><a href="{{ route('admin.contact-survey.results', ['id' => $s->id]) }}">{{ $s->title }}</a></div>
                                     @endif
                                 @endforeach
                             </td>
                             <td>
                                 @php
-                                $gIds = $surveyIds ? \App\Models\GraduationSurvey::where('survey_id', $surveyIds)->pluck('graduation_id')->toArray() : [];
+                                $gIds = $surveyIds ? \App\Models\ContactSurveyGraduation::where('contact_survey_id', $surveyIds)->pluck('graduation_id')->toArray() : [];
                                 $g = \App\Models\Graduation::whereIn('id', $gIds)->get();
                                 @endphp
                                 @foreach($g as $itemX)
