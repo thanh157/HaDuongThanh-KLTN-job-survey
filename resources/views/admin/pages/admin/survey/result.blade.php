@@ -55,7 +55,7 @@
                     ← Quay lại danh sách
                 </a>
             @else
-                <a href="{{ route('admin.contact-survey.index') }}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('admin.survey.index') }}" class="btn btn-outline-primary btn-sm">
                     ← Quay lại ds khảo sát
                 </a>
             @endif

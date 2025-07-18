@@ -141,13 +141,18 @@
 
         <!-- Tốt nghiệp -->
         <div class="sidebar-section">
+            @php
+                $isGraduationActive =
+                    request()->routeIs('admin.graduation.*') || request()->routeIs('admin.graduation-student.*');
+            @endphp
+
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                <li class="nav-item-header {{ request()->routeIs('admin.graduation.*') ? 'active-section' : '' }}">
+                <li class="nav-item-header {{ $isGraduationActive ? 'active-section' : '' }}">
                     <span>Tốt nghiệp</span>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.graduation.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.graduation.*') ? 'active' : '' }}">
+                        class="nav-link {{ $isGraduationActive ? 'active' : '' }}">
                         <i class="fa-solid fa-user-graduate"></i>
                         <span>Đợt tốt nghiệp</span>
                     </a>
@@ -155,8 +160,9 @@
             </ul>
         </div>
 
+
         <!-- Khảo sát & Cựu sinh viên -->
-        <div class="sidebar-section">
+        {{-- <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
                 <li
                     class="nav-item-header
@@ -184,6 +190,46 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ route('admin.contact-survey.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.contact-survey.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <span>Thu thập thông tin cựu sinh viên</span>
+                    </a>
+                </li>
+            </ul>
+        </div> --}}
+
+        <div class="sidebar-section">
+            <ul class="nav nav-sidebar" data-nav-type="accordion">
+                @php
+                    $isSurveyActive =
+                        request()->routeIs('admin.survey.*') || request()->routeIs('admin.contact-survey.*');
+                @endphp
+
+                <li class="nav-item-header {{ $isSurveyActive ? 'active-section' : '' }}">
+                    <span>Khảo sát</span>
+                </li>
+
+                {{-- Khảo sát việc làm --}}
+                <li class="nav-item">
+                    <a href="{{ route('admin.survey.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.survey.*') && !request()->routeIs('admin.survey.form-survey') ? 'active' : '' }}">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                        <span>Khảo sát việc làm</span>
+                    </a>
+                </li>
+
+                {{-- Câu hỏi cố định --}}
+                <li class="nav-item">
+                    <a href="{{ route('admin.survey.form-survey') }}"
+                        class="nav-link {{ request()->routeIs('admin.survey.form-survey') ? 'active' : '' }}">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                        <span>Form câu hỏi cố định</span>
+                    </a>
+                </li>
+
+                {{-- Thu thập thông tin cựu sinh viên --}}
                 <li class="nav-item">
                     <a href="{{ route('admin.contact-survey.index') }}"
                         class="nav-link {{ request()->routeIs('admin.contact-survey.*') ? 'active' : '' }}">
@@ -220,28 +266,42 @@
 
 
         <!-- Quản lý thông tin cựu sinh viên -->
+        @php
+            $isAlumniInfoActive =
+                request()->routeIs('admin.student.*') ||
+                request()->routeIs('admin.student-info.*') ||
+                request()->routeIs('admin.alumni-show');
+
+            $isStudentListActive = request()->routeIs('admin.student.*');
+            $isStudentInfoActive =
+                request()->routeIs('admin.student-info.*') || request()->routeIs('admin.alumni-show');
+        @endphp
+
         <div class="sidebar-section">
             <ul class="nav nav-sidebar" data-nav-type="accordion">
-                <li
-                    class="nav-item-header {{ request()->routeIs('admin.student.*') || request()->routeIs('admin.student-info.*') ? 'active-section' : '' }}">
+                <li class="nav-item-header {{ $isAlumniInfoActive ? 'active-section' : '' }}">
                     <span>Quản lý thông tin cựu sinh viên</span>
                 </li>
+
                 <li class="nav-item">
                     <a href="{{ route('admin.student.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.student.*') ? 'active' : '' }}">
+                        class="nav-link {{ $isStudentListActive ? 'active' : '' }}">
                         <i class="fa-solid fa-users"></i>
                         <span>Danh sách cựu sinh viên</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="{{ route('admin.student-info.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.student-info.*') ? 'active' : '' }}">
+                        class="nav-link {{ $isStudentInfoActive ? 'active' : '' }}">
                         <i class="fa-solid fa-id-card"></i>
                         <span>Thông tin chi tiết cựu sinh viên</span>
                     </a>
                 </li>
             </ul>
         </div>
+
+
 
 
         <!-- Hệ thống -->

@@ -41,18 +41,20 @@
                     </thead>
                     <tbody>
 
-                        @foreach($data as $item)
+                        @foreach ($data as $item)
                             <tr>
                                 <td>{{ $item->title }}</td>
-                                <td>{{ $item->isActive() ? "Hoạt động" : "Ẩn" }}</td>
+                                <td>{{ $item->isActive() ? 'Hoạt động' : 'Ẩn' }}</td>
 
                                 <td>
                                     @if ($item->graduations->count() > 0)
-                                        @foreach($item->graduations as $dot)
-                                            <a target="_blank" href="{{ route('admin.graduation-student.show', ['id' => $dot->id]) }}" class="d-block text-decoration-none text-primary mb-1">
+                                        @foreach ($item->graduations as $dot)
+                                            <a target="_blank"
+                                                href="{{ route('admin.graduation-student.show', ['id' => $dot->id]) }}"
+                                                class="d-block text-decoration-none text-primary mb-1">
                                                 {{ $dot->name }}
                                             </a>
-                                            <hr/>
+                                            <hr />
                                         @endforeach
                                     @endif
                                 </td>
@@ -61,9 +63,14 @@
                                 <td>{{ $item->end_time }}</td>
                                 <td>
                                     @php
-                                        $totalPhanHoi = App\Models\EmploymentSurveyResponse::where('survey_period_id', $item->id)->count();
+                                        $totalPhanHoi = App\Models\EmploymentSurveyResponse::where(
+                                            'survey_period_id',
+                                            $item->id,
+                                        )->count();
                                         $countDot = $item->graduations()->pluck('id')->toArray();
-                                        $countStudent = \App\Models\GraduationStudent::query()->whereIn('graduation_id', $countDot)->count();
+                                        $countStudent = \App\Models\GraduationStudent::query()
+                                            ->whereIn('graduation_id', $countDot)
+                                            ->count();
                                     @endphp
 
                                     <strong class="text-primary">
@@ -72,25 +79,27 @@
                                 </td>
 
                                 <td class="text-center d-flex justify-content-center gap-2">
-                                    <a href="{{ route('admin.survey.edit', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
-                                       style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                                    <a href="{{ route('admin.survey.edit', ['id' => $item->id]) }}"
+                                        class="btn btn-sm btn-outline-primary" title="Chỉnh sửa"
+                                        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
 
                                     <button class="btn btn-sm btn-outline-secondary" title="Sao chép đường dẫn"
-                                            style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
-                                            data-link="{{ route('my_form', ['survey_id' => $item->id]) }}"
-                                            onclick="copySurveyLink(this)">
+                                        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
+                                        data-link="{{ route('my_form', ['survey_id' => $item->id]) }}"
+                                        onclick="copySurveyLink(this)">
                                         <i class="bi bi-clipboard"></i>
                                     </button>
 
-                                    <a href="{{ route('admin.survey.form', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-primary" title="Show form"
-                                       style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
+                                    <a href="{{ route('admin.survey.form', ['id' => $item->id]) }}"
+                                        class="btn btn-sm btn-outline-primary" title="Show form"
+                                        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                         <i class="bi bi-list-nested"></i>
                                     </a>
 
                                     <form action="{{ route('admin.survey.destroy', $item->id) }}" method="POST"
-                                          onsubmit="return confirm('Xác nhận xoá khảo sát này?');" style="display:inline;">
+                                        onsubmit="return confirm('Xác nhận xoá khảo sát này?');" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-sm btn-outline-danger" title="Xoá">
@@ -98,21 +107,28 @@
                                         </button>
                                     </form>
 
-                                    @if ($totalPhanHoi > 0)
+                                    {{-- @if ($totalPhanHoi > 0)
                                     <a href="{{ route('admin.survey.result', ['id' => $item->id]) }}" class="btn btn-sm btn-outline-info" title="Xem chi tiết khảo sát"
                                        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;">
                                         <i class="bi bi-person-lines-fill"></i>
                                     </a>
+                                    @endif --}}
+                                    @if ($totalPhanHoi > 0)
+                                        <a href="{{ route('admin.survey.result', ['id' => $item->id]) }}"
+                                            class="btn btn-outline-primary btn-sm" title="Xem kết quả">
+                                            <i class="bi bi-bar-chart-fill me-1"></i> ({{ $totalPhanHoi }})
+                                        </a>
                                     @endif
 
+
                                     <form action="{{ route('send_mail', $item->id) }}" method="POST"
-                                          onsubmit="return confirm('Send mail?');" style="display:inline;">
+                                        onsubmit="return confirm('Send mail?');" style="display:inline;">
                                         @csrf
                                         @method('POST')
-                                        <button class="btn btn-sm btn-outline-success" title="Gửi biểu mẫu khảo sát qua mail"
-                                                 style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
-{{--                                                 onclick="sendSurveyByEmail(this)"--}}
-                                        >
+                                        <button class="btn btn-sm btn-outline-success"
+                                            title="Gửi biểu mẫu khảo sát qua mail"
+                                            style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
+                                            {{--                                                 onclick="sendSurveyByEmail(this)" --}}>
                                             <i class="bi bi-envelope"></i>
                                         </button>
                                     </form>

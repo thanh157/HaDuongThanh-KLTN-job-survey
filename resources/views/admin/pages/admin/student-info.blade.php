@@ -37,7 +37,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>STT</th>
-                            <th>ID</th>
+                            {{-- <th>ID</th> --}}
                             <th>Mã SV</th>
                             <th>Họ tên</th>
                             <th>Survey</th>
@@ -46,50 +46,87 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($student as $item)
-                        @php
-                            $surveyIds =\App\Models\AlumniContact::where('student_code', $item->code)->pluck('survey_batch_id')->toArray();
-                            $surveys = [];
-                            if (!empty($surveyIds)) {
-                                $surveys = \App\Models\ContactSurvey::whereIn('id', $surveyIds)->get();
-                            }
-                        @endphp
+                        @foreach ($student as $item)
+                            @php
+                                $surveyIds = \App\Models\AlumniContact::where('student_code', $item->code)
+                                    ->pluck('survey_batch_id')
+                                    ->toArray();
+                                $surveys = [];
+                                if (!empty($surveyIds)) {
+                                    $surveys = \App\Models\ContactSurvey::whereIn('id', $surveyIds)->get();
+                                }
+                            @endphp
 
-                        <tr>
-                            <td>{{ ($student->currentPage() - 1) * $student->perPage() + $loop->iteration }}</td>
-                            <td>{{ $item->id }}</td>
-                            <td>{{ $item->code }}</td>
-                            <td>{{ $item->full_name }}</td>
-                            <td>
-                                @foreach($surveys as $s)
+                            <tr>
+                                <td>{{ ($student->currentPage() - 1) * $student->perPage() + $loop->iteration }}</td>
+                                {{-- <td>{{ $item->id }}</td> --}}
+                                <td>{{ $item->code }}</td>
+                                <td>{{ $item->full_name }}</td>
+                                <td>
+                                    @foreach ($surveys as $s)
+                                        @php
+                                            $res = \App\Models\AlumniContact::where('student_code', $item->code)
+                                                ->where('survey_batch_id', $s->id)
+                                                ->first();
+                                        @endphp
+                                        @if (!empty($res))
+                                            <div><a
+                                                    href="{{ route('admin.contact-survey.results', ['id' => $s->id]) }}">{{ $s->title }}</a>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td>
                                     @php
-                                    $res = \App\Models\AlumniContact::where('student_code', $item->code)->where('survey_batch_id', $s->id)->first();
+                                        $gIds = $surveyIds
+                                            ? \App\Models\ContactSurveyGraduation::where(
+                                                'contact_survey_id',
+                                                $surveyIds,
+                                            )
+                                                ->pluck('graduation_id')
+                                                ->toArray()
+                                            : [];
+                                        $g = \App\Models\Graduation::whereIn('id', $gIds)->get();
                                     @endphp
-                                    @if(!empty($res))
-                                    <div><a href="{{ route('admin.contact-survey.results', ['id' => $s->id]) }}">{{ $s->title }}</a></div>
+
+                                    @if ($g->isNotEmpty())
+                                        @foreach ($g as $itemX)
+                                            <div>
+                                                <a
+                                                    href="{{ route('admin.graduation-student.show', ['id' => $itemX->id]) }}">{{ $itemX->name }}</a>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted fst-italic">Chưa khảo sát</span>
                                     @endif
-                                @endforeach
-                            </td>
-                            <td>
+                                </td>
+
+                                {{-- <td>
                                 @php
                                 $gIds = $surveyIds ? \App\Models\ContactSurveyGraduation::where('contact_survey_id', $surveyIds)->pluck('graduation_id')->toArray() : [];
                                 $g = \App\Models\Graduation::whereIn('id', $gIds)->get();
                                 @endphp
-                                @foreach($g as $itemX)
+                                @foreach ($g as $itemX)
                                     <div><a href="{{ route('admin.graduation-student.show', ['id' => $itemX->id]) }}">{{ $itemX->name }}</a></div>
                                 @endforeach
-                            </td>
-                            <td>
-                                @foreach($surveys as $s)
-                                    <div style="margin-bottom: 3px">
-                                        <a href="{{ route('admin.alumni-show', ['studentId' => $item->id, 'surveyId' => $s->id]) }}" class="btn btn-sm btn-info">
-                                            <i class="bi bi-eye"></i> Xem
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </td>
-                        </tr>
-                    @endforeach
+                            </td> --}}
+                                <td>
+                                    @if (!empty($surveys))
+                                        @foreach ($surveys as $s)
+                                            <div style="margin-bottom: 3px">
+                                                <a href="{{ route('admin.alumni-show', ['studentId' => $item->id, 'surveyId' => $s->id]) }}"
+                                                    class="btn btn-sm btn-info">
+                                                    <i class="bi bi-eye"></i> Xem
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted fst-italic">Chưa có dữ liệu khảo sát</span>
+                                    @endif
+                                </td>
+
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
                 {{-- Phân trang --}}
