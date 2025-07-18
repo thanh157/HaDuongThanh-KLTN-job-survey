@@ -25,21 +25,44 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class SurveyResultController extends Controller
 {
-    public function index($surveyId)
+    public function index(Request $request, $surveyId)
     {
-       $data = EmploymentSurveyResponse::query()->with(['student'])->where('survey_period_id', $surveyId)->orderBy('id', 'desc')->paginate(15);
+        $query = EmploymentSurveyResponse::query()
+            ->with(['student'])
+            ->where('survey_period_id', $surveyId);
+
+        // Lọc theo mã sinh viên
+        if ($request->filled('student_code')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('student_code', 'like', '%' . $request->student_code . '%');
+            });
+        }
+
+        // Lọc theo tên sinh viên
+        if ($request->filled('student_name')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('full_name', 'like', '%' . $request->student_name . '%');
+            });
+        }
+
+        // Lọc theo đợt tốt nghiệp
+        if ($request->filled('graduation_id')) {
+            $query->where('graduation_id', $request->graduation_id);
+        }
+
+        $data = $query->orderBy('id', 'desc')->paginate(15);
 
         $survey = Survey::with('graduations')->findOrFail($surveyId);
         $allDotTotNghiep = $survey->graduations()->get();
         $schoolYear = !empty($allDotTotNghiep[0]->school_year) ? $allDotTotNghiep[0]->school_year : '';
 
-       $viewData = [
-           'data' => $data,
-           'schoolYear' => $schoolYear,
-           'allDotTotNghiep' => $allDotTotNghiep,
-           'survey' => $survey,
-       ];
-       return view('admin.pages.admin.survey.result', $viewData);
+        return view('admin.pages.admin.survey.result', [
+            'data' => $data,
+            'schoolYear' => $schoolYear,
+            'allDotTotNghiep' => $allDotTotNghiep,
+            'survey' => $survey,
+            'request' => $request, // Gửi lại input để giữ giá trị trong form
+        ]);
     }
 
     public function show($id)

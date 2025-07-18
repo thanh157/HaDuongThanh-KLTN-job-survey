@@ -319,23 +319,39 @@ class ContactSurveyController extends Controller
      * @param $id: contact_surveys.id
      * @return \Illuminate\Container\Container|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|mixed|object
      */
-    public function viewResults($id)
+    public function viewResults($id, Request $request)
     {
-        $survey = ContactSurvey::where('id', $id)->first();
-        if (empty($survey)) {
-            abort(404);
+        $survey = ContactSurvey::with('graduations.students')->findOrFail($id);
+
+        // Lấy danh sách các mã sinh viên liên quan đến khảo sát này
+        $graduationStudentIds = $survey->graduations->flatMap(function ($graduation) {
+            return $graduation->students->pluck('code');
+        });
+
+        $query = AlumniContact::where('survey_batch_id', $id);
+
+        // Tìm kiếm theo tên hoặc mã SV
+        if ($search = $request->input('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('student_code', 'like', '%' . $search . '%')
+                    ->orWhere('full_name', 'like', '%' . $search . '%');
+            });
         }
-        $results = AlumniContact::where('survey_batch_id', $id)->paginate(2);
+
+        // Tổng số SV được khảo sát (dựa trên liên kết đợt tốt nghiệp)
+        $totalStudents = $graduationStudentIds->unique()->count();
+
+        // Tổng số phản hồi
         $count = AlumniContact::where('survey_batch_id', $id)->count();
-        if (empty($survey)) {
-            abort(404);
-        }
-        $viewData = [
+
+        $results = $query->paginate(10)->withQueryString();
+
+        return view('admin.pages.admin.alumni-info-form.results', [
             'survey' => $survey,
             'results' => $results,
             'count' => $count,
-        ];
-        return view('admin.pages.admin.alumni-info-form.results', $viewData);
+            'totalStudents' => $totalStudents,
+        ]);
     }
 
     public function thankyou()

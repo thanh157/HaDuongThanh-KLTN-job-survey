@@ -4,7 +4,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-end mb-3">
                             <a href="#" class="btn btn-primary me-2">
-                                <i class="bi bi-eye"></i> Xem trước
+                                <i class="bi bi-eye"></i> Xem biểu đồ thống kê
                             </a>
                             <a href="#" class="btn btn-success">
                                 <i class="bi bi-download"></i> Tải xuống báo cáo

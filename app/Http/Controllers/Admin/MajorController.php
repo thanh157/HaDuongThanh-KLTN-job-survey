@@ -40,12 +40,19 @@ class MajorController extends Controller
 
         // Filter
         $tenNganh = $request->query('ten_nganh');
+        $maNganh = $request->query('ma_nganh');
         $trangThai = $request->query('trang_thai');
         $sapXep = $request->query('sap_xep');
 
         if ($tenNganh) {
             $majors = $majors->filter(function ($item) use ($tenNganh) {
                 return Str::contains(Str::lower($item['name']), Str::lower($tenNganh));
+            });
+        }
+
+        if ($maNganh) {
+            $majors = $majors->filter(function ($item) use ($maNganh) {
+                return Str::contains(Str::lower($item['code']), Str::lower($maNganh));
             });
         }
 

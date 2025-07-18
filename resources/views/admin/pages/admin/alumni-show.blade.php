@@ -76,7 +76,7 @@
             </h5>
             <div class="row mb-3 align-items-center">
                 <div class="col-md-2 text-center">
-                    <img src="{{ asset('assets/admin/images/logo-abc.png') }}" alt="Công ty ABC"
+                    <img src="{{ asset('assets/admin/images/employee.png') }}" alt="Công ty ABC"
                         class="img-fluid rounded-circle border shadow-sm" style="width:80px;">
                 </div>
                 <div class="col-md-10">

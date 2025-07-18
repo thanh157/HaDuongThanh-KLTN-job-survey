@@ -22,7 +22,18 @@
                     <thead class="table-light">
                         <tr class="text-nowrap">
                             <th>STT</th>
-                            <th>Mã ngành</th>
+                            <th>
+                                <form method="GET" class="position-relative d-inline-block">
+                                    <span>Mã ngành</span>
+                                    <i class="bi bi-funnel-fill text-primary ms-1" style="cursor: pointer;"
+                                        onclick="toggleFilter('filter-ma')"></i>
+                                    <div id="filter-ma" class="shadow rounded p-3 bg-white position-absolute filter-popup">
+                                        <input type="text" name="ma_nganh" class="form-control mb-2"
+                                            placeholder="vd: CNTT, QTKD" value="{{ request('ma_nganh') }}">
+                                        <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
+                                    </div>
+                                </form>
+                            </th>
                             <th>
                                 <form method="GET" class="position-relative d-inline-block">
                                     <span>Tên ngành đào tạo</span>
@@ -45,8 +56,10 @@
                                         class="shadow rounded p-3 bg-white position-absolute filter-popup">
                                         <select name="trang_thai" class="form-select mb-2">
                                             <option value="">Tất cả</option>
-                                            <option value="active" {{ request('trang_thai') == 'active' ? 'selected' : '' }}>Hoạt động</option>
-                                            <option value="hidden" {{ request('trang_thai') == 'hidden' ? 'selected' : '' }}>Ẩn</option>
+                                            <option value="active"
+                                                {{ request('trang_thai') == 'active' ? 'selected' : '' }}>Hoạt động</option>
+                                            <option value="hidden"
+                                                {{ request('trang_thai') == 'hidden' ? 'selected' : '' }}>Ẩn</option>
                                         </select>
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
@@ -61,8 +74,10 @@
                                         class="shadow rounded p-3 bg-white position-absolute filter-popup">
                                         <select name="sap_xep" class="form-select mb-2">
                                             <option value="">Tất cả</option>
-                                            <option value="moi_nhat" {{ request('sap_xep') == 'moi_nhat' ? 'selected' : '' }}>Mới nhất</option>
-                                            <option value="cu_nhat" {{ request('sap_xep') == 'cu_nhat' ? 'selected' : '' }}>Cũ nhất</option>
+                                            <option value="moi_nhat"
+                                                {{ request('sap_xep') == 'moi_nhat' ? 'selected' : '' }}>Mới nhất</option>
+                                            <option value="cu_nhat" {{ request('sap_xep') == 'cu_nhat' ? 'selected' : '' }}>
+                                                Cũ nhất</option>
                                         </select>
                                         <button type="submit" class="btn btn-sm btn-primary w-100">Lọc</button>
                                     </div>
