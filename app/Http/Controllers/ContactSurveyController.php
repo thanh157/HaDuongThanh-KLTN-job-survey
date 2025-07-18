@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmploymentSurveyResponse;
+use App\Models\Major;
+use App\Models\Survey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -357,5 +360,35 @@ class ContactSurveyController extends Controller
     public function thankyou()
     {
         return view('admin.pages.admin.alumni-info-form.thankyou');
+    }
+
+    /**
+     * @param $id
+     * employment_survey_responses_v2.id
+     */
+    public function showStudentSubmit($id)
+    {
+        $res = EmploymentSurveyResponse::where('id', $id)->first();
+        if (empty($res)) {
+            return abort(404);
+        }
+
+        $student = Student::where('id', $res->student_id)->first();
+        $survey = Survey::where('id', $res->survey_period_id)->first();
+
+        if (empty($survey) || empty($student)) {
+            return abort(404);
+        }
+
+        $major = Major::query()->pluck('name', 'id')->toArray();
+
+        $viewData = [
+            'survey' => $survey,
+            'response' => $res,
+            'student' => $student,
+            'major' => $major,
+        ];
+
+        return view('admin.pages.admin.survey.result_show', $viewData);
     }
 }

@@ -91,6 +91,10 @@
                                 {{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i') : '' }}
                             </td>
                             <td class="text-center d-flex justify-content-center gap-1">
+                                <a href="{{ route('admin.contact-survey.show_student_submit', ['id' => $item->id]) }}"
+                                   class="btn btn-sm btn-outline-info" title="Xem chi tiết">
+                                    <i class="bi bi-award-fill"></i>
+                                </a>
                                 <a href="{{ route('admin.survey.result_detail', ['id' => $item->id]) }}"
                                     class="btn btn-sm btn-outline-info" title="Xem chi tiết">
                                     <i class="bi bi-info-lg"></i>

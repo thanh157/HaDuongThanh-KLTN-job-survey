@@ -110,6 +110,7 @@ Route::middleware('auth.sso')->prefix('admin')->name('admin.')->group(function (
 
         // Xem kết quả
         Route::get('/{id}/results', [ContactSurveyController::class, 'viewResults'])->name('results');
+        Route::get('/{id}/show_submit', [ContactSurveyController::class, 'showStudentSubmit'])->name('show_student_submit');
 
         // API lấy đợt tốt nghiệp theo năm
         Route::get('/graduation-ceremonies', [ContactSurveyController::class, 'getGraduationCeremonies'])

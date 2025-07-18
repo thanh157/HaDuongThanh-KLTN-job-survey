@@ -60,26 +60,26 @@
             <div class="col-md-4"><strong>Họ tên:</strong> {{ $response->full_name }}</div>
             <div class="col-md-4"><strong>Giới tính:</strong> {{ $response->gender == 'male' ? 'Nam' : 'Nữ' }}</div>
             <div class="col-md-4"><strong>Ngày sinh:</strong>
-                {{ $response->dob ? date('d-m-Y', strtotime($response->dob)) : '' }}</div>
+                {{ $response->date_of_birth ? date('d-m-Y', strtotime($response->date_of_birth)) : '' }}</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4"><strong>Mã SV:</strong> {{ $response->code_student }}</div>
-            <div class="col-md-4"><strong>CCCD:</strong> {{ $response->identification_card_number }}</div>
+            <div class="col-md-4"><strong>Mã SV:</strong> {{ $student->code }}</div>
+            <div class="col-md-4"><strong>Nơi sinh:</strong> {{ $response->place_of_birth }}</div>
             <div class="col-md-4">
-                <strong>Nơi cấp:</strong> {{ $response->identification_issuance_place }}
-                ({{ \Carbon\Carbon::parse($response->identification_issuance_date)->format('d/m/Y') }})
+                <strong>Địa chỉ:</strong> {{ $response->address }}
             </div>
 
         </div>
         <div class="row mb-3">
             <div class="col-md-4"><strong>Khóa:</strong> {{ $response->course }}</div>
-            <div class="col-md-4"><strong>Ngành:</strong>
-                {{ !empty($major[$response->training_industry_id]) ? $major[$response->training_industry_id] : '' }}
-            </div>
-            <div class="col-md-4"><strong>Điện thoại:</strong> {{ $response->phone_number }}</div>
+            <div class="col-md-4"><strong>Điện thoại:</strong> {{ $response->phone }}</div>
+            <div class="col-md-4"><strong>Email:</strong> {{ $response->email }}</div>
         </div>
-        <div class="mb-4"><strong>Email:</strong> {{ $response->email }}</div>
 
+        <div class="row mb-3">
+            <div class="col-md-4"><strong>Facebook:</strong> {{ $response->facebook }}</div>
+            <div class="col-md-4"><strong>Instagram:</strong> {{ $response->instagram }}</div>
+        </div>
         <hr>
 
         {{-- PHẦN 2: Việc làm hiện tại --}}
@@ -96,77 +96,22 @@
             <div class="col-md-10">
                 <div class="row">
                     <div class="col-md-6 mb-2">
-                        <strong>Tên công ty:</strong> {{ $response->recruit_partner_name }}
+                        <strong>Tên công ty:</strong> {{ $response->company_name }}
                     </div>
                     <div class="col-md-6 mb-2">
-                        <strong>Địa chỉ:</strong> {{ $response->recruit_partner_address }}
-                    </div>
-
-                    <div class="col-md-6 mb-2">
-                        <strong>Chức vụ:</strong> {{ $response->recruit_partner_position }}
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <strong>Khu vực:</strong>
-                        {{ $response->work_area ? data_get(config('config.work_area'), $response->work_area) : '---' }}
+                        <strong>Địa chỉ:</strong> {{ $response->company_address }}
                     </div>
 
                     <div class="col-md-6 mb-2">
-                        <strong>Thu nhập:</strong>
-                        {{ $response->average_income ? data_get(config('config.average_income'), $response->average_income) : '---' }}
-                        triệu VNĐ/tháng
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <strong>Thời gian có việc:</strong>
-                        {{ $response->employed_since ? data_get(config('config.employed_since'), $response->employed_since) : '---' }}
+                        <strong>Chức vụ:</strong> {{ $response->company_phone }}
                     </div>
 
                     <div class="col-md-6 mb-2">
-                        <strong>Phù hợp ngành đào tạo:</strong>
-                        {{ $response->professional_qualification_field ? data_get(config('config.professional_qualification_field'), $response->professional_qualification_field) : '---' }}
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <strong>Được nhà trường hỗ trợ:</strong>
-                        {{ $response->school_support ?? '---' }}
+                        <strong>Chức vụ:</strong> {{ $response->company_email }}
                     </div>
                 </div>
             </div>
         </div>
-
-
-
-        <hr>
-
-        {{-- PHẦN 3: Thông tin khảo sát --}}
-        <h5 class="text-secondary fw-bold mb-3">
-            <i class="bi bi-clipboard-check-fill me-2"></i>Thông tin khảo sát
-        </h5>
-
-        @php
-            $recruitmentText = getSurveyFieldLabels($response->recruitment_type, config('config.recruitment_type'));
-            $must_attended_courses = getSurveyFieldLabels(
-                $response->must_attended_courses,
-                config('config.must_attended_courses'),
-            );
-            $soft_skills_required = getSurveyFieldLabels(
-                $response->soft_skills_required,
-                config('config.soft_skills_required'),
-            );
-            $solutions_get_job = getSurveyFieldLabels($response->solutions_get_job, config('config.solutions_get_job'));
-        @endphp
-
-        <div class="mb-2"><strong>Cách tìm việc:</strong> {{ $recruitmentText }}</div>
-        <div class="mb-2"><strong>Khóa học đã tham gia:</strong> {{ $must_attended_courses }}</div>
-        <div class="mb-2"><strong>Áp dụng kiến thức:</strong> </div>
-        <div class="mb-2"><strong>Áp dụng kỹ năng:</strong> </div>
-        <div class="mb-2"><strong>Kỹ năng mềm cần có:</strong> {{ $soft_skills_required }}</div>
-        <div class="mb-2"><strong>Giải pháp cải tiến đào tạo:</strong> {{ $solutions_get_job }}</div>
-
-
-        {{-- <div class="mt-4 text-end">
-            <a href="{{ route('admin.student-info.index') }}" class="btn btn-primary">
-                <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
-            </a>
-        </div> --}}
     </div>
     </div>
 @endsection
